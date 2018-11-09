@@ -1,0 +1,6 @@
+"1","Resumen","<a ><i class=""fa fa-bank""></i> <span class=""nav-label"">Resumen</span><span class=""fa arrow""></span></a>","fa fa-bank","dashboard","11","1","2017-05-09 10:03:45","0000-00-00 00:00:00"
+"2","Cuentas","<a ><i class=""fa fa-id-card-o""></i> <span class=""nav-label"">Cuentas</span><span class=""fa arrow""></span></a>","fa fa-id-card-o",,"0","2","2017-05-09 10:03:45","0000-00-00 00:00:00"
+"3","Inversiones","<a ><i class=""fa fa-file""></i> <span class=""nav-label"">Inversiones</span><span class=""fa arrow""></span></a>","fa fa-file",,"0","3","2017-05-09 10:03:45","0000-00-00 00:00:00"
+"4","Usuarios","<a ><i class=""fa fa-user-o""></i> <span class=""nav-label"">Usuarios</span><span class=""fa arrow""></span></a>","fa fa-user-o",,"0","4","2017-05-09 10:04:30","0000-00-00 00:00:00"
+"5","Menús","<a ><i class=""fa fa-user-o""></i> <span class=""nav-label"">Menús</span><span class=""fa arrow""></span></a>","fa fa-bars",,"0","5","2017-05-09 10:03:45","0000-00-00 00:00:00"
+"6","Cambiar Contraseña","<a ><i class=""fa fa-lock""></i> <span class=""nav-label"">Cambiar Contraseña</span><span class=""fa arrow""></span></a>","fa fa-lock","users/change_passwd","14","6","2017-05-09 10:03:45","0000-00-00 00:00:00"
