@@ -77,7 +77,7 @@
                                             <?php echo $proyecto->valor; ?>
                                         </td>
                                         <td>
-                                            <?php echo $proyecto->amount_r; ?>
+                                            <?php echo $proyecto->valor; ?>
                                         </td>
                                         <td>
                                             <?php echo $proyecto->amount_min; ?>
@@ -202,7 +202,7 @@
 						<td class="project-title">
 							<a href="<?php echo base_url() ?>projects/view/<?= $proyecto->id; ?>"><?php echo $proyecto->name; ?></a>
 							<br/>
-							<small>Created <?php echo $proyecto->date; ?></small>
+							<small>Created </small>
 							<br>
 							<?php if($this->session->userdata('logged_in')['profile_id'] == 1 || $this->session->userdata('logged_in')['profile_id'] == 2) { ?>
 							<small><?php echo $proyecto->groups_names; ?></small>
@@ -212,7 +212,7 @@
 								<small>
 									<?php echo $this->lang->line('list_completed_projects'); ?>: 
 									<?php 
-									if($proyecto->amount_r == null){
+									if($proyecto->valor == null){
 										echo "&infin;";
 										$percentage = 0;
 									}else{
@@ -230,9 +230,6 @@
 									<div style="width: <?php echo $percentage; ?>%;" class="progress-bar"></div>
 								</div>
 						</td>
-						<td class="project-title">
-							<?php echo $proyecto->coin; ?>
-						</td>
 						<!--<td class="project-people">
 							<a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
 							<a href=""><img alt="image" class="img-circle" src="img/a1.jpg"></a>
@@ -240,6 +237,9 @@
 							<a href=""><img alt="image" class="img-circle" src="img/a4.jpg"></a>
 							<a href=""><img alt="image" class="img-circle" src="img/a5.jpg"></a>
 						</td>-->
+						<td class="project-title">
+							<?php echo $proyecto->coin; ?>
+						</td>
 						<td class="project-actions">
 							<a href="<?php echo base_url() ?>projects/view/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_view_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> <?php echo $this->lang->line('list_view_projects'); ?> </a>
 							<a href="<?php echo base_url() ?>projects/edit/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_edit_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> <?php echo $this->lang->line('list_edit_projects'); ?> </a>

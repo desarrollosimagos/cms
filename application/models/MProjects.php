@@ -13,7 +13,7 @@ class MProjects extends CI_Model {
 
     // Método público para obterner todos los proyectos
     public function listar() {
-        $this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.amount_r, pj.amount_min, pj.amount_max, pj.date, pj.date_r, pj.date_v, pj.public, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
+        $this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.public, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
 		$this->db->from('projects pj', 'pj.id = ig_p.project_id');
 		$this->db->join('project_types p_t', 'p_t.id = pj.type');
 		$this->db->join('coins c', 'c.id = pj.coin_id');
@@ -29,7 +29,7 @@ class MProjects extends CI_Model {
     //Public method to obtain the projects
     public function obtener() {
 		
-		$this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status');
+		$this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
 		// Si el usuario logueado es de perfil administrador, plataforma o gestor tomamos sólo los proyectos de su grupo de inversores.
 		// Si el usuario logueado es de perfil inversor tomamos sólo los proyectos en los que tiene transacciones.
 		if($this->session->userdata('logged_in')['profile_id'] == 1){
@@ -38,6 +38,7 @@ class MProjects extends CI_Model {
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 2){
 			$this->db->from('usergroups ig');
@@ -45,20 +46,24 @@ class MProjects extends CI_Model {
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 3){
 			$this->db->from('projects pj');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 		}else if($this->session->userdata('logged_in')['profile_id'] == 5){
 			$this->db->from('usergroups ig');
 			$this->db->join('usergroups_projects ig_p', 'ig_p.group_id = ig.id');
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else{
 			$this->db->from('projects pj');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 		}
 		$this->db->order_by("pj.id", "desc");
 		$query = $this->db->get();
@@ -76,7 +81,7 @@ class MProjects extends CI_Model {
     //Public method to obtain the projects
     public function obtener_filtrado($buscar){
 		
-		$select = 'pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status';
+		$select = 'pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol';
 		
 		$this->db->select($select);
 		$this->db->distinct();
@@ -88,6 +93,7 @@ class MProjects extends CI_Model {
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 2){
 			$this->db->from('usergroups ig');
@@ -95,20 +101,24 @@ class MProjects extends CI_Model {
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 3){
 			$this->db->from('projects pj');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 		}else if($this->session->userdata('logged_in')['profile_id'] == 5){
 			$this->db->from('usergroups ig');
 			$this->db->join('usergroups_projects ig_p', 'ig_p.group_id = ig.id');
 			$this->db->join('usergroups_users ig_u', 'ig_u.group_id = ig.id');
 			$this->db->join('projects pj', 'pj.id = ig_p.project_id');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 			$this->db->where('ig_u.user_id', $this->session->userdata('logged_in')['id']);
 		}else{
 			$this->db->from('projects pj');
 			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins c', 'c.id = pj.coin_id');
 		}
 		// Filtro del buscador
 		if($buscar != ''){
@@ -324,9 +334,7 @@ class MProjects extends CI_Model {
     // Public method to obtain the projects by id
     public function obtenerProyecto($id) {
 		
-		$select = 'p.id, p.name, p.description, p.valor, p.type, p.amount_r, p.amount_min, p.amount_max, ';
-		$select .= 'p.public, p.coin_id, p.status, p.date, p.date_r, p.date_v, p.d_create, p.d_update, ';
-		$select .= 'c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol, c.decimals as coin_decimals';
+		$select = 'p.id, p.name, p.description, p.valor, p.type, p.public, p.coin_id, p.status, p.d_create, p.d_update, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol, c.decimals as coin_decimals';
 		
 		$this->db->select($select);
 		$this->db->from('projects p');
@@ -416,11 +424,11 @@ class MProjects extends CI_Model {
 		
 		// Almacenamos los ids de los inversores asociados al asesor más su id propio en un array
 		$ids = array($this->session->userdata('logged_in')['id']);
-		$this->db->where('adviser_id', $this->session->userdata('logged_in')['id']);
+		$this->db->where('userfrom_id', $this->session->userdata('logged_in')['id']);
         $query_asesor_inversores = $this->db->get('user_relations');
         if ($query_asesor_inversores->num_rows() > 0) {
             foreach($query_asesor_inversores->result() as $relacion){
-				$ids[] = $relacion->investor_id;
+				$ids[] = $relacion->userto_id;
 			}
 		}
 		
@@ -462,11 +470,11 @@ class MProjects extends CI_Model {
 		
 		// Almacenamos los ids de los inversores asociados al asesor más su id propio en un array
 		$ids = array($this->session->userdata('logged_in')['id']);
-		$this->db->where('adviser_id', $this->session->userdata('logged_in')['id']);
+		$this->db->where('userfrom_id', $this->session->userdata('logged_in')['id']);
         $query_asesor_inversores = $this->db->get('user_relations');
         if ($query_asesor_inversores->num_rows() > 0) {
             foreach($query_asesor_inversores->result() as $relacion){
-				$ids[] = $relacion->investor_id;
+				$ids[] = $relacion->userto_id;
 			}
 		}
 		

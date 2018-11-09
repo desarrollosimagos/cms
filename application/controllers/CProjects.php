@@ -88,8 +88,8 @@ class CProjects extends CI_Controller {
 			
 			// Proceso de búsqueda de transacciones asociados al proyecto para calcular el porcentaje recaudado
 			$transacctions = $this->MProjects->buscar_transacciones($proyecto->id);
-			if($proyecto->amount_r != null && $proyecto->amount_r > 0){
-				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->amount_r*100;
+			if($proyecto->valor != null && $proyecto->valor > 0){
+				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->valor*100;
 			}else{
 				$porcentaje = "null";
 			}
@@ -100,12 +100,6 @@ class CProjects extends CI_Controller {
 				'description' => $proyecto->description,
 				'type' => $proyecto->type,
 				'valor' => $proyecto->valor,
-				'amount_r' => $proyecto->amount_r,
-				'amount_min' => $proyecto->amount_min,
-				'amount_max' => $proyecto->amount_max,
-				'date' => $proyecto->date,
-				'date_r' => $proyecto->date_r,
-				'date_v' => $proyecto->date_v,
 				'coin' => $proyecto->coin_avr." (".$proyecto->coin.")",
 				'status' => $proyecto->status,
 				'num_fotos' => $num_fotos,
@@ -182,8 +176,8 @@ class CProjects extends CI_Controller {
 			
 			// Proceso de búsqueda de transacciones asociados al proyecto para calcular el porcentaje recaudado
 			$transacctions = $this->MProjects->buscar_transacciones($proyecto->id);
-			if($proyecto->amount_r != null && $proyecto->amount_r > 0){
-				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->amount_r*100;
+			if($proyecto->valor != null && $proyecto->valor > 0){
+				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->valor*100;
 			}else{
 				$porcentaje = "null";
 			}
@@ -194,12 +188,6 @@ class CProjects extends CI_Controller {
 				'description' => $proyecto->description,
 				'type' => $proyecto->type,
 				'valor' => $proyecto->valor,
-				'amount_r' => $proyecto->amount_r,
-				'amount_min' => $proyecto->amount_min,
-				'amount_max' => $proyecto->amount_max,
-				'date' => $proyecto->date,
-				'date_r' => $proyecto->date_r,
-				'date_v' => $proyecto->date_v,
 				'coin' => $proyecto->coin_avr." (".$proyecto->coin.")",
 				'status' => $proyecto->status,
 				'groups_names' => $groups_names,
@@ -248,7 +236,7 @@ class CProjects extends CI_Controller {
 					<small>
 						<?php echo $this->lang->line('list_completed_projects'); ?>: 
 						<?php 
-						if($proyecto->amount_r == null){
+						if($proyecto->valor == null){
 							echo "&infin;";
 							$percentage = 0;
 						}else{
@@ -309,18 +297,6 @@ class CProjects extends CI_Controller {
 	// Método para guardar un nuevo registro
     public function add() {
 		
-		$fecha = $this->input->post('date');
-		$fecha = explode("/", $fecha);
-		$fecha = $fecha[2]."-".$fecha[1]."-".$fecha[0];
-		
-		$fecha_r = $this->input->post('date_r');
-		$fecha_r = explode("/", $fecha_r);
-		$fecha_r = $fecha_r[2]."-".$fecha_r[1]."-".$fecha_r[0];
-		
-		$fecha_v = $this->input->post('date_v');
-		$fecha_v = explode("/", $fecha_v);
-		$fecha_v = $fecha_v[2]."-".$fecha_v[1]."-".$fecha_v[0];
-		
 		$publico = false;
 		if($this->input->post('public') == "on"){
 			$publico = true;
@@ -331,12 +307,6 @@ class CProjects extends CI_Controller {
 			'description' => $this->input->post('description'),
 			'type' => $this->input->post('type'),
             'valor' => $this->input->post('valor'),
-            'amount_r' => $this->input->post('amount_r'),
-            'amount_min' => $this->input->post('amount_min'),
-            'amount_max' => $this->input->post('amount_max'),
-            'date' => $fecha,
-            'date_r' => $fecha_r,
-            'date_v' => $fecha_v,
             'public' => $publico,
             'coin_id' => $this->input->post('coin_id'),
             'status' => 1,
@@ -516,8 +486,8 @@ class CProjects extends CI_Controller {
 		
 		// Proceso de búsqueda de transacciones asociadas al proyecto para calcular el porcentaje recaudado
 		$transacctions = $this->MProjects->buscar_transacciones($data['id']);
-		if($data['ver'][0]->amount_r != null && $data['ver'][0]->amount_r > 0){
-			$porcentaje = (float)$transacctions[0]->ingresos/(float)$data['ver'][0]->amount_r*100;
+		if($data['ver'][0]->valor != null && $data['ver'][0]->valor > 0){
+			$porcentaje = (float)$transacctions[0]->ingresos/(float)$data['ver'][0]->valor*100;
 		}else{
 			$porcentaje = 0;
 		}
@@ -743,18 +713,6 @@ class CProjects extends CI_Controller {
 	// Método para actualizar
     public function update() {
 		
-		$fecha = $this->input->post('date');
-		$fecha = explode("/", $fecha);
-		$fecha = $fecha[2]."-".$fecha[1]."-".$fecha[0];
-		
-		$fecha_r = $this->input->post('date_r');
-		$fecha_r = explode("/", $fecha_r);
-		$fecha_r = $fecha_r[2]."-".$fecha_r[1]."-".$fecha_r[0];
-		
-		$fecha_v = $this->input->post('date_v');
-		$fecha_v = explode("/", $fecha_v);
-		$fecha_v = $fecha_v[2]."-".$fecha_v[1]."-".$fecha_v[0];
-		
 		$publico = false;
 		if($this->input->post('public') == "on"){
 			$publico = true;
@@ -766,12 +724,6 @@ class CProjects extends CI_Controller {
 			'description' => $this->input->post('description'),
 			'type' => $this->input->post('type'),
             'valor' => $this->input->post('valor'),
-            'amount_r' => $this->input->post('amount_r'),
-            'amount_min' => $this->input->post('amount_min'),
-            'amount_max' => $this->input->post('amount_max'),
-            'date' => $fecha,
-            'date_r' => $fecha_r,
-            'date_v' => $fecha_v,
             'public' => $publico,
             'coin_id' => $this->input->post('coin_id'),
             'd_update' => date('Y-m-d H:i:s')

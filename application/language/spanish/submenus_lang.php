@@ -15,7 +15,7 @@ $lang['Pagos'] = 'Pagos';
 $lang['Perfiles'] = 'Perfiles';
 $lang['Usuarios'] = 'Usuarios';
 $lang['Asociaciones'] = 'Asociaciones';
-$lang['Grupos de Inversionistas'] = 'Grupos de Inversionistas';
+$lang['Grupos de Usuarios'] = 'Grupos de Usuarios';
 
 // Submenús de Menús
 $lang['Menús'] = 'Menús';
