@@ -82,7 +82,7 @@ $lang['view_list_transactions_account_projects'] = 'Cuenta';
 $lang['view_list_transactions_status_projects'] = 'Estatus';
 
 // Resumen de plataforma
-$lang['view_list_summary_platform_title_projects'] = 'Resumen por Moneda';
+$lang['view_list_summary_platform_title_projects'] = 'Resumen dwe plataforma';
 $lang['view_list_platform_invested_capital_projects'] = 'Capital Invertido';
 $lang['view_list_platform_dividend_projects'] = 'Dividendo';
 $lang['view_list_platform_capital_in_project_projects'] = 'Capital en Proyecto';
