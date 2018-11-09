@@ -58,24 +58,6 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_amount_rise_projects'); ?></label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="amount_r" id="amount_r">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_amount_min_projects'); ?></label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="amount_min" id="amount_min">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_amount_max_projects'); ?></label>
-										<div class="col-sm-10">
-											<input type="text" class="form-control" name="amount_max" id="amount_max">
-										</div>
-									</div>
-									<div class="form-group">
 										<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_currency_projects'); ?> *</label>
 										<div class="col-sm-6">
 											<select class="form-control m-b" name="coin_id" id="coin_id">
@@ -101,24 +83,6 @@
 									<div class="form-group"><label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_value_projects'); ?> *</label>
 										<div class="col-sm-6">
 											<input type="text" class="form-control"  name="valor" id="valor">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label"><?php echo $this->lang->line('registry_date_projects'); ?> *</label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" maxlength="10" name="date" id="date">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label"><?php echo $this->lang->line('registry_return_date_projects'); ?></label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" maxlength="10" name="date_r" id="date_r">
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-2 control-label"><?php echo $this->lang->line('registry_validity_date_projects'); ?></label>
-										<div class="col-sm-6">
-											<input type="text" class="form-control" maxlength="10" name="date_v" id="date_v">
 										</div>
 									</div>
 									<div class="form-group">
@@ -332,24 +296,6 @@ $(document).ready(function(){
             $(this).parent('div').removeClass('has-error');
         }
     });
-    
-    $('#date').datepicker({
-        format: "dd/mm/yyyy",
-        language: "es",
-        autoclose: true,
-    })
-    
-    $('#date_r').datepicker({
-        format: "dd/mm/yyyy",
-        language: "es",
-        autoclose: true,
-    })
-    
-    $('#date_v').datepicker({
-        format: "dd/mm/yyyy",
-        language: "es",
-        autoclose: true,
-    })
 
     $('#volver').click(function () {
         url = '<?php echo base_url() ?>projects/';
@@ -357,9 +303,6 @@ $(document).ready(function(){
     });
     
     $("#valor").numeric(); //Valida solo permite valores numéricos
-    $("#amount_r").numeric(); //Valida solo permite valores numéricos
-    $("#amount_min").numeric(); //Valida solo permite valores numéricos
-    $("#amount_max").numeric(); //Valida solo permite valores numéricos
 
     $("#registrar").click(function (e) {
 
@@ -382,11 +325,7 @@ $(document).ready(function(){
 		  swal("Disculpe,", "para continuar debe seleccionar la moneda");
 	       $('#coin_id').parent('div').addClass('has-error');
 		   
-		} else if ($('#date').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar la fecha del proyecto");
-			$('#date').parent('div').addClass('has-error');
-			
-        } else {
+		} else {
             
             // Formateamos los precios para usar coma en vez de punto
             //~ $("#valor").val(String($("#valor").val()).replace('.',','));

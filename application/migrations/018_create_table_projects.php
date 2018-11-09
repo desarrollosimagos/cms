@@ -49,6 +49,11 @@ class Migration_create_table_projects extends CI_Migration
 					//~ "constraint" => 11,
 					//~ "null" => TRUE
 				//~ ),
+				"coin_id" => array(
+					"type" => "INT",
+					"constraint" => 11,
+					"null" => TRUE
+				),
 				"d_create" => array(
 					"type" => "TIMESTAMP",
 					"null" => TRUE

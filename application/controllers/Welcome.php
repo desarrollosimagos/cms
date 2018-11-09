@@ -387,7 +387,7 @@ class Welcome extends CI_Controller {
 			}
 			
 			// Verificamos si existe la tabla de tipos de cuenta 'tipos_cuenta'
-			$exists_type = $this->db->table_exists('tipos_cuenta');
+			$exists_type = $this->db->table_exists('account_type');
 			
 			if($exists_type){
 			

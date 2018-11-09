@@ -45,7 +45,7 @@ class CUserGroups extends CI_Controller {
 		}else{
 			redirect('login');
 		}
-		$this->load->view($perfil_folder.'investor_groups/lista', $data);
+		$this->load->view($perfil_folder.'user_groups/lista', $data);
 		$this->load->view('footer');
 	}
 	
@@ -75,7 +75,7 @@ class CUserGroups extends CI_Controller {
 		}else{
 			redirect('login');
 		}
-		$this->load->view($perfil_folder.'investor_groups/registrar', $data);
+		$this->load->view($perfil_folder.'user_groups/registrar', $data);
 		$this->load->view('footer');
 	}
 	
@@ -192,7 +192,7 @@ class CUserGroups extends CI_Controller {
 		}else{
 			redirect('login');
 		}
-        $this->load->view($perfil_folder.'investor_groups/editar', $data);
+        $this->load->view($perfil_folder.'user_groups/editar', $data);
 		$this->load->view('footer');
     }
 	
