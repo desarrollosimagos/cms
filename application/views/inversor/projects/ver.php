@@ -204,7 +204,7 @@ th {
 									<dt><?php echo $this->lang->line('view_completed_projects'); ?>:</dt>
 									<dd>
 										<?php 
-										if($ver[0]->amount_r == null){
+										if($ver[0]->valor == null){
 											echo "&infin;";
 											$percentage = 0;
 										}else{

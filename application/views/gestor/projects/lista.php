@@ -77,7 +77,7 @@
                                             <?php echo $proyecto->valor; ?>
                                         </td>
                                         <td>
-                                            <?php echo $proyecto->amount_r; ?>
+                                            <?php echo $proyecto->valor; ?>
                                         </td>
                                         <td>
                                             <?php echo $proyecto->amount_min; ?>
@@ -212,7 +212,7 @@
 								<small>
 									<?php echo $this->lang->line('list_completed_projects'); ?>: 
 									<?php 
-									if($proyecto->amount_r == null){
+									if($proyecto->valor == null){
 										echo "&infin;";
 										$percentage = 0;
 									}else{
