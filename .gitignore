@@ -9,23 +9,23 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 
-!application/config/database.php
-!application/config/config.php
+application/config/database.php
+application/config/config.php
 
-!application/views/publico/home.php
-!application/views/publico/start.php
-!application/views/publico/contacts.php
-!application/views/publico/possibilities.php
+application/views/publico/home.php
+application/views/publico/start.php
+application/views/publico/contacts.php
+application/views/publico/possibilities.php
 
-!application/language/spanish/public_home_lang.php
-!application/language/english/public_home_lang.php
+application/language/spanish/public_home_lang.php
+application/language/english/public_home_lang.php
 
 *.sql
-!*.htaccess
-!index.php
+*.htaccess
+index.php
 
-!assets/img/logos/*
+assets/img/logos/*
 assets/img/projects/*
 assets/documents/*
 assets/readings/*
-!assets/img/gallery/portfolio_EN_arte.jpg
+assets/img/gallery/portfolio_EN_arte.jpg
