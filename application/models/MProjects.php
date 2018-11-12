@@ -284,9 +284,27 @@ class MProjects extends CI_Model {
 
     // Public method to serach the transactions associated
     public function buscar_transacciones_user_project($user_id, $project_id) {
+		
         $result = $this->db->where('user_id', $user_id);
 		$result = $this->db->where('project_id', $project_id);
         $result = $this->db->get('transactions');
+		
+        return $result->result();
+    }
+
+    // Public method to serach the transactions associated
+    public function buscar_transacciones_project($project_id) {
+		
+		$select = 'f_p.id, f_p.account_id, f_p.type, f_p.description, f_p.reference, f_p.observation, f_p.real, ';
+		$select .= 'f_p.rate, f_p.document, f_p.amount, f_p.status, u.name as usuario, c.alias, c.number, cn.description as coin, ';
+		$select .= 'cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals';
+		$this->db->select($select);
+		$this->db->from('transactions f_p');
+		$this->db->join('users u', 'u.id = f_p.user_id');
+		$this->db->join('accounts c', 'c.id = f_p.account_id');
+		$this->db->join('coins cn', 'cn.id = c.coin_id');
+		$this->db->where('project_id', $project_id);
+        $result = $this->db->get();
 		
         return $result->result();
     }
@@ -432,7 +450,7 @@ class MProjects extends CI_Model {
 			}
 		}
 		
-		$select = 'pt.id, pt.project_id, pt.user_id, pt.user_create_id, pt.date, pt.type, pt.description, pt.amount, pt.real, pt.rate, pt.status, u.username, c.alias, ';
+		$select = 'pt.id, pt.project_id, pt.user_id, pt.user_create_id, pt.d_create, pt.type, pt.description, pt.amount, pt.real, pt.rate, pt.status, u.username, c.alias, ';
 		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals, u.name, u.alias as user_alias';
 		
 		$this->db->select($select);
@@ -444,11 +462,11 @@ class MProjects extends CI_Model {
 		// Si el usuario logueado es de perfil gestor tomamos sólo las transacciones generadas por él.
 		// Si el usuario logueado es de perfil asesor tomamos sólo las transacciones generadas por él y los usuarios asociados a él.
 		if($this->session->userdata('logged_in')['profile_id'] != 1 && $this->session->userdata('logged_in')['profile_id'] != 2){
-			if($this->session->userdata('logged_in')['profile_id'] == 3){
+			if($this->session->userdata('logged_in')['profile_id'] == 4){
 				$this->db->where('pt.user_id =', $this->session->userdata('logged_in')['id']);
-			}else if($this->session->userdata('logged_in')['profile_id'] == 5){
+			}else if($this->session->userdata('logged_in')['profile_id'] == 3){
 				$this->db->where('pt.user_create_id', $this->session->userdata('logged_in')['id']);
-			}else if($this->session->userdata('logged_in')['profile_id'] == 4){
+			}else if($this->session->userdata('logged_in')['profile_id'] == 5){
 				$this->db->where_in('pt.user_id', $ids);
 			}else{
 				$this->db->where('pt.user_id =', $this->session->userdata('logged_in')['id']);

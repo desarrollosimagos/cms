@@ -99,6 +99,21 @@ $lang['view_list_users_capital_in_project_projects'] = 'Capital en Proyecto';
 $lang['view_list_users_pending_invest_projects'] = 'Inversión Pendiente';
 $lang['view_list_users_pending_withdraw_projects'] = 'Retiro Pendiente';
 
+// Usuarios con pagos aprobados
+$lang['view_list_users_approved_title_projects'] = 'Usuarios con pagos aprobados';
+$lang['view_list_users_approved_username_projects'] = 'Usuario';
+$lang['view_list_users_approved_date_projects'] = 'Fecha inscripción';
+$lang['view_list_users_approved_value_projects'] = 'Costo inscripción';
+$lang['view_list_users_approved_status_projects'] = 'Estatus';
+$lang['view_list_users_approved_validated_projects'] = 'Inscripción válida';
+
+// Usuarios con pagos pendientes
+$lang['view_list_users_waiting_title_projects'] = 'Usuarios con pagos pendientes';
+$lang['view_list_users_waiting_username_projects'] = 'Usuario';
+$lang['view_list_users_waiting_date_projects'] = 'Fecha inscripción';
+$lang['view_list_users_waiting_value_projects'] = 'Costo inscripción';
+$lang['view_list_users_waiting_status_projects'] = 'Estatus';
+$lang['view_list_users_waiting_validated_projects'] = 'Inscripción válida';
 
 /* PÁGINA DE REGISTRO DE PROYECTOS */
 

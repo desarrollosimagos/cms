@@ -170,7 +170,7 @@ th {
 							<div class="col-lg-5">
 								<dl class="dl-horizontal">
 									<dt><?php echo $this->lang->line('view_created_projects'); ?>:</dt> <dd><?php //echo $ver[0]->username; ?></dd>
-									<dt><?php echo $this->lang->line('view_investors_projects'); ?>:</dt> <dd>  <?php echo count($investors); ?></dd>
+									<!--<dt><?php echo $this->lang->line('view_investors_projects'); ?>:</dt> <dd>  <?php echo count($investors); ?></dd>-->
 								</dl>
 							</div>
 							<div class="col-lg-7" id="cluster_info">
@@ -181,7 +181,7 @@ th {
 							</div>
 						</div>
 						
-						<div class="row">
+						<!--<div class="row">
 							<div class="col-lg-12">
 								<dl class="dl-horizontal" >
 									<dt></dt>
@@ -196,7 +196,7 @@ th {
 									</dd>
 								</dl>
 							</div>
-						</div>
+						</div>-->
 						
 						<div class="row">
 							<div class="col-lg-12">
@@ -338,20 +338,15 @@ th {
 									<div class="ibox">
 										<div class="ibox-content">
 											<h5><?php echo $this->lang->line('view_registered_users'); ?></h5>
-											<!--<h1 class="no-margins">
-												<?php 
-												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
-												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
-												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+											<h2>
+												<?php
+												$i = 0;  // Número de usuario registrados
+												foreach($project_transactions as $transact){
+													$i += 1;
+												}
+												echo $i;
 												?>
-												<span class="pie"><?php //echo $result; ?></span>
-											</h1>-->
-											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
-											<div class="progress progress-mini">
-												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
-											</div>
-											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
-											<!--<small><?php echo $result; ?></small>-->
+											</h2>
 										</div>
 									</div>
 								</div>
@@ -360,20 +355,17 @@ th {
 									<div class="ibox">
 										<div class="ibox-content">
 											<h5><?php echo $this->lang->line('view_validated_users'); ?></h5>
-											<!--<h1 class="no-margins">
-												<?php 
-												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
-												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
-												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+											<h2>
+												<?php
+												$j = 0;  // Número de usuario validados
+												foreach($project_transactions as $transact){
+													if($transact->status == "approved"){
+														$j += 1;
+													}
+												}
+												echo $j;
 												?>
-												<span class="pie"><?php //echo $result; ?></span>
-											</h1>-->
-											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
-											<div class="progress progress-mini">
-												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
-											</div>
-											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
-											<!--<small><?php echo $result; ?></small>-->
+											</h2>
 										</div>
 									</div>
 								</div>
@@ -703,30 +695,17 @@ th {
 	</div>
 	<!-- Cierre del cuerpo de la sección de transacciones -->
 	
-	<?php 
-	// Ids de los perfiles que tendrań permisos de visualización
-	$global_profiles = array(1, 2);
-	?>
 	
-	<?php if(in_array($this->session->userdata('logged_in')['profile_id'], $global_profiles)){?>
-	<!-- Cuerpo de la sección de transacciones por usuario-->
+	<!-- Cuerpo de la sección de usuarios con pagos aprobados -->
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
-			<h5><?php echo $this->lang->line('view_list_summary_users_title_projects'); ?></h5>
+			<h5><?php echo $this->lang->line('view_list_users_approved_title_projects'); ?></h5>
 			
 			<div class="ibox-tools">
 				<a class="collapse-link">
 					<i class="fa fa-chevron-up"></i>
 				</a>
-				<!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="fa fa-wrench"></i>
-				</a>
-				<ul class="dropdown-menu dropdown-user">
-					<li><a href="#">Config option 1</a>
-					</li>
-					<li><a href="#">Config option 2</a>
-					</li>
-				</ul>-->
+				
 				<a class="close-link">
 					<i class="fa fa-times"></i>
 				</a>
@@ -737,68 +716,51 @@ th {
 			
 			<div class="col-sm-4 col-md-offset-8">
 				<div class="input-group">
-					<input type="text" placeholder="Search in table" class="input-sm form-control" id="filter2">
+					<input type="text" placeholder="Search in table" class="input-sm form-control" id="approved_payments">
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-sm btn-primary"> Go!</button>
 					</span>
 				</div>
 			</div>
 			
-			<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter=#filter2>
+			<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter=#approved_payments>
 				<thead>
 					<tr>
-						<th><?php echo $this->lang->line('view_list_users_username_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_payback_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_invested_capital_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_dividend_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_capital_in_project_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_invest_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_withdraw_projects'); ?></th>
+						<th><?php echo $this->lang->line('view_list_users_approved_username_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_approved_date_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_approved_value_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_approved_status_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_approved_validated_projects'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php $i = 1; ?>
-					<?php foreach ($project_transactions_gen['resumen_usuarios'] as $transact) { ?>
-						<tr style="text-align: center">
-							<td>
-								<?php echo $transact->name; ?>
-							</td>
-							<?php
-							$returned_capital = explode(" ", $transact->returned_capital);
-							$returned_capital = $returned_capital[0];
-							$capital_invested = explode(" ", $transact->capital_invested);
-							$capital_invested = $capital_invested[0];
-							if($capital_invested > 0){
-								$payback = $returned_capital*100/$capital_invested;
-							}else{
-								$payback = 100;
-							}
-							?>
-							<td title="<?php echo round($payback, 2); ?>%">
-								<span class="pie"><?php echo (string)$returned_capital."/".(string)$capital_invested; ?></span>
-							</td>
-							<td>
-								<?php echo $transact->capital_invested; ?>
-							</td>
-							<td>
-								<?php echo $transact->returned_capital; ?>
-							</td>
-							<td>
-								<?php echo $transact->retirement_capital_available; ?>
-							</td>
-							<td>
-								<?php echo $transact->pending_entry; ?>
-							</td>
-							<td>
-								<?php echo $transact->pending_exit; ?>
-							</td>
-						</tr>
-						<?php $i++ ?>
+					<?php foreach ($project_transactions as $transact) { ?>
+						<?php if($transact->status == "approved") { ?>
+							<tr style="text-align: center">
+								<td>
+									<?php echo $transact->username; ?>
+								</td>
+								<td>
+									<?php echo $transact->d_create; ?>
+								</td>
+								<td>
+									<?php echo $transact->amount . " " . $transact->coin_avr; ?>
+								</td>
+								<td>
+									<?php echo $transact->status; ?>
+								</td>
+								<td>
+									<?php echo "<i class='fa fa-check text-navy'></i>"; ?>
+								</td>
+							</tr>
+							<?php $i++ ?>
+						<?php } ?>
 					<?php } ?>
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class='text-center' colspan='7'>
+						<td class='text-center' colspan='5'>
 							<ul class='pagination'></ul>
 						</td>
 					</tr>
@@ -808,27 +770,18 @@ th {
 		</div>
 		
 	</div>
-	<!-- Cierre del cuerpo de la sección de transacciones por usuario -->
-	<?php } ?>
-	
-	<!-- Cuerpo de la sección de usuarios con pagos pendientes-->
+	<!-- Cierre del cuerpo de la sección de usuarios con pagos aprobados -->
+		
+	<!-- Cuerpo de la sección de usuarios con pagos pendientes -->
 	<div class="ibox float-e-margins">
 		<div class="ibox-title">
-			<h5><?php echo $this->lang->line('view_list_summary_users_title_projects'); ?></h5>
+			<h5><?php echo $this->lang->line('view_list_users_waiting_title_projects'); ?></h5>
 			
 			<div class="ibox-tools">
 				<a class="collapse-link">
 					<i class="fa fa-chevron-up"></i>
 				</a>
-				<!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="fa fa-wrench"></i>
-				</a>
-				<ul class="dropdown-menu dropdown-user">
-					<li><a href="#">Config option 1</a>
-					</li>
-					<li><a href="#">Config option 2</a>
-					</li>
-				</ul>-->
+				
 				<a class="close-link">
 					<i class="fa fa-times"></i>
 				</a>
@@ -839,68 +792,51 @@ th {
 			
 			<div class="col-sm-4 col-md-offset-8">
 				<div class="input-group">
-					<input type="text" placeholder="Search in table" class="input-sm form-control" id="filter3">
+					<input type="text" placeholder="Search in table" class="input-sm form-control" id="pending_payments">
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-sm btn-primary"> Go!</button>
 					</span>
 				</div>
 			</div>
 			
-			<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter=#filter3>
+			<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter=#pending_payments>
 				<thead>
 					<tr>
-						<th><?php echo $this->lang->line('view_list_users_username_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_payback_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_invested_capital_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_dividend_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_capital_in_project_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_invest_projects'); ?></th>
-						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_withdraw_projects'); ?></th>
+						<th><?php echo $this->lang->line('view_list_users_waiting_username_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_waiting_date_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_waiting_value_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_waiting_status_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_waiting_validated_projects'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php $i = 1; ?>
-					<?php foreach ($project_transactions_gen['resumen_usuarios'] as $transact) { ?>
-						<tr style="text-align: center">
-							<td>
-								<?php echo $transact->name; ?>
-							</td>
-							<?php
-							$returned_capital = explode(" ", $transact->returned_capital);
-							$returned_capital = $returned_capital[0];
-							$capital_invested = explode(" ", $transact->capital_invested);
-							$capital_invested = $capital_invested[0];
-							if($capital_invested > 0){
-								$payback = $returned_capital*100/$capital_invested;
-							}else{
-								$payback = 100;
-							}
-							?>
-							<td title="<?php echo round($payback, 2); ?>%">
-								<span class="pie"><?php echo (string)$returned_capital."/".(string)$capital_invested; ?></span>
-							</td>
-							<td>
-								<?php echo $transact->capital_invested; ?>
-							</td>
-							<td>
-								<?php echo $transact->returned_capital; ?>
-							</td>
-							<td>
-								<?php echo $transact->retirement_capital_available; ?>
-							</td>
-							<td>
-								<?php echo $transact->pending_entry; ?>
-							</td>
-							<td>
-								<?php echo $transact->pending_exit; ?>
-							</td>
-						</tr>
-						<?php $i++ ?>
+					<?php foreach ($project_transactions as $transact) { ?>
+						<?php if($transact->status == "waiting") { ?>
+							<tr style="text-align: center">
+								<td>
+									<?php echo $transact->username; ?>
+								</td>
+								<td>
+									<?php echo $transact->d_create; ?>
+								</td>
+								<td>
+									<?php echo $transact->amount . " " . $transact->coin_avr; ?>
+								</td>
+								<td>
+									<?php echo $transact->status; ?>
+								</td>
+								<td>
+									<?php echo "<i class='fa fa-check text-warning'></i>"; ?>
+								</td>
+							</tr>
+							<?php $i++ ?>
+						<?php } ?>
 					<?php } ?>
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class='text-center' colspan='7'>
+						<td class='text-center' colspan='5'>
 							<ul class='pagination'></ul>
 						</td>
 					</tr>

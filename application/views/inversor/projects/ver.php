@@ -170,7 +170,7 @@ th {
 							<div class="col-lg-5">
 								<dl class="dl-horizontal">
 									<dt><?php echo $this->lang->line('view_created_projects'); ?>:</dt> <dd><?php //echo $ver[0]->username; ?></dd>
-									<dt><?php echo $this->lang->line('view_investors_projects'); ?>:</dt> <dd>  <?php echo count($investors); ?></dd>
+									<!--<dt><?php echo $this->lang->line('view_investors_projects'); ?>:</dt> <dd>  <?php echo count($investors); ?></dd>-->
 								</dl>
 							</div>
 							<div class="col-lg-7" id="cluster_info">
@@ -181,7 +181,7 @@ th {
 							</div>
 						</div>
 						
-						<div class="row">
+						<!--<div class="row">
 							<div class="col-lg-12">
 								<dl class="dl-horizontal" >
 									<dt></dt>
@@ -196,7 +196,7 @@ th {
 									</dd>
 								</dl>
 							</div>
-						</div>
+						</div>-->
 						
 						<div class="row">
 							<div class="col-lg-12">
@@ -338,20 +338,15 @@ th {
 									<div class="ibox">
 										<div class="ibox-content">
 											<h5><?php echo $this->lang->line('view_registered_users'); ?></h5>
-											<!--<h1 class="no-margins">
-												<?php 
-												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
-												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
-												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+											<h2>
+												<?php
+												$i = 0;  // Número de usuario registrados
+												foreach($project_transactions as $transact){
+													$i += 1;
+												}
+												echo $i;
 												?>
-												<span class="pie"><?php //echo $result; ?></span>
-											</h1>-->
-											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
-											<div class="progress progress-mini">
-												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
-											</div>
-											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
-											<!--<small><?php echo $result; ?></small>-->
+											</h2>
 										</div>
 									</div>
 								</div>
@@ -360,20 +355,17 @@ th {
 									<div class="ibox">
 										<div class="ibox-content">
 											<h5><?php echo $this->lang->line('view_validated_users'); ?></h5>
-											<!--<h1 class="no-margins">
-												<?php 
-												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
-												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
-												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+											<h2>
+												<?php
+												$j = 0;  // Número de usuario validados
+												foreach($project_transactions as $transact){
+													if($transact->status == "approved"){
+														$j += 1;
+													}
+												}
+												echo $j;
 												?>
-												<span class="pie"><?php //echo $result; ?></span>
-											</h1>-->
-											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
-											<div class="progress progress-mini">
-												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
-											</div>
-											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
-											<!--<small><?php echo $result; ?></small>-->
+											</h2>
 										</div>
 									</div>
 								</div>
