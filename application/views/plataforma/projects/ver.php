@@ -895,6 +895,107 @@ th {
 		
 	</div>
 	<!-- Cierre del cuerpo de la sección de transacciones por usuario -->
+		
+	<!-- Cuerpo de la sección de usuarios con pagos pendientes-->
+	<div class="ibox float-e-margins">
+		<div class="ibox-title">
+			<h5><?php echo $this->lang->line('view_list_summary_users_title_projects'); ?></h5>
+			
+			<div class="ibox-tools">
+				<a class="collapse-link">
+					<i class="fa fa-chevron-up"></i>
+				</a>
+				<!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="fa fa-wrench"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-user">
+					<li><a href="#">Config option 1</a>
+					</li>
+					<li><a href="#">Config option 2</a>
+					</li>
+				</ul>-->
+				<a class="close-link">
+					<i class="fa fa-times"></i>
+				</a>
+			</div>
+			
+		</div>
+		<div class="ibox-content">
+			
+			<div class="col-sm-4 col-md-offset-8">
+				<div class="input-group">
+					<input type="text" placeholder="Search in table" class="input-sm form-control" id="filter3">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-sm btn-primary"> Go!</button>
+					</span>
+				</div>
+			</div>
+			
+			<table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter=#filter3>
+				<thead>
+					<tr>
+						<th><?php echo $this->lang->line('view_list_users_username_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_payback_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_invested_capital_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_dividend_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_capital_in_project_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_invest_projects'); ?></th>
+						<th data-hide="phone,tablet"><?php echo $this->lang->line('view_list_users_pending_withdraw_projects'); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $i = 1; ?>
+					<?php foreach ($project_transactions_gen['resumen_usuarios'] as $transact) { ?>
+						<tr style="text-align: center">
+							<td>
+								<?php echo $transact->name; ?>
+							</td>
+							<?php
+							$returned_capital = explode(" ", $transact->returned_capital);
+							$returned_capital = $returned_capital[0];
+							$capital_invested = explode(" ", $transact->capital_invested);
+							$capital_invested = $capital_invested[0];
+							if($capital_invested > 0){
+								$payback = $returned_capital*100/$capital_invested;
+							}else{
+								$payback = 100;
+							}
+							?>
+							<td title="<?php echo round($payback, 2); ?>%">
+								<span class="pie"><?php echo (string)$returned_capital."/".(string)$capital_invested; ?></span>
+							</td>
+							<td>
+								<?php echo $transact->capital_invested; ?>
+							</td>
+							<td>
+								<?php echo $transact->returned_capital; ?>
+							</td>
+							<td>
+								<?php echo $transact->retirement_capital_available; ?>
+							</td>
+							<td>
+								<?php echo $transact->pending_entry; ?>
+							</td>
+							<td>
+								<?php echo $transact->pending_exit; ?>
+							</td>
+						</tr>
+						<?php $i++ ?>
+					<?php } ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class='text-center' colspan='7'>
+							<ul class='pagination'></ul>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+			
+		</div>
+		
+	</div>
+	<!-- Cierre del cuerpo de la sección de usuarios con pagos pendientes -->
 	
 	<?php } ?>
 

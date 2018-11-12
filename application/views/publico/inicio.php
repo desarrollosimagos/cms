@@ -23,6 +23,7 @@
 	
 	ul {
 		list-style: none;
+		color: #FFFFFF;
 	}
 	
 	@media screen and (max-height: 480px) {
