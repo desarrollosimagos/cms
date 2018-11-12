@@ -53,6 +53,8 @@ $lang['view_invested_capital'] = 'Invested capital';
 $lang['view_dividend'] = 'Dividend';
 $lang['view_expenses'] = 'Expenses';
 $lang['view_capital_in_project'] = 'Capital in Project';
+$lang['view_registered_users'] = 'Registered users';
+$lang['view_validated_users'] = 'Validated users';
 
 // Resumen por moneda
 $lang['view_list_summary_currency_title_projects'] = 'Summary by Currency';
