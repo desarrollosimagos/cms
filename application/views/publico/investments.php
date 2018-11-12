@@ -61,15 +61,15 @@
 							<?php echo $proyecto->description ?>
 						</p>
 						<div class="row m-t-lg">
-							<div class="col-md-4">
-								<h5><strong><?php echo number_format($proyecto->amount_min, 2, ',', '.') ?></strong></h5>
+							<div class="col-md-3">
+								<h5><strong><?php echo "100"; ?></strong></h5>
 								<span class="label label-success"><?php echo $this->lang->line('public_list_minimum_projects'); ?></span>
 							</div>
 							<div class="col-md-4">
 								<h5><strong>368</strong></h5>
 								<span class="label label-success"><?php echo $this->lang->line('public_list_variable_projects'); ?></span>
 							</div>
-							<div class="col-md-4">
+							<div class="col-md-5">
 								<h5><strong>5yr</strong></h5>
 								<span class="label label-success"><?php echo $this->lang->line('public_view_target_projects'); ?></span>
 							</div>
@@ -81,6 +81,17 @@
 									<a type="button" href="<?php echo base_url();?>investments/detail/<?php echo $proyecto->id?>" class="btn btn-primary btn-sm btn-block b-r-xl learn-more">
 									<i class="fa fa-info-circle fa-1.5x"></i>
 									<?php echo $this->lang->line('public_list_learn_more_projects'); ?>
+									</a>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row user-button">
+							<div class="row">
+								<div class="col-md-12" align="center">
+									<a type="button" href="<?php echo base_url();?>investments/detail/<?php echo $proyecto->id?>" class="btn btn-primary btn-sm btn-block b-r-xl learn-more">
+									<i class="fa fa-sign-in fa-1.5x"></i>
+									<?php echo $this->lang->line('public_list_sing_up_projects'); ?>
 									</a>
 								</div>
 							</div>
