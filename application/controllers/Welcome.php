@@ -117,8 +117,8 @@ class Welcome extends CI_Controller {
 			
 			// Proceso de búsqueda de transacciones asociados al proyecto para calcular el porcentaje recaudado
 			$transacctions = $this->MProjects->buscar_transacciones($proyecto->id);
-			if($proyecto->amount_r != null && $proyecto->amount_r > 0){
-				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->amount_r*100;
+			if($proyecto->valor != null && $proyecto->valor > 0){
+				$porcentaje = (float)$transacctions[0]->ingresos/(float)$proyecto->valor*100;
 			}else{
 				$porcentaje = "null";
 			}
@@ -129,12 +129,6 @@ class Welcome extends CI_Controller {
 				'description' => $proyecto->description,
 				'type' => $proyecto->type,
 				'valor' => $proyecto->valor,
-				'amount_r' => $proyecto->amount_r,
-				'amount_min' => $proyecto->amount_min,
-				'amount_max' => $proyecto->amount_max,
-				'date' => $proyecto->date,
-				'date_r' => $proyecto->date_r,
-				'date_v' => $proyecto->date_v,
 				'coin' => $proyecto->coin_avr." (".$proyecto->coin.")",
 				'status' => $proyecto->status,
 				'fotos_asociadas' => $fotos_asociadas,
