@@ -329,6 +329,60 @@ th {
 							
 						</div>
 						
+						<!-- Sección de usuarios asociados al proyecto -->
+						<div class="row m-t-sm">
+							
+							<div class="col-lg-12">
+								
+								<div class="col-lg-3">
+									<div class="ibox">
+										<div class="ibox-content">
+											<h5><?php echo $this->lang->line('view_registered_users'); ?></h5>
+											<!--<h1 class="no-margins">
+												<?php 
+												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
+												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
+												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+												?>
+												<span class="pie"><?php //echo $result; ?></span>
+											</h1>-->
+											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
+											<div class="progress progress-mini">
+												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
+											</div>
+											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
+											<!--<small><?php echo $result; ?></small>-->
+										</div>
+									</div>
+								</div>
+								
+								<div class="col-lg-3">
+									<div class="ibox">
+										<div class="ibox-content">
+											<h5><?php echo $this->lang->line('view_validated_users'); ?></h5>
+											<!--<h1 class="no-margins">
+												<?php 
+												//~ $payback = explode(" ", $project_transactions_gen->capital_payback);
+												//~ $invested = explode(" ", $project_transactions_gen->capital_invested);
+												//~ $result = (string)$payback[0]."/".(string)$invested[0];
+												?>
+												<span class="pie"><?php //echo $result; ?></span>
+											</h1>-->
+											<h2><?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%</h2>
+											<div class="progress progress-mini">
+												<div style="width: <?php echo $project_transactions_gen['resumen_general']->capital_payback; ?>%;" class="progress-bar"></div>
+											</div>
+											<!--<div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>-->
+											<!--<small><?php echo $result; ?></small>-->
+										</div>
+									</div>
+								</div>
+								
+							</div>
+							
+						</div>
+						<!-- Cierre de la sección de usuarios asociados al proyecto -->
+						
 					</div>
 					
 				</div>
