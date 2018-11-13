@@ -7,6 +7,7 @@ $lang['Import LB'] = 'Import LB';
 
 // Submenús de Inversiones
 $lang['Eventos'] = 'Eventos';
+$lang['Ver Eventos'] = 'Ver Eventos';
 $lang['Invertir'] = 'Invertir';
 $lang['Contratos'] = 'Contratos';
 $lang['Pagos'] = 'Pagos';
