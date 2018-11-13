@@ -73,7 +73,7 @@ $(document).ready(function(){
         function(isConfirm){
             if (isConfirm) {
              
-                $.post(base_url+'projects/delete/' + id + '', function (response) {
+                $.post(base_url+'events/delete/' + id + '', function (response) {
 
                     if (response['response'] == "existe") {
                        
@@ -102,7 +102,7 @@ $(document).ready(function(){
                             type: "success" 
                         },
                         function(){
-                             window.location.href = base_url+'projects';
+                             window.location.href = base_url+'events';
                         });
                     }
                 }, 'json');
@@ -138,7 +138,7 @@ $(document).ready(function(){
 				});
 				
 				// Realizamos una consulta asincrona con ajax usando como argumento lo escrito en el buscador
-				$.post(base_url+'projects/search', { 'search': info }, function(data){
+				$.post(base_url+'events/search', { 'search': info }, function(data){
 					
 					if(data != ''){
 						$(".results").html('');  // Vaciamos la tabla
@@ -165,7 +165,7 @@ $(document).ready(function(){
 				});
 				
 				// Realizamos una consulta asincrona con ajax sin datos de búsqueda para que retorne todos los registros correspondientes
-				$.post(base_url+'projects/search', { 'search': '' }, function(data){
+				$.post(base_url+'events/search', { 'search': '' }, function(data){
 					
 					if(data != ''){
 						$(".results").html('');  // Vaciamos la tabla
@@ -201,7 +201,7 @@ $(document).ready(function(){
 			});
 			
 			// Realizamos una consulta asincrona con ajax usando como argumento lo escrito en el buscador
-			$.post(base_url+'projects/search', { 'search': info }, function(data){
+			$.post(base_url+'events/search', { 'search': info }, function(data){
 				
 				if(data != ''){
 					$(".results").html('');  // Vaciamos la tabla
@@ -228,7 +228,7 @@ $(document).ready(function(){
 			});
 			
 			// Realizamos una consulta asincrona con ajax sin datos de búsqueda para que retorne todos los registros correspondientes
-			$.post(base_url+'projects/search', { 'search': '' }, function(data){
+			$.post(base_url+'events/search', { 'search': '' }, function(data){
 				
 				if(data != ''){
 					$(".results").html('');  // Vaciamos la tabla
