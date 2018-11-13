@@ -47,8 +47,8 @@ class CProjects extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('base');
-		$data['ident'] = "Inversiones";
-		$data['ident_sub'] = "Inversiones";
+		$data['ident'] = "Eventos";
+		$data['ident_sub'] = "Eventos";
 		
 		$listar = array();
 		
@@ -271,8 +271,8 @@ class CProjects extends CI_Controller {
 	public function register()
 	{
 		$this->load->view('base');
-		$data['ident'] = "Inversiones";
-		$data['ident_sub'] = "Inversiones";
+		$data['ident'] = "Eventos";
+		$data['ident_sub'] = "Eventos";
 		$data['monedas'] = $this->MCoins->obtener();
 		$data['project_types'] = $this->MProjects->obtenerTipos();
 		
@@ -443,8 +443,8 @@ class CProjects extends CI_Controller {
     public function view() {
 		
 		$this->load->view('base');
-		$data['ident'] = "Inversiones";
-		$data['ident_sub'] = "Inversiones";
+		$data['ident'] = "Eventos";
+		$data['ident_sub'] = "Eventos";
         $data['id'] = $this->uri->segment(3);
         $data['ver'] = $this->MProjects->obtenerProyecto($data['id']);
         $data['fotos_asociadas'] = $this->MProjects->obtenerFotos($data['id']);
@@ -682,8 +682,8 @@ class CProjects extends CI_Controller {
     public function edit() {
 		
 		$this->load->view('base');
-		$data['ident'] = "Inversiones";
-		$data['ident_sub'] = "Inversiones";
+		$data['ident'] = "Eventos";
+		$data['ident_sub'] = "Eventos";
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MProjects->obtenerProyecto($data['id']);
         $data['monedas'] = $this->MCoins->obtener();

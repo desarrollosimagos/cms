@@ -132,7 +132,7 @@
 		<div class="ibox-title">
 			<h5><?php echo $this->lang->line('list_title_projects'); ?></h5>
 			<div class="ibox-tools">
-				<a href="<?php echo base_url() ?>projects/register" id="agregar" class="btn btn-primary btn-xs"><?php echo $this->lang->line('btn_registry_projects'); ?></a>
+				<a href="<?php echo base_url() ?>events/register" id="agregar" class="btn btn-primary btn-xs"><?php echo $this->lang->line('btn_registry_projects'); ?></a>
 			</div>
 		</div>
 		<div class="ibox-content">
@@ -200,7 +200,7 @@
 							<?php } ?>
 						</td>
 						<td class="project-title">
-							<a href="<?php echo base_url() ?>projects/view/<?= $proyecto->id; ?>"><?php echo $proyecto->name; ?></a>
+							<a href="<?php echo base_url() ?>events/view/<?= $proyecto->id; ?>"><?php echo $proyecto->name; ?></a>
 							<br/>
 							<small>Created <?php echo $proyecto->date; ?></small>
 							<br>
@@ -234,8 +234,8 @@
 							<?php echo $proyecto->coin; ?>
 						</td>
 						<td class="project-actions">
-							<a href="<?php echo base_url() ?>projects/view/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_view_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> <?php echo $this->lang->line('list_view_projects'); ?> </a>
-							<a href="<?php echo base_url() ?>projects/edit/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_edit_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> <?php echo $this->lang->line('list_edit_projects'); ?> </a>
+							<a href="<?php echo base_url() ?>events/view/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_view_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-folder"></i> <?php echo $this->lang->line('list_view_projects'); ?> </a>
+							<a href="<?php echo base_url() ?>events/edit/<?= $proyecto->id; ?>" title="<?php echo $this->lang->line('list_edit_projects'); ?>" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> <?php echo $this->lang->line('list_edit_projects'); ?> </a>
 							<a id='<?php echo $proyecto->id; ?>' title='<?php echo $this->lang->line('list_delete_projects'); ?>' class="btn btn-danger btn-sm borrar"><i class="fa fa-trash"></i> <?php echo $this->lang->line('list_delete_projects'); ?> </a>
 						</td>
 					</tr>

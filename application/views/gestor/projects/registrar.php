@@ -7,7 +7,7 @@
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>projects"><?php echo $this->lang->line('heading_subtitle_projects_registry'); ?></a>
+                <a href="<?php echo base_url() ?>events"><?php echo $this->lang->line('heading_subtitle_projects_registry'); ?></a>
             </li>
             
             <li class="active">
@@ -298,7 +298,7 @@ $(document).ready(function(){
     });
 
     $('#volver').click(function () {
-        url = '<?php echo base_url() ?>projects/';
+        url = '<?php echo base_url() ?>events/';
         window.location = url;
     });
     
@@ -372,7 +372,7 @@ $(document).ready(function(){
 							  type: "success" 
 							},
 						function(){
-						  window.location.href = '<?php echo base_url(); ?>projects';
+						  window.location.href = '<?php echo base_url(); ?>events';
 						});
 						
 					}

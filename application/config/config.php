@@ -541,6 +541,6 @@ $config['logo_favicon'] = '';
 $config['email_send'] = 'solorzano202009@gmail.com';
 $config['public_menu'][] = array('Inicio', $config['base_url'].'start', 1);
 //~ $config['public_menu'][] = array('Posibilidades', $config['base_url'].'possibilities', 1);
-$config['public_menu'][] = array('Inversiones', $config['base_url'].'investments', 1);
+$config['public_menu'][] = array('Eventos', $config['base_url'].'investments', 1);
 $config['public_menu'][] = array('Contactos', $config['base_url'].'contacts', 1);
 $config['public_menu'][] = array('Resumen', $config['base_url'].'dashboard', 2);

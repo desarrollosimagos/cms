@@ -2,7 +2,7 @@
 $lang['Perfil'] = 'Profile';
 $lang['Resumen'] = 'Summary';
 $lang['Cuentas'] = 'Accounts';
-$lang['Inversiones'] = 'Investments';
+$lang['Eventos'] = 'Events';
 $lang['Usuarios'] = 'Users';
 $lang['Menús'] = 'Menus';
 $lang['Cambiar Contraseña'] = 'Change Password';

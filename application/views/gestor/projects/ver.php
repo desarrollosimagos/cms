@@ -28,7 +28,7 @@ th {
             </li>
             
             <li>
-                <a href="<?php echo base_url() ?>projects"><?php echo $this->lang->line('heading_subtitle_projects_view'); ?></a>
+                <a href="<?php echo base_url() ?>events"><?php echo $this->lang->line('heading_subtitle_projects_view'); ?></a>
             </li>
            
             <li class="active">
@@ -101,7 +101,7 @@ th {
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="m-b-md">
-									<a href="<?php echo base_url() ?>projects/edit/<?= $ver[0]->id; ?>" class="btn btn-white btn-xs pull-right"><?php echo $this->lang->line('btn_edit_projects_view'); ?></a>
+									<a href="<?php echo base_url() ?>events/edit/<?= $ver[0]->id; ?>" class="btn btn-white btn-xs pull-right"><?php echo $this->lang->line('btn_edit_projects_view'); ?></a>
 									<!--<h2><?php echo $ver[0]->name; ?></h2>-->
 								</div>
 								<dl class="dl-horizontal">

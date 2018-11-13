@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'welcome';
-$route['detail_projects'] = 'Welcome/detail_projects';
+$route['detail_events'] = 'Welcome/detail_events';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -136,19 +136,19 @@ $route['user_groups/register'] = 'CUserGroups/register';
 $route['user_groups/edit/(:num)'] = 'CUserGroups/edit/$1';
 $route['user_groups/delete/(:num)'] = 'CUserGroups/delete/$1';
 /*   Proyectos */
-$route['projects'] = 'CProjects';
-$route['projects/register'] = 'CProjects/register';
-$route['projects/view/(:num)'] = 'CProjects/view/$1';
-$route['projects/edit/(:num)'] = 'CProjects/edit/$1';
-$route['projects/delete/(:num)'] = 'CProjects/delete/$1';
-$route['projects/search'] = 'CProjects/seeker';
+$route['events'] = 'CProjects';
+$route['events/register'] = 'CProjects/register';
+$route['events/view/(:num)'] = 'CProjects/view/$1';
+$route['events/edit/(:num)'] = 'CProjects/edit/$1';
+$route['events/delete/(:num)'] = 'CProjects/delete/$1';
+$route['events/search'] = 'CProjects/seeker';
 $route['share_profit'] = 'CShareProfit';
 $route['share_profit/share'] = 'CShareProfit/share';
 /*   Público */
 $route['start'] = 'Welcome/start';
 $route['possibilities'] = 'Welcome/possibilities';
 $route['investments'] = 'Welcome/investments';
-$route['investments/detail/(:num)'] = 'Welcome/detail_projects/$1';
+$route['investments/detail/(:num)'] = 'Welcome/detail_events/$1';
 $route['contacts'] = 'Welcome/contacts';
 
 /*   Bitácora */
