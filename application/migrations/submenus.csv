@@ -3,7 +3,7 @@
 "3","Monedas"," <li><a href=""coins"">Monedas</a></li>",,"coins","2","12","3","2017-05-09 10:03:45","0000-00-00 00:00:00"
 "4","Eventos"," <li><a href=""events"">Eventos</a></li>",,"events","3","16","1","2017-05-09 10:03:45","0000-00-00 00:00:00"
 "5","Ver Eventos"," <li><a href=""investments"">Ver Eventos</a></li>",,"investments","3","16","2","2017-05-09 10:03:45","0000-00-00 00:00:00"
-"6","Invertir"," <li><a href=""projects"">Invertir</a></li>",,"projects","3","16","3","2017-05-09 10:03:45","0000-00-00 00:00:00"
+"6","Inscribir"," <li><a href=""events/inscription"">Inscribir</a></li>",,"events/inscription","3","17","3","2017-05-09 10:03:45","0000-00-00 00:00:00"
 "7","Contratos"," <li><a href=""contracts"">Contratos</a></li>",,"contracts","3","18","4","2017-05-09 10:03:45","0000-00-00 00:00:00"
 "8","Pagos"," <li><a href=""payments"">Pagos</a></li>",,"payments","3","19","5","2017-05-09 10:03:45","0000-00-00 00:00:00"
 "9","Perfiles","<li><a href=""profile"">Perfiles</a></li>",,"profile","4","2","1","2017-05-05 16:59:47","0000-00-00 00:00:00"
