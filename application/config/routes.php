@@ -142,6 +142,7 @@ $route['events/view/(:num)'] = 'CProjects/view/$1';
 $route['events/edit/(:num)'] = 'CProjects/edit/$1';
 $route['events/delete/(:num)'] = 'CProjects/delete/$1';
 $route['events/search'] = 'CProjects/seeker';
+$route['events/inscription'] = 'CInscription/register';
 $route['share_profit'] = 'CShareProfit';
 $route['share_profit/share'] = 'CShareProfit/share';
 /*   Público */

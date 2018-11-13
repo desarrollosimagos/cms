@@ -161,7 +161,7 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 						<!-- Construimos el menú superior combinando el arreglo de menús del config.php más las etiquetas de idiomas -->
 						<?php $i = 1; ?>
 						<?php foreach($this->config->item('public_menu') as $public_menu){ ?>
-							<?php $public_menu[0] = $this->lang->line('menu_bar_menu'.$i); ?>
+							<?php $public_menu[0] = $this->lang->line('menu_bar_menu4'); ?>
 							<?php if(!isset($this->session->userdata['logged_in']) && $public_menu[2] == 2){ ?>
 								<li style="display:none;"><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
 							<?php }else{ ?>

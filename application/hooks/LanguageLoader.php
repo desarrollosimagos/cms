@@ -32,6 +32,7 @@ class LanguageLoader
             $ci->lang->load('register_public',$siteLang);
             $ci->lang->load('new_password',$siteLang);
             $ci->lang->load('change_password',$siteLang);
+            $ci->lang->load('inscription_module',$siteLang);
         } else {
             $ci->lang->load('header','english');
             $ci->lang->load('login','english');
@@ -58,6 +59,7 @@ class LanguageLoader
             $ci->lang->load('register_public','english');
             $ci->lang->load('new_password','english');
             $ci->lang->load('change_password','english');
+            $ci->lang->load('inscription_module','english');
         }
         
         // Área de carga de idiomas disponibles en la tabla 'lang'
