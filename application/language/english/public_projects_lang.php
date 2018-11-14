@@ -13,7 +13,7 @@ $lang['public_list_type1_projects'] = 'available-capital';
 $lang['public_list_type2_projects'] = 'not available-capital';
 $lang['public_list_minimum_projects'] = 'Price';
 $lang['public_list_variable_projects'] = 'Event date';
-$lang['public_list_learn_more_projects'] = 'Learn More...';
+$lang['public_list_learn_more_projects'] = 'See More...';
 $lang['public_list_sing_up_projects'] = 'Sing up';
 $lang['public_list_see_more_projects'] = 'See More Deals';
 
