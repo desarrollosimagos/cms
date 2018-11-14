@@ -149,7 +149,7 @@ $route['share_profit/share'] = 'CShareProfit/share';
 $route['start'] = 'Welcome/start';
 $route['possibilities'] = 'Welcome/possibilities';
 $route['investments'] = 'Welcome/investments';
-$route['investments/detail/(:num)'] = 'Welcome/detail_events/$1';
+$route['investments/detail/(:num)'] = 'Welcome/detail_projects/$1';
 $route['contacts'] = 'Welcome/contacts';
 
 /*   Bitácora */
