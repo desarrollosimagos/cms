@@ -19,7 +19,7 @@ class CUserGroups extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['ident'] = "Usuarios";
-		$data['ident_sub'] = "Grupos_de_Inversionistas";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
+		$data['ident_sub'] = "Grupos_de_Usuarios";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
 		$data['listar'] = $this->MUserGroups->obtener();
 		$data['group_projects'] = $this->MUserGroups->obtener_proyectos();
 		//~ $data['projects'] = $this->MProjects->obtener();
@@ -53,7 +53,7 @@ class CUserGroups extends CI_Controller {
 	{
 		$this->load->view('base');
 		$data['ident'] = "Usuarios";
-		$data['ident_sub'] = "Grupos_de_Inversionistas";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
+		$data['ident_sub'] = "Grupos_de_Usuarios";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
 		//~ $data['projects'] = $this->MProjects->obtener();
 		$data['projects'] = $this->MProjects->listar();
 		//~ $data['inversores'] = $this->MRelateUsers->obtener_inversores();
@@ -135,7 +135,7 @@ class CUserGroups extends CI_Controller {
     public function edit() {
 		$this->load->view('base');
 		$data['ident'] = "Usuarios";
-		$data['ident_sub'] = "Grupos_de_Inversionistas";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
+		$data['ident_sub'] = "Grupos_de_Usuarios";  // Se añade el caracter "_" para suplantar los espacios y dar compatibilidad con la función de marcador de menú
         $data['id'] = $this->uri->segment(3);
         $data['editar'] = $this->MUserGroups->obtenerGrupos($data['id']);
         $data['group_projects'] = $this->MUserGroups->obtener_proyectos_id($data['id']);
