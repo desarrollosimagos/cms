@@ -112,14 +112,29 @@ if (!function_exists('menu')) {
 					}
 					if($num_submenus > 0){
 						echo "<ul class='nav nav-second-level collapse'>";
-						// Imprimiendo los submenús
+						
+						/* Procesando los submenús reordenándolos a través de un arreglo vacío y usando el valor del 
+						 * campo 'order' para asignar los índices
+						 * */
+						$new_order_submenus = array();
 						foreach($ci->session->userdata('logged_in')['submenus'] as $submenus){
+							
 							foreach($submenus as $submenu){
 								if($submenu->menu_id == $menu->id){
-									echo "<li class='".str_replace(" ", "_", $submenu->name)." submenu'><a href='".base_url().$submenu->route."'>".$ci->lang->line($submenu->name)."</a></li>";
+									$new_order_submenus[$submenu->order] = "<li class='".str_replace(" ", "_", $submenu->name)." submenu'><a href='".base_url().$submenu->route."'>".$ci->lang->line($submenu->name)."</a></li>";
 								}
 							}
+							
 						}
+						
+						// Ejecutamos el reordenamiento del submenú por clave, ya que tiene como claves los valores del campo 'order'
+						ksort($new_order_submenus);
+						
+						// Imprimimos los submenús, ya reordenados, correspondientes al menú
+						foreach($new_order_submenus as $key => $submenu){
+							echo $submenu;
+						}
+						
 						echo "</ul>";
 					}
 					?>

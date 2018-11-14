@@ -164,8 +164,10 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 							<?php $public_menu[0] = $this->lang->line('menu_bar_menu4'); ?>
 							<?php if(!isset($this->session->userdata['logged_in']) && $public_menu[2] == 2){ ?>
 								<li style="display:none;"><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
-							<?php }else{ ?>
+							<?php }else if(isset($this->session->userdata['logged_in']) && $this->session->userdata['logged_in']['profile_id'] != 4){ ?>
 								<li><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
+							<?php }else{ ?>
+								<li><a class="page-scroll" href="<?php echo base_url(); ?>home">Home</a></li>
 							<?php } ?>
                         <?php $i++; } ?>
 						<!--<li class="dropdown">
