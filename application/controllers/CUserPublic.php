@@ -38,7 +38,7 @@ class CUserPublic extends CI_Controller {
 				'name' => $this->input->post('name'),
 				'username' => $this->input->post('username'),
 				'alias' => '',
-				'profile_id' => 3,
+				'profile_id' => 4,
 				'coin_id' => 1,
 				'lang_id' => 1,
 				'user_create_id' => 0,
@@ -108,7 +108,7 @@ class CUserPublic extends CI_Controller {
 			$datos_reg = array(
 				'name'=>$mail[0]->name,
 				'username'=>$mail[0]->username,
-				'perfil'=>'INVERSOR'
+				'perfil'=>'COMPETIDOR'
 			);
 			// Enviamos los datos registrados al correo del usuario y lo redireccionamos al inicio de sesión
 			$this->MMails->enviarMailConfirm($datos_reg);
