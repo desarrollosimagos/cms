@@ -33,6 +33,7 @@ class CInscription extends CI_Controller {
 		// Load database
         $this->load->model('MUser');
         $this->load->model('MProjects');
+        $this->load->model('MInscription');
         $this->load->model('MCuentas');
         $this->load->model('MCoins');
         $this->load->model('MCoinRate');
@@ -51,8 +52,13 @@ class CInscription extends CI_Controller {
 		$data['ident'] = "Inscribir";
 		$data['ident_sub'] = "Inscribir";
 		$data['monedas'] = $this->MCoins->obtener();
-		$data['usuarios'] = $this->MUser->obtener();
-		$data['proyectos'] = $this->MProjects->listar();
+		$data['usuarios'] = $this->MInscription->listar_usuarios();
+		$data['proyectos'] = $this->MInscription->listar_proyectos();
+		if($this->input->get('project_id')){
+			$data['project_id'] = $this->input->get('project_id');
+		}else{
+			$data['project_id'] = '';
+		}
 		$data['project_types'] = $this->MProjects->obtenerTipos();
 		
 		// Filtro para cargar las vistas según el perfil del usuario logueado

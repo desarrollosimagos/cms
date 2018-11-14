@@ -12,6 +12,11 @@
         </ol>
     </div>
 </div>
+
+<!-- Campos ocultos que almacenan los nombres del menú y el submenú de la vista actual -->
+<input type="hidden" id="ident" value="<?php echo $ident; ?>">
+<input type="hidden" id="ident_sub" value="<?php echo $ident_sub; ?>">
+
 <div class="wrapper wrapper-content animated fadeInRight">
 	<div class="row">
         <div class="col-lg-12">
@@ -39,7 +44,11 @@
 								<select class="form-control m-b" name="project_id" id="project_id">
 									<option value="0" selected="">Seleccione</option>
 									<?php foreach($proyectos as $proyecto){?>
-									<option value="<?php echo $proyecto->id; ?>"><?php echo $proyecto->name; ?></option>
+										<?php if($project_id != '' && $project_id == $proyecto->id){?>
+											<option value="<?php echo $proyecto->id; ?>" selected="selected"><?php echo $proyecto->name; ?></option>
+										<?php }else{ ?>
+											<option value="<?php echo $proyecto->id; ?>"><?php echo $proyecto->name; ?></option>
+										<?php }?>
 									<?php }?>
 								</select>
 							</div>

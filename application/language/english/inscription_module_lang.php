@@ -13,7 +13,7 @@ $lang['heading_info_inscription_registry'] = 'Register inscription';
 
 // Formulario de registro de menús
 $lang['registry_user_inscription'] = 'User';
-$lang['registry_project_inscription'] = 'Project';
+$lang['registry_project_inscription'] = 'Event';
 $lang['registry_action_inscription'] = 'Action';
 $lang['registry_icon_inscription'] = 'Icon';
 $lang['registry_back_inscription'] = 'Back';

@@ -233,7 +233,7 @@
 							<div class="row user-button">
 								<div class="row">
 									<div class="col-md-12" align="center">
-										<a type="button" href="<?php echo base_url();?>events/inscription" class="btn btn-primary btn-sm btn-block b-r-xl learn-more">
+										<a type="button" href="<?php echo base_url();?>events/inscription?project_id=<?php echo $get_detail->id?>" class="btn btn-primary btn-sm btn-block b-r-xl learn-more">
 										<i class="fa fa-sign-in fa-1.5x"></i>
 										<?php echo $this->lang->line('public_view_invest_projects'); ?>
 										</a>
