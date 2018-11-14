@@ -123,7 +123,7 @@ class MProjects extends CI_Model {
 		// Filtro del buscador
 		if($buscar != ''){
 			$this->db->like('pj.name', $buscar);
-			$this->db->or_like('pj.date', $buscar);
+			$this->db->or_like('pj.d_create', $buscar);
 		}
 		$this->db->order_by("pj.id", "desc");
 		$query = $this->db->get();

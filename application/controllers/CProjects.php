@@ -226,7 +226,7 @@ class CProjects extends CI_Controller {
 			<td class="project-title">
 				<a href="<?php echo base_url() ?>projects/view/<?= $proyecto->id; ?>"><?php echo $proyecto->name; ?></a>
 				<br/>
-				<small>Created <?php echo $proyecto->date; ?></small>
+				<small>Created </small>
 				<br>
 				<?php if($this->session->userdata('logged_in')['profile_id'] == 1 || $this->session->userdata('logged_in')['profile_id'] == 2) { ?>
 				<small><?php echo $proyecto->groups_names; ?></small>
