@@ -25,6 +25,7 @@ application/language/english/public_home_lang.php
 index.php
 
 assets/img/logos/*
+assets/img/users/*
 assets/img/projects/*
 assets/documents/*
 assets/readings/*
