@@ -114,8 +114,12 @@
 						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_birthday_profileuser'); ?> *</label>
 						<div class="col-sm-10">
 							<?php
-							$birthday = explode("-", $editar_data[0]->birthday);
-							$birthday = $birthday[2] . "/" . $birthday[1] . "/" . $birthday[0];
+							if($editar_data[0]->birthday != ''){
+								$birthday = explode("-", $editar_data[0]->birthday);
+								$birthday = $birthday[2] . "/" . $birthday[1] . "/" . $birthday[0];
+							}else{
+								$birthday = "";
+							}
 							?>
 							<input type="text" class="form-control" placeholder="" name="birthday" id="birthday" value="<?php echo $birthday ?>">
 						</div>

@@ -73,8 +73,12 @@ class CProfileUser extends CI_Controller {
         $result = $this->MUser->update($data);
 		
 		// Actualización de datos complementarios
-		$birthday = explode("/", $this->input->post('birthday'));
-		$birthday = $birthday[2] . "-" . $birthday[1] . "-" . $birthday[0];
+		if($this->input->post('birthday') != ''){
+			$birthday = explode("/", $this->input->post('birthday'));
+			$birthday = $birthday[2] . "-" . $birthday[1] . "-" . $birthday[0];
+		}else{
+			$birthday = "";
+		}
 		$data2 = array(
 			'user_id' => $this->input->post('id'),
 			'dni' => $this->input->post('dni'),
