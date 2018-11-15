@@ -65,6 +65,7 @@ $route['profile/register'] = 'CPerfil/register';
 $route['profile/edit/(:num)'] = 'CPerfil/edit/$1';
 $route['profile/delete/(:num)'] = 'CPerfil/delete/$1';
 $route['profileuser'] = 'CProfileUser';
+$route['profileuser/update'] = 'CProfileUser/update';
 /*   Users */
 $route['users'] = 'CUser';
 $route['users/register'] = 'CUser/register';
