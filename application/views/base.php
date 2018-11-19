@@ -147,7 +147,7 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 				<nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0; background-color:#1b426c !important">
 					<div class="navbar-header">
 						<?php if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welcome'){ ?>
-						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary hidden-md hidden-lg" href="#"><i class="fa fa-bars"></i> </a>
 						<?php } ?>
 						<img src="<?php echo assets_url('img/logos/'.$this->config->item('logo_menu_bar')); ?>" style="margin-top: 5px;">
 						<!--<form role="search" class="navbar-form-custom" action="search_results.html">
@@ -163,11 +163,11 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 						<?php foreach($this->config->item('public_menu') as $public_menu){ ?>
 							<?php $public_menu[0] = $this->lang->line('menu_bar_menu4'); ?>
 							<?php if(!isset($this->session->userdata['logged_in']) && $public_menu[2] == 2){ ?>
-								<li style="display:none;"><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
+								<li class="hidden-xs hidden-sm" style="display:none;"><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
 							<?php }else if(isset($this->session->userdata['logged_in']) && $this->session->userdata['logged_in']['profile_id'] != 4){ ?>
-								<li><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
+								<li class="hidden-xs hidden-sm"><a class="page-scroll" href="<?php echo $public_menu[1] ?>"><?php echo $public_menu[0] ?></a></li>
 							<?php }else{ ?>
-								<li><a class="page-scroll" href="<?php echo base_url(); ?>home">Home</a></li>
+								<li class="hidden-xs hidden-sm"><a class="page-scroll" href="<?php echo base_url(); ?>home">Home</a></li>
 							<?php } ?>
                         <?php $i++; } ?>
 						<!--<li class="dropdown">
@@ -224,7 +224,7 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 							</ul>
 						</li>-->
 						
-						<li class="dropdown" id="li_language">
+						<li class="dropdown hidden-xs hidden-sm" id="li_language">
 							<a class="dropdown-toggle count-info page-scroll" data-toggle="dropdown" href="#" title="Idioma">
 								<i class="fa fa-language"></i> <span class="label label-warning" id="span_num_respuestas"></span>
 							</a>
@@ -250,14 +250,14 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 						<?php if(isset($this->session->userdata['logged_in'])){ ?>
 						<li>
 							<a class="page-scroll" href="<?php echo base_url();?>logout">
-								<i class="fa fa-sign-out"></i> <?php echo $this->lang->line('top_bar_logout'); ?>
+								<i class="fa fa-sign-out hidden-xs"></i> <?php echo $this->lang->line('top_bar_logout'); ?>
 							</a>
 						</li>
 						
 						<?php } else { ?>
 						<li>
 							<a class="page-scroll" href="<?php echo base_url();?>login">
-								<i class="fa fa-sign-in"></i> <?php echo $this->lang->line('top_bar_login'); ?>
+								<i class="fa fa-sign-in hidden-xs"></i> <?php echo $this->lang->line('top_bar_login'); ?>
 							</a>
 						</li>
 						<?php } ?>
@@ -280,17 +280,14 @@ if(isset($this->session->userdata['logged_in']) && $this->router->class != 'Welc
 				
 				// Función añadida manualmente para alternar entre mini-barra y barra de menú completa u ocultar en dispositivos móviles
 				// .navbar-minimalize = clase del botón de acción
-				// .md-skin = clase de la etiqueta body asignada automáticamente por los plugins de la plantilla
 				$(".navbar-minimalize").on('click', function(){
-					var cadena1 = "md-skin fixed-nav no-skin-config pace-done pace-done";
-					var cadena1_small = "md-skin fixed-nav no-skin-config body-small pace-done pace-done";
-					var cadena2 = "md-skin fixed-nav no-skin-config pace-done pace-done mini-navbar";
-					var cadena2_small = "md-skin fixed-nav no-skin-config body-small pace-done pace-done mini-navbar";
-					if($(".md-skin").attr("class") == cadena1 || $(".md-skin").attr("class") == cadena1_small){
-						$(".md-skin").addClass("mini-navbar");
-					}else if($(".md-skin").attr("class") == cadena2 || $(".md-skin").attr("class") == cadena2_small){
-						$(".md-skin").removeClass("mini-navbar");
+					// Añadimos o quitamos la clase 'mini-navbar' al body
+					if($("body").attr("class").indexOf("mini-navbar") > -1){
+						$("body").removeClass("mini-navbar");
+					}else{
+						$("body").addClass("mini-navbar");
 					}
+					
 				});
 				
 				//~ // Metodo de verificación de tiempo de sesión cada media hora
