@@ -21,6 +21,7 @@ $lang['edit_buttonpassword_profileuser'] = 'Change password';
 // Sección 2
 $lang['edit_title2_profileuser'] = 'Complementary data';
 $lang['edit_dni_profileuser'] = 'Identification document';
+$lang['message_dni_profileuser'] = 'The identity card must have the format V-00000000 without points.';
 $lang['edit_gender_profileuser'] = 'Gender';
 $lang['edit_gender1_profileuser'] = 'Masculine';
 $lang['edit_gender2_profileuser'] = 'Femenine';

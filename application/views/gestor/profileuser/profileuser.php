@@ -97,7 +97,10 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_dni_profileuser'); ?> *</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" placeholder="V-12345678" onkeypress="return valida_cedula(event)" name="dni" id="dni" maxlength="11" value="<?php echo $editar_data[0]->dni ?>">
+							<input type="text" class="form-control" placeholder="V-12345678" onkeypress="return valida_cedula(event)" name="dni" id="dni" maxlength="10" value="<?php echo $editar_data[0]->dni ?>">
+							<div class="alert alert-danger" id="dni-message" style="display:none;">
+								<?php echo $this->lang->line('message_dni_profileuser'); ?>
+							</div>
 						</div>
 					</div>
 					<div class="form-group">
