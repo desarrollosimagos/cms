@@ -194,7 +194,7 @@ class MFondoPersonal extends CI_Model {
  */
     public function obtener_proyectos_group() {
 		
-		$this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.amount_r, pj.amount_min, pj.amount_max, pj.date, pj.date_r, pj.date_v, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
+		$this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
 		// Si el usuario logueado es de perfil administrador o plataforma tomamos sólo los proyectos de su grupo de inversores
 		if($this->session->userdata('logged_in')['profile_id'] == 1 || $this->session->userdata('logged_in')['profile_id'] == 2){
 			$this->db->from('usergroups ig');
