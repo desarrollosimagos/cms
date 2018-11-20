@@ -26,7 +26,7 @@
 					
 				</div>
 				<div class="ibox-content">
-					<form id="form_services" method="post" accept-charset="utf-8" class="form-horizontal">
+					<form id="form_inscription" method="post" accept-charset="utf-8" class="form-horizontal">
 						<div class="form-group">
 							<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_user_inscription'); ?> *</label>
 							<div class="col-sm-10">
@@ -104,71 +104,36 @@ $(document).ready(function(){
 
         e.preventDefault();  // Para evitar que se envíe por defecto
 
-        if ($('#name').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar nombre");
-			$('#name').parent('div').addClass('has-error');
+        if ($('#user_id').val() == "0") {
 			
-        } else if ($('#description').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar la descripción");
-			$('#description').parent('div').addClass('has-error');
+			swal("Disculpe,", "para continuar debe seleccionar el usuario");
+			$('#user_id').focus();
+			$('#user_id').parent('div').addClass('has-error');
 			
-        } else if ($('#icon').val().trim() == '1' || $('#icon').val().trim() == '') {
-			swal("Disculpe,", "para continuar debe seleccionar una imagen");
-			$('#icon').parent('div').addClass('has-error');
+        } else if ($('#project_id').val() == "0") {
 			
-        } else if ($('#price').val().trim() === "") {
-			swal("Disculpe,", "para continuar debe ingresar el precio");
-			$('#price').parent('div').addClass('has-error');
+			swal("Disculpe,", "para continuar debe seleccionar el proyecto");
+			$('#project_id').focus();
+			$('#project_id').parent('div').addClass('has-error');
 			
-        }  else {
+        } else {
 
-            //~ $.post('<?php echo base_url(); ?>CServices/add', $('#form_services').serialize(), function (response) {
-				//~ if (response[0] == '1') {
-                    //~ swal("Disculpe,", "este nombre se encuentra registrado");
-                //~ }else{
-					//~ swal({ 
-						//~ title: "Registro",
-						 //~ text: "Guardado con exito",
-						  //~ type: "success" 
-						//~ },
-					//~ function(){
-					  //~ window.location.href = '<?php echo base_url(); ?>services';
-					//~ });
-				//~ }
-            //~ });
+            $.post('<?php echo base_url(); ?>CInscription/add', $('#form_inscription').serialize(), function (response) {
+				if (response['response'] == 'error') {
+                    swal("Disculpe", "Usted ya se ha inscrito en este evento...");
+                }else if (response['response'] == 'error2') {
+                    swal("Disculpe", "Usted ya se ha inscrito en este evento...");
+                }else{
+					swal({ 
+						title: "Registro",
+						text: "Guardado con exito",
+						type: "success" 
+					}, function(){
+					  window.location.href = '<?php echo base_url(); ?>home';
+					});
+				}
+            }, 'json');
             
-            var formData = new FormData(document.getElementById("form_services"));  // Forma de capturar todos los datos del formulario
-			
-			$.ajax({
-				//~ method: "POST",
-				type: "post",
-				dataType: "html",
-				url: '<?php echo base_url(); ?>CServices/add',
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false
-			})
-			.done(function(data) {
-				if(data.error){
-					console.log(data.error);
-				} else {
-					if (data[0] == '1') {
-						swal("Disculpe,", "este servicio se encuentra registrado");
-					}else{
-						swal({ 
-							title: "Registro",
-							 text: "Guardado con exito",
-							  type: "success" 
-							},
-						function(){
-						  window.location.href = '<?php echo base_url(); ?>services';
-						});
-					}
-				}				
-			}).fail(function() {
-				console.log("error ajax");
-			});
         }
     });
 });

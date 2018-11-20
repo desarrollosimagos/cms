@@ -34,6 +34,7 @@ class CInscription extends CI_Controller {
         $this->load->model('MUser');
         $this->load->model('MProjects');
         $this->load->model('MInscription');
+        $this->load->model('MFondoPersonal');
         $this->load->model('MCuentas');
         $this->load->model('MCoins');
         $this->load->model('MCoinRate');
@@ -80,134 +81,43 @@ class CInscription extends CI_Controller {
 	// Método para guardar un nuevo registro
     public function add() {
 		
-		$publico = false;
-		if($this->input->post('public') == "on"){
-			$publico = true;
-		}
-		
-		$datos = array(
-			'name' => $this->input->post('name'),
-			'description' => $this->input->post('description'),
-			'type' => $this->input->post('type'),
-            'valor' => $this->input->post('valor'),
-            'public' => $publico,
-            'coin_id' => $this->input->post('coin_id'),
-            'status' => 1,
-            //~ 'user_id' => $this->session->userdata('logged_in')['id'],
+		$transaction = array(
+            'user_id' => $this->input->post('user_id'),
+            'user_create_id' => $this->session->userdata('logged_in')['id'],
+            'type' => 'deposit',
+            'project_id' => $this->input->post('project_id'),
+            'account_id' => 0,
+            'date' => date('Y-m-d H:i:s'),
+            'description' => 'Inscription',
+            'reference' => '',
+            'observation' => '',
+            'real' => 0,
+            'rate' => 0,
+            'amount' => 0,
+            'status' => 'waiting',
             'd_create' => date('Y-m-d H:i:s')
         );
         
-        $result = $this->MProjects->insert($datos);
+        $result = $this->MInscription->insert_transaction($transaction);  // Guardamos la transacción
         
-        //~ echo $result;
-        
-        // Si el proyecto fue registrado satisfactoriamente registramos las photos
         if ($result != 'existe') {
 			
-			// Sección para el registro de las fotos en la ruta establecida para tal fin (assets/img/projects)
-			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-			
-			//~ // print_r($_FILES);
-			$i = 0;
-			
-			$errors = 0;
-			
-			foreach($_FILES['imagen']['name'] as $imagen){
+			// Sección para el registro del contrato
 				
-				if($imagen != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$imagen);
-					$ext = $ext[1];
-					$datos2 = array(
-						'project_id' => $result,
-						'photo' => "photo".($i+1)."_".$result.".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					$insertar_photo = $this->MProjects->insert_photo($datos2);
-					
-					if (!move_uploaded_file($_FILES['imagen']['tmp_name'][$i], $ruta."/assets/img/projects/photo".($i+1)."_".$result.".".$ext)) {
-						
-						$errors += 1;
-						
-					}
-					
-				}
-				$i++;  // Incrementamos
-			}
+			$contract = array(
+				'project_id' => $this->input->post('project_id'),
+				'transaction_id' => $result,
+				'type' => '',
+				'created_on' => date('Y-m-d H:i:s'),
+				'payback' => 0,
+				'amount' => 0
+			);
 			
-			// Sección para el registro de los documentos en la ruta establecida para tal fin (assets/documents)
-			$j = 0;
+			$result2 = $this->MInscription->insert_contract($contract);  // Guardamos el contrato
 			
-			$errors2 = 0;
-			
-			foreach($_FILES['documento']['name'] as $documento){
-				
-				if($documento != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$documento);
-					$ext = $ext[1];
-					$datos3 = array(
-						'project_id' => $result,
-						'description' => "document".($j+1)."_".$result.".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					$insertar_documento = $this->MProjects->insert_document($datos3);
-					
-					if (!move_uploaded_file($_FILES['documento']['tmp_name'][$j], $ruta."/assets/documents/document".($j+1)."_".$result.".".$ext)) {
-						
-						$errors2 += 1;
-						
-					}
-					
-				}
-				$j++;  // Incrementamos
-			}
-			
-			// Sección para el registro de las lecturas recomendadas en la ruta establecida para tal fin (assets/readings)
-			$k = 0;
-			
-			$errors3 = 0;
-			
-			foreach($_FILES['lectura']['name'] as $lectura){
-				
-				if($lectura != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$lectura);
-					$ext = $ext[1];
-					$datos4 = array(
-						'project_id' => $result,
-						'description' => "reading".($k+1)."_".$result.".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					$insertar_lectura = $this->MProjects->insert_reading($datos4);
-					
-					if (!move_uploaded_file($_FILES['lectura']['tmp_name'][$k], $ruta."/assets/readings/reading".($k+1)."_".$result.".".$ext)) {
-						
-						$errors3 += 1;
-						
-					}
-					
-				}
-				$k++;  // Incrementamos
-			}
-			
-			if($errors > 0){
+			if($result2 == 'existe'){
 				
 				echo '{"response":"error2"}';
-				
-			}else if($errors2 > 0){
-				
-				echo '{"response":"error3"}';
-				
-			}else if($errors3 > 0){
-				
-				echo '{"response":"error4"}';
 				
 			}else{
 				
@@ -217,7 +127,7 @@ class CInscription extends CI_Controller {
        
         }else{
 			
-			echo '{"response":"error1"}';
+			echo '{"response":"error"}';
 			
 		}
     }
