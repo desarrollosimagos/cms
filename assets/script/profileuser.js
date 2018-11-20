@@ -48,12 +48,28 @@ $(document).ready(function() {
 		}
 	});
 	
+	// Validación de formato de cédula
+	$("#dni").on("keyup", function() {
+		var RegExPattern = /^(V|E){1}(-){1}([0-9]){8}$/;
+		if ((this.value.match(RegExPattern)) && (this.value != '')) {
+			$("#dni-message").hide();
+		} else {
+			if (this.value.length >= 1) {
+				$("#dni-message").show();
+			}else{
+				$("#dni-message").hide();
+			}
+		}
+	})
+	
 	// Ejecutar actualización de datos
     $("#update").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
         // Expresion regular para validar el correo
 		var regex = /[\w-\.]{2,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}/;
+        // Expresion regular para validar el dni
+		var RegExPattern = /^(V|E){1}(-){1}([0-9]){8}$/;
 
         if ($('#username').val().trim() === "") {
           
@@ -78,6 +94,11 @@ $(document).ready(function() {
         } else if ($('#lang_id').val() == '0') {
 			
 		  swal("Disculpe,", "para continuar debe seleccionar el idioma");
+	       $('#lang_id').parent('div').addClass('has-error');
+		   
+		} else if (!($('#dni').val().match(RegExPattern)) && ($('#dni').val() != '')) {
+			
+		  swal("Disculpe,", "La cédula de identidad debe tener el formato V-00000000 sin puntos.");
 	       $('#lang_id').parent('div').addClass('has-error');
 		   
 		} else {

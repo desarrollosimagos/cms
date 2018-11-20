@@ -21,6 +21,7 @@ $lang['edit_buttonpassword_profileuser'] = 'Cambiar contraseña';
 // Sección 2
 $lang['edit_title2_profileuser'] = 'Datos complementarios';
 $lang['edit_dni_profileuser'] = 'Documento de identidad';
+$lang['message_dni_profileuser'] = 'La cédula de identidad debe tener el formato V-00000000 sin puntos.';
 $lang['edit_gender_profileuser'] = 'Sexo';
 $lang['edit_gender1_profileuser'] = 'Masculino';
 $lang['edit_gender2_profileuser'] = 'Femenino';
