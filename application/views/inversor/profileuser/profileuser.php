@@ -117,9 +117,10 @@
 						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_birthday_profileuser'); ?> *</label>
 						<div class="col-sm-10">
 							<?php
-							if($editar_data[0]->birthday != ''){
-								$birthday = explode("-", $editar_data[0]->birthday);
-								$birthday = $birthday[2] . "/" . $birthday[1] . "/" . $birthday[0];
+							if($editar_data[0]->birthday != '' && $editar_data[0]->birthday != '0000-00-00 00:00:00'){
+								$birthday = explode(" ", $editar_data[0]->birthday);  // Dividimos la fecha de la hora
+								$birthday = explode("-", $birthday[0]);  // Tomamos sólo la fecha
+								$birthday = $birthday[2] . "/" . $birthday[1] . "/" . $birthday[0];  // Reordenamos
 							}else{
 								$birthday = "";
 							}

@@ -81,55 +81,127 @@ class CInscription extends CI_Controller {
 	// Método para guardar un nuevo registro
     public function add() {
 		
-		$transaction = array(
-            'user_id' => $this->input->post('user_id'),
-            'user_create_id' => $this->session->userdata('logged_in')['id'],
-            'type' => 'deposit',
-            'project_id' => $this->input->post('project_id'),
-            'account_id' => 0,
-            'date' => date('Y-m-d H:i:s'),
-            'description' => 'Inscription',
-            'reference' => '',
-            'observation' => '',
-            'real' => 0,
-            'rate' => 0,
-            'amount' => 0,
-            'status' => 'waiting',
-            'd_create' => date('Y-m-d H:i:s')
-        );
-        
-        $result = $this->MInscription->insert_transaction($transaction);  // Guardamos la transacción
-        
-        if ($result != 'existe') {
+		$project_id = $this->input->post('project_id');  // Id del proyecto
+		
+		$user_id = $this->input->post('user_id');  // Id del usuario
+		
+		$current_date = date('Y-m-d H:i:s');  // Fecha actual
+		
+		// Primero verificamos si el usuario a colocado su fecha de nacimiento
+		$birthday = $this->MUser->search_user_data($user_id);
+		
+		// Si el usuario ya ha cargado su fecha de nacimiento
+		if(count($birthday) > 0 && $birthday[0]->birthday != '' && $birthday[0]->birthday != '0000-00-00 00:00:00'){
+		
+			// Consultamos las reglas del proyecto
+			$project_rules = $this->MInscription->get_project_rules($project_id);
+			
+			// Verificamos el monto del proyecto consultando el rango de fechas de cada regla de costo
+			$project_cost = 0;
+			foreach($project_rules as $rule){
+				// Si es una regla de costo
+				if($rule->segment == "cost"){
+					$cond = $rule->cond;  // Operador condicional de la regla
+					$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+					$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+					$range_from = $range[0];  // Rango desde
+					$range_to = $range[1];  // Rango hasta
+					
+					// Si el operador condicional es "between"
+					if($cond == "between"){
+						// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
+						$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+						if($check_in_range == true){
+							$project_cost = $rule->result;
+						}
+					}
+				}
+			}
 			
 			// Sección para el registro del contrato
-				
 			$contract = array(
-				'project_id' => $this->input->post('project_id'),
-				'transaction_id' => $result,
+				'project_id' => $project_id,
+				'user_id' => $user_id,
+				'transaction_id' => 0,
 				'type' => '',
 				'created_on' => date('Y-m-d H:i:s'),
 				'payback' => 0,
-				'amount' => 0
+				'amount' => $project_cost
 			);
 			
-			$result2 = $this->MInscription->insert_contract($contract);  // Guardamos el contrato
+			$contract_id = $this->MInscription->insert_contract($contract);  // Guardamos el contrato
 			
-			if($result2 == 'existe'){
+			if ($contract_id != 'existe') {
 				
-				echo '{"response":"error2"}';
+				$exists = 0;
 				
+				// Verificamos las reglas que encajen con la fecha actual y la fecha de nacimiento del usuario
+				foreach($project_rules as $rule){
+					
+					$cond = $rule->cond;  // Operador condicional de la regla
+					$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+					$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+					$range_from = $range[0];  // Rango desde
+					$range_to = $range[1];  // Rango hasta
+					
+					// Si es una regla de costo tomamos la fecha actual y si es una regla de categoría tomamos la fecha de nacimiento
+					if($rule->segment == "cost"){
+						$date = $current_date;
+					}else if($rule->segment == "category"){
+						$date = $birthday[0]->birthday;
+					}
+					
+					// Si el operador condicional es "between" y la regla es de costo o categoría
+					if($cond == "between" && ($rule->segment == "cost" || $rule->segment == "category")){
+						
+						// Si la fecha actual o de nacimiento está dentro del rango de fechas de la regla del proyecto, registramos dicha regla como regla del contrato
+						$check_in_range = $this->MInscription->check_in_range($date, $range_from, $range_to);
+						if($check_in_range == true){
+							
+							// Sección para el registro de la regla del contrato
+							$contract_rules = array(
+								'var1' => $date,
+								'cond' => $cond,
+								'var2' => $rule->var2,
+								'contracts_id' => $contract_id,
+								'segment' => $rule->segment,
+								'result' => $rule->result
+							);
+							
+							$contract_rule_id = $this->MInscription->insert_contract_rule($contract_rules);  // Guardamos la regla del contrato
+							
+							if($contract_rule_id == 'existe'){
+								$exists += 1;
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				if($exists > 3){
+					
+					echo '{"response":"error2"}';
+					
+				}else{
+					
+					echo '{"response":"ok"}';
+					
+				}
+		   
 			}else{
 				
-				echo '{"response":"ok"}';
+				echo '{"response":"contract_exists"}';
 				
 			}
-       
-        }else{
 			
-			echo '{"response":"error"}';
+		}else{
+			
+			echo '{"response":"no_birthday"}';
 			
 		}
+		
     }
 	
 	

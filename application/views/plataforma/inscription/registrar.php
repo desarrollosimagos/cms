@@ -98,10 +98,13 @@ $(document).ready(function(){
         } else {
 
             $.post('<?php echo base_url(); ?>CInscription/add', $('#form_inscription').serialize(), function (response) {
-				if (response['response'] == 'error') {
+				
+				if (response['response'] == 'no_birthday') {
+                    swal("Disculpe", "Debe ingresar su fecha de nacimineto para poder inscribirse...");
+                }else if (response['response'] == 'contract_exists') {
                     swal("Disculpe", "Usted ya se ha inscrito en este evento...");
                 }else if (response['response'] == 'error2') {
-                    swal("Disculpe", "Usted ya se ha inscrito en este evento...");
+                    swal("Disculpe", "Las reglas del contrato no han podido ser completamente registradas...");
                 }else{
 					swal({ 
 						title: "Registro",
