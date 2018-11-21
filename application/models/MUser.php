@@ -217,6 +217,14 @@ class MUser extends CI_Model {
         $result = $this->db->get('actions');
         return $result->result();
     }
+    
+    // Public method to obtain the data asociated to user_id
+    public function search_user_data($user_id)
+    {
+        $this->db->where('user_id', $user_id);
+        $result = $this->db->get('user_data');
+        return $result->result();
+    }
 
 }
 ?>

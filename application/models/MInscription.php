@@ -48,10 +48,11 @@ class MInscription extends CI_Model {
             
     }
 
-    // Public method to insert the data
+    // Public method to insert the data of a transaciton
     public function insert_transaction($datos) {
 		
 		$result = $this->db->where('project_id', $datos['project_id']);
+		$result = $this->db->where('user_id', $datos['user_id']);
         $result = $this->db->get('transactions');
         if ($result->num_rows() > 0) {
             return 'existe';
@@ -63,10 +64,11 @@ class MInscription extends CI_Model {
         
     }
 
-    // Public method to insert the data
+    // Public method to insert the data of a contract
     public function insert_contract($datos) {
 		
 		$result = $this->db->where('project_id', $datos['project_id']);
+		$result = $this->db->where('user_id', $datos['user_id']);
         $result = $this->db->get('contracts');
         if ($result->num_rows() > 0) {
             return 'existe';
@@ -76,6 +78,51 @@ class MInscription extends CI_Model {
 			return $id;
         }
         
+    }
+
+    // Public method to insert the data of a rule of a contract
+    public function insert_contract_rule($datos) {
+		
+		$result = $this->db->where('contracts_id', $datos['contracts_id']);
+		$result = $this->db->where('segment', $datos['segment']);
+        $result = $this->db->get('contract_rules');
+        if ($result->num_rows() > 0) {
+            return 'existe';
+        } else {
+            $result = $this->db->insert("contract_rules", $datos);
+			$id = $this->db->insert_id();
+			return $id;
+        }
+        
+    }
+    
+    // Método público para obterner las reglas de un proyecto
+    public function get_project_rules($project_id) {
+		
+		$result = $this->db->where('project_id', $project_id);
+        $query = $this->db->get('project_rules');
+
+        return $query->result();
+            
+    }
+    
+    // Método público para verificar el costo de un proyecto en base al rango de fechas de la regla
+    public function check_in_range($date, $range_from, $range_to) {
+		
+		$range_from = strtotime($range_from);
+		$range_to = strtotime($range_to);
+		$date = strtotime($date);
+
+		if(($date >= $range_from) && ($date <= $range_to)) {
+
+			return true;
+
+		} else {
+
+			return false;
+
+		}
+            
     }
     
     // Public method to serach the rules
