@@ -121,7 +121,28 @@ $(document).ready(function(){
             $.post('<?php echo base_url(); ?>CInscription/add', $('#form_inscription').serialize(), function (response) {
 				
 				if (response['response'] == 'no_birthday') {
-                    swal("Disculpe", "Debe ingresar su fecha de nacimineto para poder inscribirse...");
+					
+                    //~ swal("Disculpe", "Debe ingresar su fecha de nacimineto para poder inscribirse...");
+                    swal({
+						title: "Actualizar datos de perfil",
+						text: "Debe ingresar su fecha de nacimineto para poder inscribirse, ¿desea hacerlo ahora?",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Actualizar perfil",
+						cancelButtonText: "No",
+						closeOnConfirm: false,
+						closeOnCancel: true
+					}, function(isConfirm){
+						
+						if (isConfirm) {
+							
+							window.location.href = '<?php echo base_url(); ?>profileuser';
+							
+						}
+						
+					});
+					
                 }else if (response['response'] == 'contract_exists') {
                     swal("Disculpe", "Usted ya se ha inscrito en este evento...");
                 }else if (response['response'] == 'error2') {
