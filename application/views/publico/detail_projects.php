@@ -230,6 +230,7 @@
 								</div>
 							</div>
 							
+							<?php if($available == 'yes'){?>
 							<div class="row user-button">
 								<div class="row">
 									<div class="col-md-12" align="center">
@@ -240,6 +241,7 @@
 									</div>
 								</div>
 							</div>
+							<?php } ?>
 
 						</div>
 					</div>
