@@ -31,6 +31,7 @@ class Welcome extends CI_Controller {
         $this->load->model('MTiposCuenta');
         $this->load->model('MWelcome');
         $this->load->model('MProjects');
+        $this->load->model('MInscription');
     }
 	 
 	public function index()
@@ -123,6 +124,9 @@ class Welcome extends CI_Controller {
 				$porcentaje = "null";
 			}
 			
+			// Consultamos las reglas del proyecto
+			$project_rules = $this->MInscription->get_project_rules($proyecto->id);
+			
 			$data_proyecto = array(
 				'id' => $proyecto->id,
 				'name' => $proyecto->name,
@@ -137,8 +141,37 @@ class Welcome extends CI_Controller {
 				'num_docs' => $num_docs,
 				'num_readings' => $num_readings,
 				'groups_names' => $groups_names,
-				'percentage_collected' => $porcentaje
+				'percentage_collected' => $porcentaje,
+				'available' => 'no'
 			);
+			
+			// Verificamos si la fecha actual encaja con la regla de 'inscription' del proyecto
+			foreach($project_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
+				// Tomamos la fecha actual
+				$current_date = date('Y-m-d H:i:s');
+				
+				// Si el operador condicional es "between" y la regla es de categoría
+				if($cond == "between" && $rule->segment == "inscription"){
+					
+					// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						
+						// Marcado del proyecto como disponible
+						$data_proyecto['available'] = 'yes';
+						
+					}
+					
+				}
+				
+			}
 			
 			// Incluimos sólo los proyecto públicos y activos
 			if($proyecto->public > 0 && $proyecto->status > 0){
