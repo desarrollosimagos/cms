@@ -89,7 +89,7 @@ class CInscription extends CI_Controller {
 				// Tomamos la fecha actual
 				$current_date = date('Y-m-d H:i:s');
 				
-				// Si el operador condicional es "between" y la regla es de categoría
+				// Si el operador condicional es "between" y la regla es de inscripción
 				if($cond == "between" && $rule->segment == "inscription"){
 					
 					// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible

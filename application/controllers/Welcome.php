@@ -58,7 +58,41 @@ class Welcome extends CI_Controller {
 		$detalles_asociados = $this->MProjects->obtenerDetalles($id, $get_id_lang);
 		$documentos_asociados = $this->MProjects->obtenerDocumentos($id);
         $lecturas_asociadas = $this->MProjects->obtenerLecturas($id);
-		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados'));
+        
+        // Consultamos las reglas del proyecto
+		$project_rules = $this->MInscription->get_project_rules($id);
+		
+		// Determinamos si el proyecto está disponible para inscripción, verificando si la fecha actual encaja con la regla de 'inscription' del proyecto
+		$available = 'no';
+		
+		foreach($project_rules as $rule){
+			
+			$cond = $rule->cond;  // Operador condicional de la regla
+			$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+			$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+			$range_from = $range[0];  // Rango desde
+			$range_to = $range[1];  // Rango hasta
+			
+			// Tomamos la fecha actual
+			$current_date = date('Y-m-d H:i:s');
+			
+			// Si el operador condicional es "between" y la regla es de inscripción
+			if($cond == "between" && $rule->segment == "inscription"){
+				
+				// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
+				$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+				if($check_in_range == true){
+					
+					// Marcado del proyecto como disponible
+					$available = 'yes';
+					
+				}
+				
+			}
+			
+		}
+        
+		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados', 'available'));
 		$this->load->view('footer');
 	}
 	
@@ -157,7 +191,7 @@ class Welcome extends CI_Controller {
 				// Tomamos la fecha actual
 				$current_date = date('Y-m-d H:i:s');
 				
-				// Si el operador condicional es "between" y la regla es de categoría
+				// Si el operador condicional es "between" y la regla es de inscripción
 				if($cond == "between" && $rule->segment == "inscription"){
 					
 					// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
