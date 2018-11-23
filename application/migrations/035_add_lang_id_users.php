@@ -28,7 +28,7 @@ class Migration_add_lang_id_users extends CI_Migration
 	public function down(){
 		
 		// Eliminamos la columna 'lang_id'
-		$this->dbforge->drop_column('lang_id', TRUE);
+		$this->dbforge->drop_column('users','lang_id');
 		
 	}
 	

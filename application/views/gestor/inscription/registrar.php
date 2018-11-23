@@ -36,6 +36,9 @@
 									<option value="<?php echo $usuario->id; ?>"><?php echo $usuario->username; ?></option>
 									<?php }?>
 								</select>
+								<div class="alert alert-danger" id="category-message" style="display:none;">
+									<?php echo $this->lang->line('registry_message_category_inscription'); ?>
+								</div>
 							</div>
 						</div>
 						<div class="form-group">
@@ -54,9 +57,50 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-sm-2 control-label" ><?php echo $this->lang->line('registry_category_inscription'); ?> *</label>
+							<div class="col-sm-10">
+								<select class="form-control m-b" name="category" id="category">
+									<option value="0" selected="">Seleccione</option>
+									
+								</select>
+								<!-- Spinner de carga de categorías -->
+								<div class="sk-spinner sk-spinner-circle" id="load_categories" style="float: left !important;">
+									<div class="sk-circle1 sk-circle"></div>
+									<div class="sk-circle2 sk-circle"></div>
+									<div class="sk-circle3 sk-circle"></div>
+									<div class="sk-circle4 sk-circle"></div>
+									<div class="sk-circle5 sk-circle"></div>
+									<div class="sk-circle6 sk-circle"></div>
+									<div class="sk-circle7 sk-circle"></div>
+									<div class="sk-circle8 sk-circle"></div>
+									<div class="sk-circle9 sk-circle"></div>
+									<div class="sk-circle10 sk-circle"></div>
+									<div class="sk-circle11 sk-circle"></div>
+									<div class="sk-circle12 sk-circle"></div>
+								</div>
+								<!-- Cierre de spinner de carga de categorías -->
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-sm-4 col-sm-offset-2">
-								<button class="btn btn-white" id="volver" type="button">Volver</button>
-								<button class="btn btn-primary" id="registrar" type="submit">Guardar</button>
+								<button class="btn btn-white" id="volver" type="button" style="float: left !important;">Volver</button>
+								<button class="btn btn-primary" id="registrar" type="submit" style="float: left !important;">Guardar</button>
+								<!-- Spinner de carga de registro de inscripción -->
+								<div class="sk-spinner sk-spinner-circle" id="load_inscription" style="float: left !important;">
+									<div class="sk-circle1 sk-circle"></div>
+									<div class="sk-circle2 sk-circle"></div>
+									<div class="sk-circle3 sk-circle"></div>
+									<div class="sk-circle4 sk-circle"></div>
+									<div class="sk-circle5 sk-circle"></div>
+									<div class="sk-circle6 sk-circle"></div>
+									<div class="sk-circle7 sk-circle"></div>
+									<div class="sk-circle8 sk-circle"></div>
+									<div class="sk-circle9 sk-circle"></div>
+									<div class="sk-circle10 sk-circle"></div>
+									<div class="sk-circle11 sk-circle"></div>
+									<div class="sk-circle12 sk-circle"></div>
+								</div>
+								<!-- Cierre de spinner de carga de registro de inscripción -->
 							</div>
 						</div>
 					</form>
@@ -75,27 +119,105 @@ $(document).ready(function(){
     });
 
     $('#volver').click(function () {
-        url = '<?php echo base_url() ?>services/';
+        url = '<?php echo base_url() ?>investments/';
         window.location = url;
     });
+    
+    // El elemento que se quiere activar (ícono de carga) si hay una petición ajax en proceso.
+	var cargando_categorias = $("#load_categories");
+	cargando_categorias.hide();
+    
+    // Proceso de carga de categorías en el combo al cargar la página de inscripción
+    if($("#user_id").val() != "0" && $("#project_id").val() != "0"){
+		
+		// evento ajax start
+		$(document).ajaxStart(function() {
+			if($("#category").val() == "0"){
+				cargando_categorias.show();
+			}
+		});
 
-	// Validamos que el archivo sea de tipo .jpg, jpeg o png
-	$("#icon").change(function (e) {
-		e.preventDefault();  // Para evitar que se envíe por defecto
+		// evento ajax stop
+		$(document).ajaxStop(function() {
+		cargando_categorias.hide();
+		});
 		
-		var max_size = '';
-		var archivo = $(this).val();
+		$.post('<?php echo base_url(); ?>CInscription/load_categories', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
+				
+			if (response['response'] == 'no_birthday') {
+				
+				// Hacemos visible el mensaje de advertencia si el usuario a inscribir no ha cargado su fecha de nacimiento
+				$("#category-message").show();
+				
+			}else{
+				
+				// Ocultamos el mensaje de alerta
+				$("#category-message").hide();
+				
+				// Primero borramos las opciones que tenga
+				$('#category').find('option:gt(0)').remove().end().select2('val', '0');
+				
+				// Cargamos las categorías correspondientes en el combo
+				$.each(response, function(i, item) {
+					$("#category").append('<option value="'+item.result+'">'+item.result+'</option>');
+				});
+				
+			}
+			
+		}, 'json');
 		
-		var ext = archivo.split(".");
-		ext = ext[1];
+	}
+	
+	// Proceso de carga de categorías en el combo al cambiar la selección del usuario o el proyecto
+	$("#user_id, #project_id").change(function (e) {
 		
-		if (ext != 'jpg' && ext != 'jpeg' && ext != 'png'){
-			swal("Disculpe,", "sólo se admiten archivos .jpg, .jpeg y png");
-			$("#icon").val('');
-			$('#icon').parent('div').addClass('has-error');
+		if($("#user_id").val() != "0" && $("#project_id").val() != "0"){
+			
+			// evento ajax start
+			$(document).ajaxStart(function() {
+				if($("#category").val() == "0"){
+					cargando_categorias.show();
+				}
+			});
+
+			// evento ajax stop
+			$(document).ajaxStop(function() {
+			cargando_categorias.hide();
+			});
+			
+			$.post('<?php echo base_url(); ?>CInscription/load_categories', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
+				
+				if (response['response'] == 'no_birthday') {
+					
+                    // Hacemos visible el mensaje de advertencia si el usuario a inscribir no ha cargado su fecha de nacimiento
+                    $("#category-message").show();
+					
+                }else{
+					
+					// Ocultamos el mensaje de alerta
+					$("#category-message").hide();
+					
+					// Primero borramos las opciones que tenga
+					$('#category').find('option:gt(0)').remove().end().select2('val', '0');
+					
+					// Cargamos las categorías correspondientes en el combo
+					$.each(response, function(i, item) {
+						$("#category").append('<option value="'+item.result+'">'+item.result+'</option>');
+					});
+					
+				}
+				
+            }, 'json');
+			
 		}
+		
 	});
-
+	
+	// El elemento que se quiere activar (ícono de carga) si hay una petición ajax en proceso.
+	var cargando_inscripcion = $("#load_inscription");
+	cargando_inscripcion.hide();
+	
+	// Proceso de registro de la inscripción
     $("#registrar").click(function (e) {
 
         e.preventDefault();  // Para evitar que se envíe por defecto
@@ -112,7 +234,23 @@ $(document).ready(function(){
 			$('#project_id').focus();
 			$('#project_id').parent('div').addClass('has-error');
 			
+        } else if ($('#category').val() == "0") {
+			
+			swal("Disculpe,", "para continuar debe seleccionar la categoría");
+			$('#category').focus();
+			$('#category').parent('div').addClass('has-error');
+			
         } else {
+			
+			// evento ajax start
+			$(document).ajaxStart(function() {
+			cargando_inscripcion.show();
+			});
+
+			// evento ajax stop
+			$(document).ajaxStop(function() {
+			cargando_inscripcion.hide();
+			});
 
             $.post('<?php echo base_url(); ?>CInscription/add', $('#form_inscription').serialize(), function (response) {
 				
@@ -144,13 +282,31 @@ $(document).ready(function(){
                 }else if (response['response'] == 'error2') {
                     swal("Disculpe", "Las reglas del contrato no han podido ser completamente registradas...");
                 }else{
-					swal({ 
+					
+					swal({
 						title: "Registro",
-						text: "Guardado con exito",
-						type: "success" 
-					}, function(){
-					  window.location.href = '<?php echo base_url(); ?>home';
+						text: "Guardado con exito, ¿desea hacer el pago ahora?",
+						type: "success",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Pagar",
+						cancelButtonText: "No",
+						closeOnConfirm: false,
+						closeOnCancel: true
+					}, function(isConfirm){
+						
+						if (isConfirm) {
+							
+							window.location.href = '<?php echo base_url(); ?>payment';
+							
+						}else{
+							
+							window.location.href = '<?php echo base_url(); ?>investments';
+							
+						}
+						
 					});
+					
 				}
             }, 'json');
             
