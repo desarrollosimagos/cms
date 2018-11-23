@@ -54,13 +54,71 @@ class CInscription extends CI_Controller {
 		$data['ident_sub'] = "Inscribir";
 		$data['monedas'] = $this->MCoins->obtener();
 		$data['usuarios'] = $this->MInscription->listar_usuarios();
-		$data['proyectos'] = $this->MInscription->listar_proyectos();
+		
+		// Proceso de carga y marca de proyectos
+		$listar = array();
+		
+		$proyectos = $this->MInscription->listar_proyectos();
+		
+		foreach($proyectos as $proyecto){
+			
+			// Consultamos las reglas del proyecto
+			$project_rules = $this->MInscription->get_project_rules($proyecto->id);
+		
+			$data_proyecto = array(
+				'id' => $proyecto->id,
+				'name' => $proyecto->name,
+				'description' => $proyecto->description,
+				'type' => $proyecto->type,
+				'valor' => $proyecto->valor,
+				'public' => $proyecto->public,
+				'coin' => $proyecto->coin_avr." (".$proyecto->coin.")",
+				'status' => $proyecto->status,
+				'available' => 'no'
+			);
+			
+			// Verificamos si la fecha actual encaja con la regla de 'inscription' del proyecto
+			foreach($project_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
+				// Tomamos la fecha actual
+				$current_date = date('Y-m-d H:i:s');
+				
+				// Si el operador condicional es "between" y la regla es de categoría
+				if($cond == "between" && $rule->segment == "inscription"){
+					
+					// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						
+						// Marcado del proyecto como disponible
+						$data_proyecto['available'] = 'yes';
+						
+					}
+					
+				}
+				
+			}
+			
+			$listar[] = $data_proyecto;
+		
+		}
+		
+		$listar = json_decode( json_encode( $listar ), false );  // Conversión a objeto
+		
+		$data['proyectos'] = $listar;  // Lista de proyectos disponibles y no disponibles
+		
+		// Verificamos si hemos recibidos el id de algún proyecto para seleccionar
 		if($this->input->get('project_id')){
 			$data['project_id'] = $this->input->get('project_id');
 		}else{
 			$data['project_id'] = '';
 		}
-		$data['project_types'] = $this->MProjects->obtenerTipos();
 		
 		// Filtro para cargar las vistas según el perfil del usuario logueado
 		$perfil_id = $this->session->userdata('logged_in')['profile_id'];

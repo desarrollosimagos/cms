@@ -47,11 +47,13 @@
 								<select class="form-control m-b" name="project_id" id="project_id">
 									<option value="0" selected="">Seleccione</option>
 									<?php foreach($proyectos as $proyecto){?>
-										<?php if($project_id != '' && $project_id == $proyecto->id){?>
-											<option value="<?php echo $proyecto->id; ?>" selected="selected"><?php echo $proyecto->name; ?></option>
-										<?php }else{ ?>
-											<option value="<?php echo $proyecto->id; ?>"><?php echo $proyecto->name; ?></option>
-										<?php }?>
+										<?php if($proyecto->available == 'yes'){?>
+											<?php if($project_id != '' && $project_id == $proyecto->id){?>
+												<option value="<?php echo $proyecto->id; ?>" selected="selected"><?php echo $proyecto->name; ?></option>
+											<?php }else{ ?>
+												<option value="<?php echo $proyecto->id; ?>"><?php echo $proyecto->name; ?></option>
+											<?php } ?>
+										<?php } ?>
 									<?php }?>
 								</select>
 							</div>
