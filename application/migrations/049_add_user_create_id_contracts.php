@@ -1,24 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_add_user_create_id_users extends CI_Migration
+class Migration_add_user_create_id_contracts extends CI_Migration
 {
 	public function up(){
 		
-		// Colocará la nueva columna después de la columna `lang_id`:
+		// Colocará la nueva columna después de la columna `user_id`:
 		$fields = array(
 			"user_create_id" => array(
 				"type" => "INT",
 				"constraint" => 11,
 				"null" => TRUE,
-				"default" => 1,
-				"after" => "lang_id"
+				"after" => "user_id"
 			)
 		);
 		
 		// Creamos el nuevo campo si éste no existe en la tabla
-		if($this->db->field_exists('user_create_id', 'users') == FALSE){
-			$this->dbforge->add_column('users', $fields);
+		if($this->db->field_exists('user_create_id', 'contracts') == FALSE){
+			$this->dbforge->add_column('contracts', $fields);
 		}
 		
 		$this->dbforge->add_key('user_create_id');  // Establecemos el user_create_id como key
@@ -28,7 +27,7 @@ class Migration_add_user_create_id_users extends CI_Migration
 	public function down(){
 		
 		// Eliminamos la columna 'user_create_id'
-		$this->dbforge->drop_column('users','user_create_id');
+		$this->dbforge->drop_column('contracts', 'user_create_id');
 		
 	}
 	

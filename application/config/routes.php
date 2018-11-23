@@ -146,6 +146,8 @@ $route['events/search'] = 'CProjects/seeker';
 $route['events/inscription'] = 'CInscription/register';
 $route['share_profit'] = 'CShareProfit';
 $route['share_profit/share'] = 'CShareProfit/share';
+/*   Pagos */
+$route['payments'] = 'CPayments';
 /*   Público */
 $route['start'] = 'Welcome/start';
 $route['possibilities'] = 'Welcome/possibilities';

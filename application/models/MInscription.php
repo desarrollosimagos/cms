@@ -106,7 +106,7 @@ class MInscription extends CI_Model {
             
     }
     
-    // Método público para verificar el costo de un proyecto en base al rango de fechas de la regla
+    // Método público para verificar si una fecha está dentro de un rango de fechas
     public function check_in_range($date, $range_from, $range_to) {
 		
 		$range_from = strtotime($range_from);

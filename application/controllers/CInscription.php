@@ -85,6 +85,8 @@ class CInscription extends CI_Controller {
 		
 		$user_id = $this->input->post('user_id');  // Id del usuario
 		
+		$category = $this->input->post('category');  // Id del usuario
+		
 		$current_date = date('Y-m-d H:i:s');  // Fecha actual
 		
 		// Primero verificamos si el usuario a colocado su fecha de nacimiento
@@ -122,6 +124,7 @@ class CInscription extends CI_Controller {
 			$contract = array(
 				'project_id' => $project_id,
 				'user_id' => $user_id,
+				'user_create_id' => $this->session->userdata('logged_in')['id'],
 				'transaction_id' => 0,
 				'type' => '',
 				'created_on' => date('Y-m-d H:i:s'),
@@ -144,19 +147,43 @@ class CInscription extends CI_Controller {
 					$range_from = $range[0];  // Rango desde
 					$range_to = $range[1];  // Rango hasta
 					
-					// Si es una regla de costo tomamos la fecha actual y si es una regla de categoría tomamos la fecha de nacimiento
-					if($rule->segment == "cost"){
+					// Si el operador condicional es "between" y la regla es de costo
+					if($cond == "between" && $rule->segment == "cost"){
+						// Si es una regla de costo tomamos la fecha actual
 						$date = $current_date;
-					}else if($rule->segment == "category"){
-						$date = $birthday[0]->birthday;
-					}
-					
-					// Si el operador condicional es "between" y la regla es de costo o categoría
-					if($cond == "between" && ($rule->segment == "cost" || $rule->segment == "category")){
 						
-						// Si la fecha actual o de nacimiento está dentro del rango de fechas de la regla del proyecto, registramos dicha regla como regla del contrato
+						// Si la fecha actual está dentro del rango de fechas de la regla del proyecto, 
+						// registramos dicha regla como regla del contrato
 						$check_in_range = $this->MInscription->check_in_range($date, $range_from, $range_to);
 						if($check_in_range == true){
+							
+							// Sección para el registro de la regla del contrato
+							$contract_rules = array(
+								'var1' => $date,
+								'cond' => $cond,
+								'var2' => $rule->var2,
+								'contracts_id' => $contract_id,
+								'segment' => $rule->segment,
+								'result' => $rule->result
+							);
+							
+							$contract_rule_id = $this->MInscription->insert_contract_rule($contract_rules);  // Guardamos la regla del contrato
+							
+							if($contract_rule_id == 'existe'){
+								$exists += 1;
+							}
+							
+						}
+					
+					// Si el operador condicional es "between" y la regla es de categoría	
+					}else if($cond == "between" && $rule->segment == "category"){
+						// Si es una regla de categoría tomamos la fecha de nacimiento
+						$date = $birthday[0]->birthday;
+						
+						// Si la fecha de nacimiento está dentro del rango de fechas de la regla del proyecto y 
+						// coincide con la categoría seleccionada, registramos dicha regla como regla del contrato
+						$check_in_range = $this->MInscription->check_in_range($date, $range_from, $range_to);
+						if($check_in_range == true && $rule->result == $category){
 							
 							// Sección para el registro de la regla del contrato
 							$contract_rules = array(
@@ -205,179 +232,77 @@ class CInscription extends CI_Controller {
     }
 	
 	
-	// Método para editar
-    public function edit() {
+	// Método para consultar la categorías disponibles por usuario y proyecto seleccionado
+	public function load_categories(){
+				
+		// Obtenemos los datos del usuario
+		$user_id = $this->input->post('user_id');  // Id del usuario
+		$user_data = $this->MUser->obtenerUsers($user_id);
 		
-		$this->load->view('base');
-		$data['ident'] = "Inscribir";
-		$data['ident_sub'] = "Inscribir";
-        $data['id'] = $this->uri->segment(3);
-        $data['editar'] = $this->MProjects->obtenerProyecto($data['id']);
-        $data['monedas'] = $this->MCoins->obtener();
-        $data['fotos_asociadas'] = $this->MProjects->obtenerFotos($data['id']);
-        $data['documentos_asociados'] = $this->MProjects->obtenerDocumentos($data['id']);
-        $data['lecturas_asociadas'] = $this->MProjects->obtenerLecturas($data['id']);
-        $data['project_types'] = $this->MProjects->obtenerTipos();
-        
-        // Filtro para cargar las vistas según el perfil del usuario logueado
-		$perfil_id = $this->session->userdata('logged_in')['profile_id'];
-		$perfil_folder = "";
-		if($perfil_id == 1 || $perfil_id == 2){
-			$perfil_folder = 'plataforma/';
-		}else if($perfil_id == 3){
-			$perfil_folder = 'gestor/';
-		}else if($perfil_id == 4){
-			$perfil_folder = 'inversor/';
+		// Obtenemos los datos del proyecto
+		$project_id = $this->input->post('project_id');  // Id del proyecto
+		$project_data = $this->MProjects->obtenerProyecto($user_id);
+		
+		// Consultamos las reglas del proyecto
+		$project_rules = $this->MInscription->get_project_rules($project_id);
+		
+		// Preparamos el arreglo que almacenará las categorías disponibles para el usuario
+		$categories = array();
+		
+		// Obtenemos la fecha de nacimiento del usuario
+		$birthday = $this->MUser->search_user_data($user_id);
+		
+		// Si el usuario ya ha cargado su fecha de nacimiento
+		if(count($birthday) > 0 && $birthday[0]->birthday != '' && $birthday[0]->birthday != '0000-00-00 00:00:00'){
+		
+			// Verificamos las reglas que encajen con la fecha de nacimiento del usuario
+			foreach($project_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
+				// Tomamos la fecha de nacimiento
+				$date = $birthday[0]->birthday;
+				
+				// Si el operador condicional es "between" y la regla es de categoría
+				if($cond == "between" && $rule->segment == "category"){
+					
+					// Si la fecha de nacimiento está dentro del rango de fechas de la regla de categoría del proyecto, cargamos la categoría de dicha regla
+					$check_in_range = $this->MInscription->check_in_range($date, $range_from, $range_to);
+					if($check_in_range == true){
+						
+						// Sección para el registro de la regla del contrato
+						$contract_rule = array(
+							'id' => $rule->id,
+							'var1' => $date,
+							'cond' => $cond,
+							'var2' => $rule->var2,
+							'project_id' => $rule->project_id,
+							'segment' => $rule->segment,
+							'result' => $rule->result
+						);
+						
+						$categories[] = $contract_rule;  // Guardamos la regla del contrato en el arreglo de categorías
+						
+					}
+					
+				}
+				
+			}
+			
+			// Convertimos el arreglo de categorías a formato json
+			echo json_encode($categories);
+		
 		}else{
-			redirect('login');
-		}
-        $this->load->view($perfil_folder.'inscription/editar', $data);
-		$this->load->view('footer');
-    }
-	
-	// Método para actualizar
-    public function update() {
-		
-		$publico = false;
-		if($this->input->post('public') == "on"){
-			$publico = true;
-		}
-		
-		$datos = array(
-			'id' => $this->input->post('id'),
-			'name' => $this->input->post('name'),
-			'description' => $this->input->post('description'),
-			'type' => $this->input->post('type'),
-            'valor' => $this->input->post('valor'),
-            'public' => $publico,
-            'coin_id' => $this->input->post('coin_id'),
-            'd_update' => date('Y-m-d H:i:s')
-		);
-		
-        $result = $this->MProjects->update($datos);
-        
-        if ($result) {
 			
-			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/img/productos)
-			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-			
-			//~ print_r($_FILES);
-			$i = 0;  // Indice de la imágen
-			
-			$errors = 0;
-			
-			foreach($_FILES['imagen']['name'] as $imagen){
-				
-				if($imagen != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$imagen);
-					$ext = $ext[1];
-					$datos2 = array(
-						'project_id' => $_POST['id'],
-						'photo' => "photo".($i+1)."_".$_POST['id'].".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					//~ echo "photo".($i+1)."_".$_POST['id'].".".$ext;
-					$insertar_photo = $this->MProjects->insert_photo($datos2);
-					
-					if (!move_uploaded_file($_FILES['imagen']['tmp_name'][$i], $ruta."/assets/img/projects/photo".($i+1)."_".$_POST['id'].".".$ext)) {
-						
-						$errors += 1;
-						
-					}
-					
-				}
-				$i++;  // Incrementamos
-			}
-			
-			// Sección para el registro de los documentos en la ruta establecida para tal fin (assets/documents)
-			$j = 0;
-			
-			$errors2 = 0;
-			
-			foreach($_FILES['documento']['name'] as $documento){
-				
-				if($documento != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$documento);
-					$ext = $ext[1];
-					$datos3 = array(
-						'project_id' => $_POST['id'],
-						'description' => "document".($j+1)."_".$_POST['id'].".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					$insertar_documento = $this->MProjects->insert_document($datos3);
-					
-					if (!move_uploaded_file($_FILES['documento']['tmp_name'][$j], $ruta."/assets/documents/document".($j+1)."_".$_POST['id'].".".$ext)) {
-						
-						$errors2 += 1;
-						
-					}
-					
-				}
-				$j++;  // Incrementamos
-				
-			}
-			
-			// Sección para el registro de las lecturas recomendadas en la ruta establecida para tal fin (assets/readings)
-			$k = 0;
-			
-			$errors3 = 0;
-			
-			foreach($_FILES['lectura']['name'] as $lectura){
-				
-				if($lectura != ""){
-					
-					// Obtenemos la extensión
-					$ext = explode(".",$lectura);
-					$ext = $ext[1];
-					$datos4 = array(
-						'project_id' => $_POST['id'],
-						'description' => "reading".($k+1)."_".$_POST['id'].".".$ext,
-						'd_create' => date('Y-m-d')
-					);
-					
-					$insertar_lectura = $this->MProjects->insert_reading($datos4);
-					
-					if (!move_uploaded_file($_FILES['lectura']['tmp_name'][$k], $ruta."/assets/readings/reading".($k+1)."_".$_POST['id'].".".$ext)) {
-						
-						$errors3 += 1;
-						
-					}
-					
-				}
-				$k++;  // Incrementamos
-				
-			}
-			
-			if($errors > 0){
-				
-				echo '{"response":"error2"}';
-				
-			}else if($errors2 > 0){
-				
-				echo '{"response":"error3"}';
-				
-			}else if($errors3 > 0){
-				
-				echo '{"response":"error4"}';
-				
-			}else{
-				
-				echo '{"response":"ok"}';
-				
-			}
-			
-        }else{
-			
-			echo '{"response":"error1"}';
+			echo '{"response":"no_birthday"}';
 			
 		}
-    }
+		
+	}
     
     
     // Método para actualizar el precio del dólar tomando como referencia la api de dolartoday
