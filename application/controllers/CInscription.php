@@ -105,7 +105,12 @@ class CInscription extends CI_Controller {
 				
 			}
 			
-			$listar[] = $data_proyecto;
+			// Incluimos sólo los proyectos activos
+			if($proyecto->status > 0){
+				
+				$listar[] = $data_proyecto;
+				
+			}
 		
 		}
 		

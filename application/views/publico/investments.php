@@ -85,6 +85,7 @@
 								</div>
 							</div>
 						</div>
+						<?php if($proyecto->available == 'yes'){?>
 						<br>
 						<div class="row user-button">
 							<div class="row">
@@ -96,6 +97,7 @@
 								</div>
 							</div>
 						</div>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
