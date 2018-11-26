@@ -44,7 +44,11 @@ Class CLogin extends CI_Controller {
 			$respuesta = $this->basicauth->login($usuario, $password);
 			
 			if(!isset($respuesta['error'])){
-				redirect('coins');
+				if($this->session->userdata('logged_in')['profile_id'] == 4){
+					redirect('investments');
+				}else{
+					redirect('dashboard');
+				}
 			}else{
 				$data['error'] = $respuesta['error'];
 				$this->load->view('login_form', $data);
