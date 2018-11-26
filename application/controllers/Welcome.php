@@ -63,7 +63,7 @@ class Welcome extends CI_Controller {
 		$project_rules = $this->MInscription->get_project_rules($id);
 		
 		// Determinamos si el proyecto está disponible para inscripción, verificando si la fecha actual encaja con la regla de 'inscription' del proyecto
-		$available = 'no';
+		$inscription_available = 'no';
 		
 		foreach($project_rules as $rule){
 			
@@ -84,7 +84,7 @@ class Welcome extends CI_Controller {
 				if($check_in_range == true){
 					
 					// Marcado del proyecto como disponible
-					$available = 'yes';
+					$inscription_available = 'yes';
 					
 				}
 				
@@ -92,7 +92,7 @@ class Welcome extends CI_Controller {
 			
 		}
         
-		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados', 'available'));
+		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados', 'inscription_available'));
 		$this->load->view('footer');
 	}
 	
@@ -118,6 +118,10 @@ class Welcome extends CI_Controller {
 		$this->load->view('base');
 		$data['ident'] = "Inversiones";
 		$data['ident_sub'] = "Inversiones";
+		
+		$data['current_events'] = 0;
+		$data['upcoming_events'] = 0;
+		$data['past_events'] = 0;
 		
 		$listar = array();
 		
@@ -176,7 +180,8 @@ class Welcome extends CI_Controller {
 				'num_readings' => $num_readings,
 				'groups_names' => $groups_names,
 				'percentage_collected' => $porcentaje,
-				'available' => 'no'
+				'inscription_available' => 'no',
+				'availability' => 'current'
 			);
 			
 			// Verificamos si la fecha actual encaja con la regla de 'inscription' del proyecto
@@ -199,8 +204,43 @@ class Welcome extends CI_Controller {
 					if($check_in_range == true){
 						
 						// Marcado del proyecto como disponible
-						$data_proyecto['available'] = 'yes';
+						$data_proyecto['inscription_available'] = 'yes';
 						
+					}
+					
+				}
+				
+				// Si el operador condicional es "between" y la regla tiene el segmento 'date'
+				if($cond == "between" && $rule->segment == "date"){
+					
+					// Si la fecha actual no está dentro del rango de fechas de la regla de fecha del proyecto, marcamos el proyecto como pasado o próximo
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == false){
+						
+						// Si la fecha de inicio del evento es mayor que la fecha actual...
+						if(strtotime($range_from) > strtotime($current_date)) {
+
+							// Marcamos el evento como próximo ('upcoming')
+							$data_proyecto['availability'] = 'upcoming';
+							// Incrementamos el contador de próximos eventos
+							$data['upcoming_events']++;
+
+						}
+						if(strtotime($range_to) < strtotime($current_date)){
+							
+							// Si la fecha de fin del evento es menor que la fecha actual...
+							// Marcamos el evento como pasado ('past')
+							$data_proyecto['availability'] = 'past';
+							// Incrementamos el contador de eventos pasados
+							$data['past_events']++;
+
+						}
+						
+					}else{
+						
+						// Incrementamos el número eventos en curso
+						$data['current_events']++;
+					
 					}
 					
 				}
