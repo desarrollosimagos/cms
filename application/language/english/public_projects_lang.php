@@ -20,9 +20,9 @@ $lang['public_list_sing_up_projects'] = 'Sing up';
 $lang['public_list_see_more_projects'] = 'See More Deals';
 
 // Detalles de proyectos
-$lang['public_view_minimum_projects'] = 'Minimum';
-$lang['public_view_variable_projects'] = 'Variable';
-$lang['public_view_target_projects'] = 'Inscriptions date';
+$lang['public_view_minimum_projects'] = 'Price';
+$lang['public_view_variable_projects'] = 'Event date';
+$lang['public_view_target_projects'] = 'Inscriptions';
 $lang['public_view_usage_projects'] = 'Usage';
 $lang['public_view_invest_projects'] = 'Sing up';
 $lang['public_view_documents_projects'] = 'Documents';

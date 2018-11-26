@@ -135,7 +135,7 @@ $(document).ready(function() {
 							  type: "success" 
 							},
 						function(){
-						  window.location.href = base_url+'profileuser';
+						  window.location.href = base_url+'investments';
 						});
 						
 					}
