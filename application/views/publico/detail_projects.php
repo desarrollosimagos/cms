@@ -230,7 +230,7 @@
 								</div>
 							</div>
 							
-							<?php if($available == 'yes'){?>
+							<?php if($inscription_available == 'yes'){?>
 							<div class="row user-button">
 								<div class="row">
 									<div class="col-md-12" align="center">

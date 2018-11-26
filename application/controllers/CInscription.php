@@ -74,7 +74,7 @@ class CInscription extends CI_Controller {
 				'public' => $proyecto->public,
 				'coin' => $proyecto->coin_avr." (".$proyecto->coin.")",
 				'status' => $proyecto->status,
-				'available' => 'no'
+				'inscription_available' => 'no'
 			);
 			
 			// Verificamos si la fecha actual encaja con la regla de 'inscription' del proyecto
@@ -97,7 +97,7 @@ class CInscription extends CI_Controller {
 					if($check_in_range == true){
 						
 						// Marcado del proyecto como disponible
-						$data_proyecto['available'] = 'yes';
+						$data_proyecto['inscription_available'] = 'yes';
 						
 					}
 					

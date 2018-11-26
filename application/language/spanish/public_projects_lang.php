@@ -8,7 +8,9 @@ $lang['public_heading_home_projects'] = 'Inicio';
 $lang['public_heading_subtitle_projects'] = 'Lista de proyectos';
 
 // Listado de proyectos
-$lang['public_list_title_projects'] = 'Inversiones Públicas';
+$lang['public_list_title_projects'] = 'Eventos en Curso';
+$lang['public_list_title2_projects'] = 'Próximos Eventos';
+$lang['public_list_title3_projects'] = 'Eventos Pasados';
 $lang['public_list_type1_projects'] = 'Capital disponible';
 $lang['public_list_type2_projects'] = 'Capital no disponible';
 $lang['public_list_minimum_projects'] = 'Precio';
