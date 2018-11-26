@@ -38,6 +38,7 @@ class CInscription extends CI_Controller {
         $this->load->model('MCuentas');
         $this->load->model('MCoins');
         $this->load->model('MCoinRate');
+        $this->load->model('MMails');
         
         // Load coin rate
         $this->load_rate();  // Load coin rate from api
@@ -146,7 +147,11 @@ class CInscription extends CI_Controller {
 		
 		$project_id = $this->input->post('project_id');  // Id del proyecto
 		
+		$data_event = $this->MProjects->obtenerProyecto($project_id);  // Datos del evento
+		
 		$user_id = $this->input->post('user_id');  // Id del usuario
+		
+		$data_user = $this->MUser->obtenerUsers($user_id);  // Datos del usuario
 		
 		$category = $this->input->post('category');  // Id del usuario
 		
@@ -161,26 +166,47 @@ class CInscription extends CI_Controller {
 			// Consultamos las reglas del proyecto
 			$project_rules = $this->MInscription->get_project_rules($project_id);
 			
-			// Verificamos el monto del proyecto consultando el rango de fechas de cada regla de costo
+			// Verificamos el monto del evento consultando el rango de fechas de cada regla de costo
+			// Verificamos la fecha de inicio del evento consultando el rango de fechas de cada regla de fecha
+			// Verificamos la fecha de fin de inscripción del proyecto consultando el rango de fechas de cada regla de inscripción
 			$project_cost = 0;
+			$project_date = '';
+			$project_pay_expiration = '';
 			foreach($project_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
 				// Si es una regla de costo
-				if($rule->segment == "cost"){
-					$cond = $rule->cond;  // Operador condicional de la regla
-					$range = $rule->var2;  // Cadena de rangos de fecha de la regla
-					$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
-					$range_from = $range[0];  // Rango desde
-					$range_to = $range[1];  // Rango hasta
-					
-					// Si el operador condicional es "between"
-					if($cond == "between"){
-						// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
-						$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
-						if($check_in_range == true){
-							$project_cost = $rule->result;
-						}
+				if($rule->segment == "cost" && $cond == "between"){
+					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						$project_cost = $rule->result;
 					}
 				}
+				
+				// Si es una regla de costo
+				if($rule->segment == "inscription" && $cond == "between"){
+					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						$project_date = $range_to;
+					}
+				}
+				
+				// Si es una regla de costo
+				if($rule->segment == "date" && $cond == "between"){
+					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						$project_pay_expiration = $range_from;
+					}
+				}
+				
 			}
 			
 			// Sección para el registro del contrato
@@ -275,6 +301,18 @@ class CInscription extends CI_Controller {
 					echo '{"response":"error2"}';
 					
 				}else{
+					
+					// Armamos los datos de la Inscripción
+					$datos_reg = array(
+						'username' => $data_user[0]->username,
+						'event_name' => $data_event[0]->name,
+						'event_date' => $project_date,
+						'pay_expiration' => $project_pay_expiration,
+						'event_cost' => $project_cost
+					);
+					
+					// Enviamos los datos actualizados al correo del usuario y lo redireccionamos al inicio de sesión
+					$this->MMails->enviarMailInscriptionEvent($datos_reg);
 					
 					echo '{"response":"ok"}';
 					
