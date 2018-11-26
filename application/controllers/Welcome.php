@@ -65,6 +65,15 @@ class Welcome extends CI_Controller {
 		// Determinamos si el proyecto está disponible para inscripción, verificando si la fecha actual encaja con la regla de 'inscription' del proyecto
 		$inscription_available = 'no';
 		
+		// Determinamos la fecha de inscripción del proyecto
+		$date_inscription = '';
+		
+		// Determinamos la fecha de inicio del proyecto
+		$date_event = '';
+		
+		// Determinamos el costo del proyecto
+		$cost = 0;
+		
 		foreach($project_rules as $rule){
 			
 			$cond = $rule->cond;  // Operador condicional de la regla
@@ -88,11 +97,40 @@ class Welcome extends CI_Controller {
 					
 				}
 				
+				// Definimos la fecha de inscripción del proyecto
+				$date_inscription = explode(" ", $range_from);
+				$date_inscription = $date_inscription[0];
+				
+			}
+			
+			// Si el operador condicional es "between" y la regla es de fecha de inicio
+			if($cond == "between" && $rule->segment == "date"){
+				
+				// Definimos la fecha de inscripción del proyecto
+				$date_event = explode(" ", $range_from);
+				$date_event = $date_event[0];
+				
+			}
+			
+			// Si el operador condicional es "between" y la regla es de costo
+			if($cond == "between" && $rule->segment == "cost"){
+				
+				// Si la fecha actual está dentro del rango de fechas de la regla de costo del proyecto, tomamos ese precio como costo del proyecto
+				$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+				if($check_in_range == true){
+					
+					// Definimos el costo del proyecto
+					$cost = $rule->result;
+					
+				}
+				
+				
+				
 			}
 			
 		}
         
-		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados', 'inscription_available'));
+		$this->load->view('publico/detail_projects', compact('get_detail', 'fotos_asociadas', 'documentos_asociados', 'lecturas_asociadas', 'detalles_asociados', 'inscription_available', 'date_inscription', 'date_event', 'cost'));
 		$this->load->view('footer');
 	}
 	
@@ -181,10 +219,13 @@ class Welcome extends CI_Controller {
 				'groups_names' => $groups_names,
 				'percentage_collected' => $porcentaje,
 				'inscription_available' => 'no',
-				'availability' => 'current'
+				'availability' => 'current',
+				'cost' => 0,
+				'date_event' => '',
+				'date_inscription' => ''
 			);
 			
-			// Verificamos si la fecha actual encaja con la regla de 'inscription' del proyecto
+			// Verificamos si la fecha actual encaja con las reglas del proyecto
 			foreach($project_rules as $rule){
 				
 				$cond = $rule->cond;  // Operador condicional de la regla
@@ -205,6 +246,24 @@ class Welcome extends CI_Controller {
 						
 						// Marcado del proyecto como disponible
 						$data_proyecto['inscription_available'] = 'yes';
+						
+					}
+					
+					// Definimos la fecha de inscripción del proyecto
+					$date_inscription = explode(" ", $range_from);
+					$data_proyecto['date_inscription'] = $date_inscription[0];
+					
+				}
+				
+				// Si el operador condicional es "between" y la regla es de costo
+				if($cond == "between" && $rule->segment == "cost"){
+					
+					// Si la fecha actual está dentro del rango de fechas de la regla de costo del proyecto, tomamos ese precio como costo del proyecto
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						
+						// Marcado del proyecto como disponible
+						$data_proyecto['cost'] += $rule->result;
 						
 					}
 					
@@ -242,6 +301,10 @@ class Welcome extends CI_Controller {
 						$data['current_events']++;
 					
 					}
+					
+					// Definimos la fecha de inicio del proyecto
+					$date_event = explode(" ", $range_from);
+					$data_proyecto['date_event'] = $date_event[0];
 					
 				}
 				
