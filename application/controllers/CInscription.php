@@ -51,7 +51,7 @@ class CInscription extends CI_Controller {
 	public function register()
 	{
 		$this->load->view('base');
-		$data['ident'] = "Inscribir";
+		$data['ident'] = "Eventos";
 		$data['ident_sub'] = "Inscribir";
 		$data['monedas'] = $this->MCoins->obtener();
 		$data['usuarios'] = $this->MInscription->listar_usuarios();
