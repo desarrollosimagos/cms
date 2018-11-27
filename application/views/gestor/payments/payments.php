@@ -124,7 +124,11 @@
 					<?php foreach ($contratos as $contrato) { ?>
 						<tr class='text-center'>
 							<td>
-								<?php echo ""; ?>
+								<div class="i-checks">
+									<label>
+										<input type="checkbox" name="real" id="real">
+									</label>
+								</div>
 							</td>
 							<td>
 								<?php echo $contrato->id; ?>
@@ -136,7 +140,8 @@
 								<?php echo $contrato->name; ?>
 							</td>
 							<td>
-								<?php echo $contrato->amount; ?>
+								<?php $monto = number_format($contrato->amount, $contrato->coin_decimals, '.', ''); ?>
+								<?php echo $monto." ".$contrato->coin_avr ?>
 							</td>
 						</tr>
 						<?php $i++ ?>
@@ -144,13 +149,26 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class='text-center' colspan='5'>
-							<ul class='pagination'></ul>
+						<td class='text-right' colspan='5'>
+							<strong><?php echo $this->lang->line('payment_contracts_total'); ?>:</strong>&nbsp;500
 						</td>
 					</tr>
 				</tfoot>
 			</table>
+			
+			<!-- Botones de acción -->
+			<?php $filter_profile = array(1, 2, 3, 4); ?>
+			<?php if(in_array($this->session->userdata('logged_in')['profile_id'], $filter_profile)){ ?>
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-sm btn-primary"><?php echo $this->lang->line('payment_contracts_pay_button'); ?></button>
+				<button type="button" class="btn btn-sm btn-primary"><?php echo $this->lang->line('payment_contracts_recalculate_button'); ?></button>
+			</div>
+			<br>
+			<?php } ?>
+			<!-- Cierre de los botones de acción -->
+			
 		</div>
+		
 	</div>
 	<!-- Cierre del cuerpo de la sección de contratos pendientes de pago -->
 	

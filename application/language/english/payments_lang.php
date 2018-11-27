@@ -9,6 +9,9 @@ $lang['payment_contracts_title'] = 'Pending contracts';
 $lang['payment_contracts_user'] = 'User';
 $lang['payment_contracts_account'] = 'Event';
 $lang['payment_contracts_amount'] = 'Amount';
+$lang['payment_contracts_pay_button'] = 'Pay';
+$lang['payment_contracts_recalculate_button'] = 'Recalculate';
+$lang['payment_contracts_total'] = 'Total';
 
 // Pagos realizados (Transaccione pendientes)
 $lang['payment_payment_title'] = 'Payments made';
