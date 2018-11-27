@@ -111,7 +111,7 @@
 
 			<table id="tab_accounts"  data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
 				<thead>
-					<tr>
+					<tr class='text-center'>
 						<th></th>
 						<th>ID</th>
 						<th ><?php echo $this->lang->line('payment_contracts_user'); ?></th>
@@ -120,29 +120,27 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!--
 					<?php $i = 1; ?>
-					<?php foreach ($cuentas as $cuenta) { ?>
-						<tr style="text-align: center">
+					<?php foreach ($contratos as $contrato) { ?>
+						<tr class='text-center'>
 							<td>
 								<?php echo ""; ?>
 							</td>
 							<td>
-								<?php echo $i; ?>
+								<?php echo $contrato->id; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->alias; ?>
+								<?php echo $contrato->username; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->number; ?>
+								<?php echo $contrato->name; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->tipo_cuenta; ?>
+								<?php echo $contrato->amount; ?>
 							</td>
 						</tr>
 						<?php $i++ ?>
 					<?php } ?>
-					-->
 				</tbody>
 				<tfoot>
 					<tr>
@@ -196,37 +194,45 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!--
 					<?php $i = 1; ?>
-					<?php foreach ($cuentas as $cuenta) { ?>
+					<?php foreach ($transacciones as $transaccion) { ?>
 						<tr style="text-align: center">
 							<td>
 								<?php echo $i; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->alias; ?>
+								<?php echo $transaccion->date; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->number; ?>
+								<?php echo $transaccion->number; ?>
 							</td>
 							<td>
-								<?php echo $cuenta->tipo_cuenta; ?>
+								<?php echo $transaccion->observation; ?>
 							</td>
 							<td>
-								<?php $monto = number_format($cuenta->capital_disponible_total, $cuenta->coin_decimals, '.', ''); ?>
-								<?php echo $monto." ".$cuenta->coin_avr ?>
+								<?php $monto = number_format($transaccion->capital_disponible_total, $transaccion->coin_decimals, '.', ''); ?>
+								<?php echo $monto." ".$transaccion->coin_avr ?>
 							</td>
 							<td>
-								<?php echo $cuenta->capital_disponible_moneda_usuario; ?>
+								<?php
+								if($transaccion->status == "approved"){
+									echo "<i class='fa fa-check text-navy'></i>";
+								}else if($transaccion->status == "waiting"){
+									echo "<i class='fa fa-check text-warning'></i>";
+								}else if($transaccion->status == "denied"){
+									echo "<i class='fa fa-times text-danger'></i>";
+								}else{
+									echo "";
+								}
+								?>
 							</td>
 						</tr>
 						<?php $i++ ?>
 					<?php } ?>
-					-->
 				</tbody>
 				<tfoot>
 					<tr>
-						<td class='text-center' colspan='7'>
+						<td class='text-center' colspan='6'>
 							<ul class='pagination'></ul>
 						</td>
 					</tr>
