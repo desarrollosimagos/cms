@@ -52,7 +52,8 @@ class CPayments extends CI_Controller {
 		$this->load->view('base');
 		$data['ident'] = "Eventos";
 		$data['ident_sub'] = "Pagos";
-		$data['listar'] = $this->MPayments->obtener();
+		$data['contratos'] = $this->MPayments->obtenerContratos($this->session->userdata('logged_in')['id']);
+		$data['transacciones'] = $this->MPayments->obtenerTransacciones($this->session->userdata('logged_in')['id']);
 		
 		// Mensaje de la api de dolartoday
 		$data['coin_rate_message'] = $this->coin_rate_message;
