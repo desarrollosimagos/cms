@@ -24,11 +24,13 @@ class MPayments extends CI_Model {
     public function obtenerContratos($user_id) {
 		
 		$select = 'c.id, c.project_id, p.name, c.user_id, u.username, c.transaction_id, c.type, ';
-		$select .= 'c.created_on, c.finished_on, c.payback, c.amount';
+		$select .= 'c.created_on, c.finished_on, c.payback, c.amount, ';
+		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals';
 		$this->db->select($select);
 		$this->db->distinct();
 		$this->db->from('contracts c');
 		$this->db->join('projects p', 'p.id = c.project_id', 'left');
+		$this->db->join('coins cn', 'cn.id = p.coin_id');
 		$this->db->join('users u', 'u.id = c.user_id');
 		$this->db->where('c.user_id', $user_id);
 		$this->db->or_where('c.user_create_id', $user_id);
