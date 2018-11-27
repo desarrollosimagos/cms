@@ -26,11 +26,9 @@ class CCoins extends CI_Controller {
 		if($perfil_id == 1 || $perfil_id == 2){
 			$perfil_folder = 'plataforma/';
 		}else if($perfil_id == 3){
-			$perfil_folder = 'inversor/';
-		}else if($perfil_id == 4){
-			$perfil_folder = 'asesor/';
-		}else if($perfil_id == 5){
 			$perfil_folder = 'gestor/';
+		}else if($perfil_id == 4){
+			$perfil_folder = 'inversor/';
 		}else{
 			redirect('login');
 		}
@@ -50,11 +48,9 @@ class CCoins extends CI_Controller {
 		if($perfil_id == 1 || $perfil_id == 2){
 			$perfil_folder = 'plataforma/';
 		}else if($perfil_id == 3){
-			$perfil_folder = 'inversor/';
-		}else if($perfil_id == 4){
-			$perfil_folder = 'asesor/';
-		}else if($perfil_id == 5){
 			$perfil_folder = 'gestor/';
+		}else if($perfil_id == 4){
+			$perfil_folder = 'inversor/';
 		}else{
 			redirect('login');
 		}
@@ -102,11 +98,9 @@ class CCoins extends CI_Controller {
 		if($perfil_id == 1 || $perfil_id == 2){
 			$perfil_folder = 'plataforma/';
 		}else if($perfil_id == 3){
-			$perfil_folder = 'inversor/';
-		}else if($perfil_id == 4){
-			$perfil_folder = 'asesor/';
-		}else if($perfil_id == 5){
 			$perfil_folder = 'gestor/';
+		}else if($perfil_id == 4){
+			$perfil_folder = 'inversor/';
 		}else{
 			redirect('login');
 		}
