@@ -160,20 +160,10 @@ class MFondoPersonal extends CI_Model {
 			$this->db->where('c.user_id =', $this->session->userdata('logged_in')['id']);
 			$this->db->group_by(array("c.id", "c.alias", "c.number", "cn.abbreviation"));
 			$this->db->order_by("c.alias", "desc");
-		}else if($this->session->userdata('logged_in')['profile_id'] == 5){
-			$this->db->from('users u');
-			$this->db->join('usergroups_users i_g_u', 'i_g_u.user_id=u.id');
-			$this->db->join('usergroups i_g', 'i_g.id=i_g_u.group_id');
-			$this->db->join('usergroups_accounts i_g_a', 'i_g_a.group_id=i_g.id');
-			$this->db->join('accounts c', 'c.id=i_g_a.account_id');
-			$this->db->join('coins cn', 'cn.id = c.coin_id');
-			$this->db->where('i_g_u.user_id =', $this->session->userdata('logged_in')['id']);
-			$this->db->group_by(array("c.id", "c.alias", "c.number", "cn.abbreviation"));
-			$this->db->order_by("c.alias", "desc");
 		}else{
 			$this->db->from('accounts c');
 			$this->db->join('coins cn', 'cn.id = c.coin_id');
-			$this->db->where('c.user_id =', $this->session->userdata('logged_in')['id']);
+			//~ $this->db->where('c.user_id =', $this->session->userdata('logged_in')['id']);
 			$this->db->group_by(array("c.id", "c.alias", "c.number", "cn.abbreviation"));
 			$this->db->order_by("c.alias", "desc");
 		}

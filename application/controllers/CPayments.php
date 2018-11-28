@@ -37,6 +37,7 @@ class CPayments extends CI_Controller {
         $this->load->model('MCoins');
         $this->load->model('MCoinRate');
         $this->load->model('MMails');
+        $this->load->model('MFondoPersonal');
         $this->load->model('MPayments');
         
         // Load coin rate
@@ -54,6 +55,7 @@ class CPayments extends CI_Controller {
 		$data['ident_sub'] = "Pagos";
 		$data['contratos'] = $this->MPayments->obtenerContratos($this->session->userdata('logged_in')['id']);
 		$data['transacciones'] = $this->MPayments->obtenerTransacciones($this->session->userdata('logged_in')['id']);
+		$data['accounts'] = $this->MFondoPersonal->obtener_cuentas_group();
 		
 		// Mensaje de la api de dolartoday
 		$data['coin_rate_message'] = $this->coin_rate_message;
