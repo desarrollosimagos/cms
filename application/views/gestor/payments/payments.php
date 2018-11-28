@@ -5,6 +5,10 @@
 .views-number {
     font-size: 18px !important;
 }
+
+.select2-container {
+	z-index: 99999;
+}
 </style>
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -125,7 +129,7 @@
 						<tr class='text-center'>
 							<td>
 								<div class="i-checks">
-									<label>
+									<label class="prueba">
 										<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
 									</label>
 								</div>
@@ -160,8 +164,8 @@
 			<?php $filter_profile = array(1, 2, 3, 4); ?>
 			<?php if(in_array($this->session->userdata('logged_in')['profile_id'], $filter_profile)){ ?>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-sm btn-primary"><?php echo $this->lang->line('payment_contracts_pay_button'); ?></button>
-				<button type="button" class="btn btn-sm btn-primary"><?php echo $this->lang->line('payment_contracts_recalculate_button'); ?></button>
+				<button type="button" class="btn btn-sm btn-primary" id="pay"><?php echo $this->lang->line('payment_contracts_pay_button'); ?></button>
+				<button type="button" class="btn btn-sm btn-primary" id="recalculate"><?php echo $this->lang->line('payment_contracts_recalculate_button'); ?></button>
 			</div>
 			<br>
 			<?php } ?>
@@ -261,6 +265,52 @@
 	<!-- Cierre del cuerpo de la sección de pagos realizados (transacciones pendientes) -->
 	
 </div>
+
+<!-- Ventana modal para la preselección y precarga de datos -->
+<div class="modal inmodal fade" id="modal_pago" tabindex="-1" role="dialog"  aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close cerrar_modal" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title"><span id="titulo"></span> <?php echo $this->lang->line('payment_modal_title'); ?></h4>
+			</div>
+			<div class="modal-body">
+				<form name="nuevo_vehiculo" action="" method="post" class="form">
+					<div class="form-group">
+						<label ><?php echo $this->lang->line('payment_modal_reference'); ?></label>
+						<input id="reference" name="reference" class="form-control" type="text" maxlength="50">
+						
+						<label><?php echo $this->lang->line('payment_modal_date'); ?> </label>
+						<input id="date" name="date" class="form-control" type="text" maxlength="20">
+						
+						<label ><?php echo $this->lang->line('payment_modal_account'); ?> *</label>
+						<select class="form-control m-b" name="account_id" id="account_id" style="width:100%;">
+							<option value="0">Seleccione</option>
+							<?php foreach($accounts as $cuenta){?>
+							<option value="<?php echo $cuenta->id; ?>"><?php echo $cuenta->alias." - ".$cuenta->number." - ".$cuenta->coin_avr; ?></option>
+							<?php } ?>
+						</select>
+						
+						<label ><?php echo $this->lang->line('payment_modal_observation'); ?></label>
+						<input id="license_plate" name="license_plate" class="form-control" type="text" maxlength="50">
+						
+						<label ><?php echo $this->lang->line('payment_modal_amount'); ?></label>
+						<input id="license_plate" name="license_plate" class="form-control" type="text" readonly="true">
+						
+						<!-- Campo oculto de ids de contratos seleccionados -->
+						<input id="contract_ids" class="form-control" type="hidden" >
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer" >
+				<button class="btn btn-primary" type="button" id="pay_excute">
+					<?php echo $this->lang->line('payment_modal_pay_button'); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Cierre de ventana modal para la preselección y precarga de datos -->
 
 <!-- FooTable -->
 <!--<script src="<?php echo assets_url('js/plugins/footable/footable.js');?>"></script>-->

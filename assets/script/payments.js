@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	// Capturamos la base_url
-    var base_url = $("#base_url").val();
-    
+    var base_url = $("#base_url").val();    
         
     $('input').on({
         keypress: function () {
@@ -15,16 +14,76 @@ $(document).ready(function() {
         autoclose: true,
         endDate: 'today'
     });
-
-	//~ $("#gender").select2('val', $("#id_gender").val());
-	//~ $("#lang_id").select2('val', $("#id_lang").val());
+    
+    // Funciones para calcular el monto total de la transacción según los contratos seleccionados
+    // Función para sumar el monto del contrato marcado al total
+    $("table#tab_contracts").on('ifChecked', 'input.checkbox', function (e) {
+		
+		// Valor actual del total
+		var total = $("span#total").text().trim();
+		
+		if(total != ''){
+			total = parseFloat(total)
+		}else{
+			total = 0;
+		}
+		
+		var tr_padre = $(this).parent().parent().parent().parent().parent();  // Subimos tantos niveles hasta llegar al tr
+		
+		var monto_contrato = tr_padre.find('td').eq(4).text().trim();  // Capturamos el valor de la columna 'Monto'
+		
+		monto_contrato = monto_contrato.split(' ');  // Filtrado de moneda
+		
+		monto_contrato = monto_contrato[0];
+		
+		// Cálculo del nuevo total
+		total += parseFloat(monto_contrato);
+		
+		// Imprimimos el nuevo total
+		$("span#total").text(total);
+		
+	});
+    // Función para restar el monto del contrato desmarcado al total
+    $("table#tab_contracts").on('ifUnchecked', 'input.checkbox', function (e) {
+		
+		// Valor actual del total
+		var total = $("span#total").text().trim();
+		
+		if(total != ''){
+			total = parseFloat(total)
+		}else{
+			total = 0;
+		}
+		
+		var tr_padre = $(this).parent().parent().parent().parent().parent();  // Subimos tantos niveles hasta llegar al tr
+		
+		var monto_contrato = tr_padre.find('td').eq(4).text().trim();  // Capturamos el valor de la columna 'Monto'
+		
+		monto_contrato = monto_contrato.split(' ');  // Filtrado de moneda
+		
+		monto_contrato = monto_contrato[0];
+		
+		// Cálculo del nuevo total
+		if(total > 0){
+			total -= parseFloat(monto_contrato);
+		}
+		
+		// Imprimimos el nuevo total
+		$("span#total").text(total);
+		
+	});
 	
 	// Mostramos la ventana modal para la preselección y precarga de datos
 	$("#pay").click(function (e) {
+		
 		e.preventDefault();  // Para evitar que se envíe por defecto
+		
+		var total = $("span#total").text();
+		
+		$("#amount").val(total.trim());
+		
 		$("#modal_pago").modal('show');
-		//~ $("span#titulo").text('Registrar');
-		//~ $("#accion").val('Registrar');
+		
 	});
 	
 	// Ejecutar actualización de datos
