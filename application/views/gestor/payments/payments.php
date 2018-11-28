@@ -126,7 +126,7 @@
 							<td>
 								<div class="i-checks">
 									<label>
-										<input type="checkbox" name="real" id="real">
+										<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
 									</label>
 								</div>
 							</td>
@@ -307,4 +307,4 @@
 <script src="<?php echo assets_url('js/plugins/chartJs/Chart.min.js');?>"></script>
 
 <!-- Page-Level Scripts -->
-<script src="<?php echo assets_url(); ?>script/resumen.js"></script>
+<script src="<?php echo assets_url(); ?>script/payments.js"></script>
