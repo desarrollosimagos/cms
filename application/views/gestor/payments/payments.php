@@ -113,7 +113,7 @@
 			</div>
 			<?php } ?>
 
-			<table id="tab_accounts"  data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
+			<table id="tab_contracts"  data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
 				<thead>
 					<tr class='text-center'>
 						<th></th>
@@ -129,7 +129,7 @@
 						<tr class='text-center'>
 							<td>
 								<div class="i-checks">
-									<label class="prueba">
+									<label>
 										<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
 									</label>
 								</div>
@@ -154,7 +154,8 @@
 				<tfoot>
 					<tr>
 						<td class='text-right' colspan='5'>
-							<strong><?php echo $this->lang->line('payment_contracts_total'); ?>:</strong>&nbsp;500
+							<strong><?php echo $this->lang->line('payment_contracts_total'); ?>:</strong>&nbsp;
+							<span id="total"></span>
 						</td>
 					</tr>
 				</tfoot>
@@ -204,7 +205,7 @@
 			</div>
 			<?php } ?>
 
-			<table id="tab_accounts"  data-page-size="10" data-filter=#filter_payments class="footable table table-stripped toggle-arrow-tiny">
+			<table id="tab_payments"  data-page-size="10" data-filter=#filter_payments class="footable table table-stripped toggle-arrow-tiny">
 				<thead>
 					<tr>
 						<th>Id</th>
@@ -292,10 +293,10 @@
 						</select>
 						
 						<label ><?php echo $this->lang->line('payment_modal_observation'); ?></label>
-						<input id="license_plate" name="license_plate" class="form-control" type="text" maxlength="50">
+						<input id="observations" name="observations" class="form-control" type="text" maxlength="200">
 						
 						<label ><?php echo $this->lang->line('payment_modal_amount'); ?></label>
-						<input id="license_plate" name="license_plate" class="form-control" type="text" readonly="true">
+						<input id="amount" name="amount" class="form-control" type="text" readonly="true">
 						
 						<!-- Campo oculto de ids de contratos seleccionados -->
 						<input id="contract_ids" class="form-control" type="hidden" >

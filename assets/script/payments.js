@@ -42,6 +42,10 @@ $(document).ready(function() {
 		// Imprimimos el nuevo total
 		$("span#total").text(total);
 		
+		// Capturamos y almacenamos el id del contrato marcado
+		var id_contract = tr_padre.find('td').eq(1).text().trim();
+		capture_id_contract('Checked', id_contract);
+		
 	});
     // Función para restar el monto del contrato desmarcado al total
     $("table#tab_contracts").on('ifUnchecked', 'input.checkbox', function (e) {
@@ -71,7 +75,68 @@ $(document).ready(function() {
 		// Imprimimos el nuevo total
 		$("span#total").text(total);
 		
+		// Borramos el id del contrato desmarcado del campo oculto
+		var id_contract = tr_padre.find('td').eq(1).text().trim();
+		capture_id_contract('Unchecked', id_contract);
+		
 	});
+	
+	// Capturar y almacenar los ids de los contratos
+	function capture_id_contract(checked, id){
+		
+		var checked = checked;
+		
+		var id = String(id);  // Id del contrato marcado/desmarcado
+		
+		var contracts_ids = $("#contract_ids").val().trim();  // Capturamos los ids almacenados actualmente
+		
+		if(checked == 'Checked'){
+		
+			if(contracts_ids != ''){
+				
+				// Primero verificamos que no esté ya almacenado
+				var array = contracts_ids.split(';');
+				
+				if($.inArray( id, array ) == -1){
+					contracts_ids += ";" + id;  // Concatenamos el nuevo id marcado añadiéndole un separador antes
+				}
+				
+			}else{
+				
+				contracts_ids += id;  // Concatenamos el nuevo id marcado
+				
+			}
+			
+		}else{
+			
+			if(contracts_ids != ''){
+				
+				// Primero verificamos que esté almacenado
+				var array = contracts_ids.split(';');
+				var index = array.indexOf(id);  // Buscamos la posición o índice del elemento que coincida con el id del contrato desmarcado
+				
+				// Eliminamos del arreglo al elemento que coincida con el índice del id del contrato desmarcado
+				if(index > -1){
+					array.splice(index, 1);
+				}
+				
+				// Reconstruimos la cadena de ids de los contratos marcados
+				contracts_ids = '';
+				$.each(array, function( index, value ) {
+					contracts_ids += value + ';';
+				});
+				// Si la cadena de ids no queda vacía borramos el último ';'
+				if(contracts_ids != ''){
+					contracts_ids = contracts_ids.slice(0,-1);
+				}
+			}
+			
+		}
+		
+		// Almacenamos los ids resultantes
+		$("#contract_ids").val(contracts_ids);
+		
+	}
 	
 	// Mostramos la ventana modal para la preselección y precarga de datos
 	$("#pay").click(function (e) {

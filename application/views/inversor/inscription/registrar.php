@@ -303,7 +303,7 @@ $(document).ready(function(){
 						
 						if (isConfirm) {
 							
-							window.location.href = '<?php echo base_url(); ?>payment';
+							window.location.href = '<?php echo base_url(); ?>payments';
 							
 						}else{
 							

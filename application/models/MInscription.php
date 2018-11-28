@@ -35,9 +35,9 @@ class MInscription extends CI_Model {
 		$this->db->join('lang l', 'l.id = u.lang_id');
 		$this->db->where('u.profile_id', 4);
 		// Si el usuario corresponde al de un COMPETIDOR añadimos el filtro de usuario
-        if($this->session->userdata('logged_in')['profile_id'] == 4){
-			$this->db->where('u.id', $this->session->userdata('logged_in')['id']);
-		}
+        //~ if($this->session->userdata('logged_in')['profile_id'] == 4){
+			//~ $this->db->where('u.id', $this->session->userdata('logged_in')['id']);
+		//~ }
 		$this->db->order_by("u.id", "desc");
         $query = $this->db->get();
         //~ $query = $this->db->get('users');
