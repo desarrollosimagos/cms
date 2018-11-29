@@ -15,7 +15,7 @@ $(document).ready(function() {
         endDate: 'today'
     });
     
-    // Funciones para calcular el monto total de la transacción según los contratos seleccionados
+    // Funciones para calcular el monto total de la transacción según los contratos seleccionados individualmente
     // Función para sumar el monto del contrato marcado al total
     $("table#tab_contracts").on('ifChecked', 'input.checkbox', function (e) {
 		
@@ -78,6 +78,66 @@ $(document).ready(function() {
 		// Borramos el id del contrato desmarcado del campo oculto
 		var id_contract = tr_padre.find('td').eq(1).text().trim();
 		capture_id_contract('Unchecked', id_contract);
+		
+	});
+	
+    // Funciones para calcular el monto total de la transacción según los contratos seleccionados generalmente
+    // Función para marcar todos los contratos y sumar todos los montos para generar un total general
+    $("table#tab_contracts").on('ifChecked', 'input.general_checkbox', function (e) {
+		
+		// Valor actual del total
+		let total = $("span#total").text().trim();
+		
+		if(total != ''){
+			total = parseFloat(total)
+		}else{
+			total = 0;
+		}
+		
+		// Recorremos la lista de contratos
+		$("#tab_contracts tbody tr").each(function (index){
+		
+			let tr_padre = $(this);  // Fijamos posición en el tr de la iteración
+			
+			// En este punto no es necesario que volvamos a calcular el monto total ya que se detecta al cambiar cada checkbox individualmente
+			
+			// Capturamos y almacenamos el id del contrato marcado
+			let id_contract = tr_padre.find('td').eq(1).text().trim();
+			capture_id_contract('Checked', id_contract);
+			
+			// Marcamos el checkbox correspondiente
+			tr_padre.find('td').eq(0).find('input.checkbox').iCheck('check');
+			
+		});
+		
+	});
+    // Función para desmarcar todos los contratos y restar todos los montos para generar un total general (cero)
+    $("table#tab_contracts").on('ifUnchecked', 'input.general_checkbox', function (e) {
+		
+		// Valor actual del total
+		let total = $("span#total").text().trim();
+		
+		if(total != ''){
+			total = parseFloat(total)
+		}else{
+			total = 0;
+		}
+		
+		// Recorremos la lista de contratos
+		$("#tab_contracts tbody tr").each(function (index){
+		
+			let tr_padre = $(this);  // Fijamos posición en el tr de la iteración
+			
+			// En este punto no es necesario que volvamos a calcular el monto total ya que se detecta al cambiar cada checkbox individualmente
+			
+			// Borramos el id del contrato desmarcado del campo oculto
+			let id_contract = tr_padre.find('td').eq(1).text().trim();
+			capture_id_contract('Unchecked', id_contract);
+			
+			// Desmarcamos el checkbox correspondiente
+			tr_padre.find('td').eq(0).find('input.checkbox').iCheck('uncheck');
+			
+		});
 		
 	});
 	
@@ -161,6 +221,44 @@ $(document).ready(function() {
 			swal({ 
 				title: "Pago",
 				text: "Debe seleccionar los contratos a pagar",
+				type: "warning" 
+			}, function(){
+				
+			});
+			
+		}
+		
+	});
+	
+	// Ejecutamos las funciones de recálculo de montos de contratos
+	$("#recalculate").click(function (e) {
+		
+		e.preventDefault();  // Para evitar que se envíe por defecto
+		
+		var total = $("span#total").text();
+		
+		// Carga del monto
+		$("#amount").val(total.trim());
+		
+		// Carga de las observaciones
+		get_observations();
+		
+		// Mostramos la modal sólo si hay contratos marcados
+		if(count_checks() > 0){
+			
+			swal({ 
+				title: "Pago",
+				text: "Recalculando...",
+				type: "warning" 
+			}, function(){
+				
+			});
+			
+		}else{
+			
+			swal({ 
+				title: "Pago",
+				text: "Debe seleccionar los contratos a recalcular",
 				type: "warning" 
 			}, function(){
 				
