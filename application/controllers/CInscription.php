@@ -189,7 +189,7 @@ class CInscription extends CI_Controller {
 					}
 				}
 				
-				// Si es una regla de costo
+				// Si es una regla de inscripción
 				if($rule->segment == "inscription" && $cond == "between"){
 					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
@@ -198,7 +198,7 @@ class CInscription extends CI_Controller {
 					}
 				}
 				
-				// Si es una regla de costo
+				// Si es una regla de fecha
 				if($rule->segment == "date" && $cond == "between"){
 					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
@@ -342,7 +342,7 @@ class CInscription extends CI_Controller {
 		
 		// Obtenemos los datos del proyecto
 		$project_id = $this->input->post('project_id');  // Id del proyecto
-		$project_data = $this->MProjects->obtenerProyecto($user_id);
+		$project_data = $this->MProjects->obtenerProyecto($project_id);
 		
 		// Consultamos las reglas del proyecto
 		$project_rules = $this->MInscription->get_project_rules($project_id);

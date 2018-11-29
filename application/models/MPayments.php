@@ -72,14 +72,15 @@ class MPayments extends CI_Model {
         
     }
 
-    // Public method to obtain the transactions by id
-    public function obtenerServices($id) {
-        $this->db->where('id', $id);
-        $query = $this->db->get('transactions');
-        if ($query->num_rows() > 0)
-            return $query->result();
-        else
-            return $query->result();
+    // Public method to obtain the projects by id
+    public function obtenerContrato($id) {
+		
+		
+		$this->db->where('id', $id);
+		$query = $this->db->get('contracts');
+		
+        return $query->result();
+            
     }
 
     // Public method to update a record  
