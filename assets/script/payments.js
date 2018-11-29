@@ -235,24 +235,31 @@ $(document).ready(function() {
 		
 		e.preventDefault();  // Para evitar que se envíe por defecto
 		
-		var total = $("span#total").text();
-		
-		// Carga del monto
-		$("#amount").val(total.trim());
-		
-		// Carga de las observaciones
-		get_observations();
+		var contract_ids = $("#contract_ids").val();
 		
 		// Mostramos la modal sólo si hay contratos marcados
 		if(count_checks() > 0){
 			
-			swal({ 
-				title: "Pago",
-				text: "Recalculando...",
-				type: "warning" 
-			}, function(){
-				
-			});
+			$.post(base_url+'CPayments/update_cost', { 'contract_ids': contract_ids }, function (response) {
+
+				if (response['response'] == 'error') {
+					
+                    swal("Disculpe,", "ocurrió un error durante el proceso, vuelva a intentarlo.");
+                    
+                }else{
+					
+					swal({
+						title: "Actualizar",
+						text: "Costos actualizados",
+						type: "success" 
+					},
+					function(){
+						window.location.href = base_url+'payments';
+					});
+					
+				}
+
+            }, 'json');
 			
 		}else{
 			

@@ -37,6 +37,7 @@ class CPayments extends CI_Controller {
         $this->load->model('MCoins');
         $this->load->model('MCoinRate');
         $this->load->model('MMails');
+        $this->load->model('MInscription');
         $this->load->model('MFondoPersonal');
         $this->load->model('MPayments');
         
@@ -146,6 +147,77 @@ class CPayments extends CI_Controller {
 		}
 		
     }
+    
+    // Método para actualizar el costo de los contratos tomando en cuenta las reglas de cada uno de los seleccionados
+	public function update_cost(){
+		
+		$errors = 0;
+		
+		// Transformamos la cadena de ids en un arreglo iterable
+		$contract_ids = explode(";", $this->input->post('contract_ids'));
+		foreach($contract_ids as $contract_id){
+		
+			// Obtenemos los datos del contrato
+			$contract_data = $this->MPayments->obtenerContrato($contract_id);
+		
+			// Obtenemos los datos del proyecto
+			$project_data = $this->MProjects->obtenerProyecto($contract_data[0]->project_id);
+			
+			// Consultamos las reglas del proyecto
+			$project_rules = $this->MInscription->get_project_rules($project_data[0]->id);
+			
+			// Verificamos las reglas de costo que encajen con la fecha actual
+			foreach($project_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
+				// Tomamos la fecha actual
+				$current_date = date('Y-m-d H:i:s');
+				
+				// Si el operador condicional es "between" y la regla es de costo
+				if($cond == "between" && $rule->segment == "cost"){
+					
+					// Si la fecha actual está dentro del rango de fechas de la regla de costo del proyecto, actualizamos el costo de dicha regla al contrato
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == true){
+						
+						// Armamos la data del contrato
+						$data_contract = array( 
+							'id'=>$contract_id, 
+							'amount'=>$rule->result
+						);
+						
+						// Actualizamos el contrato con el costo correspondiente
+						if(!$update = $this->MPayments->update_contract($data_contract)){
+							
+							$errors++;
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		// Muestra de resultados
+		if($errors > 0){
+			
+			echo '{"response":"error"}';
+			
+		}else{
+			
+			echo '{"response":"ok"}';
+			
+		}
+		
+	}
     
     // Método para actualizar el precio del dólar tomando como referencia la api de dolartoday
     public function load_rate(){
