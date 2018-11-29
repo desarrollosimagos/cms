@@ -113,7 +113,7 @@
 			</div>
 			<?php } ?>
 
-			<table id="tab_contracts"  data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
+			<table id="tab_contracts" data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
 				<thead>
 					<tr class='text-center'>
 						<th></th>
@@ -126,29 +126,31 @@
 				<tbody>
 					<?php $i = 1; ?>
 					<?php foreach ($contratos as $contrato) { ?>
-						<tr class='text-center'>
-							<td>
-								<div class="i-checks">
-									<label>
-										<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
-									</label>
-								</div>
-							</td>
-							<td>
-								<?php echo $contrato->id; ?>
-							</td>
-							<td>
-								<?php echo $contrato->username; ?>
-							</td>
-							<td>
-								<?php echo $contrato->name; ?>
-							</td>
-							<td>
-								<?php $monto = number_format($contrato->amount, $contrato->coin_decimals, '.', ''); ?>
-								<?php echo $monto." ".$contrato->coin_avr ?>
-							</td>
-						</tr>
-						<?php $i++ ?>
+						<?php if($contrato->transaction_id == 0) { ?>
+							<tr class='text-center'>
+								<td>
+									<div class="i-checks">
+										<label>
+											<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
+										</label>
+									</div>
+								</td>
+								<td>
+									<?php echo $contrato->id; ?>
+								</td>
+								<td>
+									<?php echo $contrato->username; ?>
+								</td>
+								<td>
+									<?php echo $contrato->name; ?>
+								</td>
+								<td>
+									<?php $monto = number_format($contrato->amount, $contrato->coin_decimals, '.', ''); ?>
+									<?php echo $monto." ".$contrato->coin_avr ?>
+								</td>
+							</tr>
+							<?php $i++ ?>
+						<?php } ?>
 					<?php } ?>
 				</tbody>
 				<tfoot>
@@ -233,17 +235,17 @@
 								<?php echo $transaccion->observation; ?>
 							</td>
 							<td>
-								<?php $monto = number_format($transaccion->capital_disponible_total, $transaccion->coin_decimals, '.', ''); ?>
+								<?php $monto = number_format($transaccion->amount, $transaccion->coin_decimals, '.', ''); ?>
 								<?php echo $monto." ".$transaccion->coin_avr ?>
 							</td>
 							<td>
 								<?php
 								if($transaccion->status == "approved"){
-									echo "<i class='fa fa-check text-navy'></i>";
+									echo "<span class='text-navy'>approved</span>";
 								}else if($transaccion->status == "waiting"){
-									echo "<i class='fa fa-check text-warning'></i>";
+									echo "<span class='text-warning'>waiting</span>";
 								}else if($transaccion->status == "denied"){
-									echo "<i class='fa fa-times text-danger'></i>";
+									echo "<span class='text-danger'>denied</span>";
 								}else{
 									echo "";
 								}
@@ -276,7 +278,7 @@
 				<h4 class="modal-title"><span id="titulo"></span> <?php echo $this->lang->line('payment_modal_title'); ?></h4>
 			</div>
 			<div class="modal-body">
-				<form name="nuevo_vehiculo" action="" method="post" class="form">
+				<form id="ejecutar_pago" name="ejecutar_pago" action="" method="post" class="form">
 					<div class="form-group">
 						<label ><?php echo $this->lang->line('payment_modal_reference'); ?></label>
 						<input id="reference" name="reference" class="form-control" type="text" maxlength="50">
@@ -293,13 +295,16 @@
 						</select>
 						
 						<label ><?php echo $this->lang->line('payment_modal_observation'); ?></label>
-						<input id="observations" name="observations" class="form-control" type="text" maxlength="200">
+						<input id="observation" name="observation" class="form-control" type="text" readonly="true">
 						
 						<label ><?php echo $this->lang->line('payment_modal_amount'); ?></label>
 						<input id="amount" name="amount" class="form-control" type="text" readonly="true">
 						
+						<!-- Campos ocultos precargados -->
+						<input id="type" name="type" class="form-control" type="hidden" value="deposit">
+						
 						<!-- Campo oculto de ids de contratos seleccionados -->
-						<input id="contract_ids" class="form-control" type="hidden" >
+						<input id="contract_ids" name="contract_ids" class="form-control" type="hidden" >
 					</div>
 				</form>
 			</div>

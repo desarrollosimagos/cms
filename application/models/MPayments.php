@@ -59,16 +59,17 @@ class MPayments extends CI_Model {
             
     }
 
-    // Public method to insert the data
+/**
+ * ------------------------------------------------------
+ * Public method to insert the data
+ * ------------------------------------------------------
+ */
     public function insert($datos) {
-        $result = $this->db->where('name =', $datos['name']);
-        $result = $this->db->get('transactions');
-        if ($result->num_rows() > 0) {
-            echo '1';
-        } else {
-            $result = $this->db->insert("transactions", $datos);
-            return $result;
-        }
+		
+		$result = $this->db->insert("transactions", $datos);
+		$id = $this->db->insert_id();
+		return $id;
+        
     }
 
     // Public method to obtain the transactions by id
@@ -82,18 +83,12 @@ class MPayments extends CI_Model {
     }
 
     // Public method to update a record  
-    public function update($datos) {
-        $result = $this->db->where('name =', $datos['name']);
-        $result = $this->db->where('id !=', $datos['id']);
-        $result = $this->db->get('transactions');
-
-        if ($result->num_rows() > 0) {
-            echo '1';
-        } else {
-            $result = $this->db->where('id', $datos['id']);
-            $result = $this->db->update('transactions', $datos);
-            return $result;
-        }
+    public function update_contract($datos) {
+		
+		$result = $this->db->where('id', $datos['id']);
+		$result = $this->db->update('contracts', $datos);
+		return $result;
+        
     }
 
 

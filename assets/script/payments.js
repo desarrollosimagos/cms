@@ -145,11 +145,92 @@ $(document).ready(function() {
 		
 		var total = $("span#total").text();
 		
+		// Carga del monto
 		$("#amount").val(total.trim());
 		
-		$("#modal_pago").modal('show');
+		// Carga de las observaciones
+		get_observations();
+		
+		// Mostramos la modal sólo si hay contratos marcados
+		if(count_checks() > 0){
+			
+			$("#modal_pago").modal('show');
+			
+		}else{
+			
+			swal({ 
+				title: "Pago",
+				text: "Debe seleccionar los contratos a pagar",
+				type: "warning" 
+			}, function(){
+				
+			});
+			
+		}
 		
 	});
+	
+	// Contamos los contratos marcados
+	function count_checks(){
+		
+		var checks = 0;
+		
+		// Recorremos la lista de contratos
+		$("#tab_contracts tbody tr").each(function (index){
+			
+			var i_check = $(this).find('td').eq(0).find('div.icheckbox_square-green').attr('class');
+			
+			// Verificamos si está marcado y capturamos los datos de ser positivo
+			if(i_check.indexOf('checked') > -1){
+				
+				checks++;
+				
+			}
+			
+		});
+		
+		return checks;
+		
+	}
+	
+	// Capturar, concatenar y almacenar los nombres de los eventos y usuarios de los contratos marcados
+	function get_observations(){
+		
+		var observaciones = "";
+		
+		// Recorremos la lista de contratos
+		$("#tab_contracts tbody tr").each(function (index){
+			
+			var i_check = $(this).find('td').eq(0).find('div.icheckbox_square-green').attr('class');
+			var evento = "";
+			var usuario = "";
+			var observacion = "";
+			
+			// Verificamos si está marcado y capturamos los datos de ser positivo
+			if(i_check.indexOf('checked') > -1){
+				
+				evento = $(this).find('td').eq(2).text().trim();
+				usuario = $(this).find('td').eq(3).text().trim();
+				
+				observacion = evento + ":" + usuario;
+				
+				observaciones += observacion + ",";
+				
+			}
+			
+		});
+		
+		// Quitamos el último caracter (,) si las observaciones no resultan vacías
+		if(observaciones != ''){
+			
+			observaciones = observaciones.slice(0,-1);
+			
+		}
+		
+		// Almacenamos las observaciones resultantes
+		$("#observation").val(observaciones);
+		
+	}
 	
 	// Ejecutar actualización de datos
     $("#pay_excute").click(function (e) {
@@ -160,45 +241,30 @@ $(document).ready(function() {
         // Expresion regular para validar el dni
 		var RegExPattern = /^(V|E){1}(-){1}([0-9]){8}$/;
 
-        if ($('#username').val().trim() === "") {
+        if ($('#reference').val().trim() === "") {
           
-		   swal("Disculpe,", "para continuar debe ingresar el nombre de usuario");
-	       $('#username').parent('div').addClass('has-error');
+		   swal("Disculpe,", "para continuar debe ingresar la referencia del pago");
+	       $('#reference').parent().addClass('has-error');
 		   
-        } else if (!(regex.test($('#username').val().trim()))){
-			
-			swal("Disculpe,", "el usuario debe ser una dirección de correo electrónico válida");
-			$('#username').parent('div').addClass('has-error');
-			
-		} else if ($('#name').val().trim() === "") {
+        } else if ($('#date').val().trim() === "") {
 
 		   swal("Disculpe,", "para continuar debe ingresar nombre");
-	       $('#name').parent('div').addClass('has-error');
+	       $('#date').parent().addClass('has-error');
 	       
-        } else if ($('#alias').val().trim() === "") {
-          
-		   swal("Disculpe,", "para continuar debe ingresar el alias");
-	       $('#alias').parent('div').addClass('has-error');
-		   
-        } else if ($('#lang_id').val() == '0') {
+        } else if ($('#account_id').val() == '0') {
 			
-		  swal("Disculpe,", "para continuar debe seleccionar el idioma");
-	       $('#lang_id').parent('div').addClass('has-error');
-		   
-		} else if (!($('#dni').val().match(RegExPattern)) && ($('#dni').val() != '')) {
-			
-		  swal("Disculpe,", "La cédula de identidad debe tener el formato V-00000000 sin puntos.");
-	       $('#lang_id').parent('div').addClass('has-error');
+		  swal("Disculpe,", "para continuar debe seleccionar la cuenta");
+	       $('#account_id').parent().addClass('has-error');
 		   
 		} else {
             
-            var formData = new FormData(document.getElementById("profileuser"));  // Forma de capturar todos los datos del formulario
+            var formData = new FormData(document.getElementById("ejecutar_pago"));  // Forma de capturar todos los datos del formulario
 			
 			$.ajax({
 				// method: "POST",
 				type: "post",
 				dataType: "json",
-				url: base_url+'CProfileUser/update',
+				url: base_url+'CPayments/add',
 				data: formData,
 				cache: false,
 				contentType: false,
@@ -210,21 +276,17 @@ $(document).ready(function() {
 				} else {
 					if (response['response'] == 'error') {
 					
-						swal("Disculpe,", "este usuario se encuentra registrado");
-						
-					}else if (response['response'] == 'error1') {
-						
-						swal("Disculpe,", "ha ocurrido un error al guardar la foto");
+						swal("Disculpe,", "no se ha podido procesar el pago, por favor consulte con el adminsitrador del sistema.");
 						
 					}else{
 						
 						swal({ 
-							title: "Registro",
+							title: "Pago",
 							 text: "Guardado con exito",
 							  type: "success" 
 							},
 						function(){
-						  window.location.href = base_url+'investments';
+						  window.location.href = base_url+'payments';
 						});
 						
 					}
