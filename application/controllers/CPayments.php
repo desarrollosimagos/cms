@@ -87,26 +87,64 @@ class CPayments extends CI_Controller {
 	
 	// Método para guardar un nuevo registro
     public function add() {
+		
+		$fecha = $this->input->post('date');
+		$fecha = explode(" ", $fecha);
+		$fecha = explode("/", $fecha[0]);
+		$fecha = $fecha[2]."-".$fecha[1]."-".$fecha[0];
+		
+		$fecha = $fecha;
+		
+		$user_id = 0;
+		
+		$amount = $this->input->post('amount');
+		
+		$real = 1;
+		
 		$datos = array(
-            'name' => $_POST['name'],
-            'description' => $_POST['description'],
-            'icon' => $_FILES['icon']['name'],
-            'price' => $_POST['price'],
-            'status' => $_POST['status'],
+            'user_id' => $user_id,
+            'user_create_id' => $this->session->userdata('logged_in')['id'],
+            'type' => $this->input->post('type'),
+            'project_id' => 0,
+            'account_id' => $this->input->post('account_id'),
+            'date' => $fecha,
+            'description' => '',
+            'reference' => $this->input->post('reference'),
+            'observation' => $this->input->post('observation'),
+            'real' => $real,
+            'rate' => 1,
+            'amount' => $amount,
+            'status' => 'waiting',
+            'd_create' => date('Y-m-d H:i:s')
         );
+        
         $result = $this->MPayments->insert($datos);
+        
         if ($result) {
-
-			// Sección para el registro del archivo en la ruta establecida para tal fin (assets/public/img/demos/medical)
-			$ruta = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-
-			if (move_uploaded_file($_FILES['icon']['tmp_name'], $ruta."/assets/public/img/demos/medical/".$_FILES['icon']['name'])) {
-				echo "El fichero es válido y se subió con éxito.\n";
-			} else {
-				echo "¡Posible ataque de subida de ficheros!\n";
+			
+			// Actualizamos los contratos actualizándoles el id de la transacción a la que quedarán asociados
+			$contract_ids = explode(";", $this->input->post('contract_ids'));
+			foreach($contract_ids as $contract_id){
+				
+				// Armamos la data del contrato
+				$data_contract = array( 
+					'id'=>$contract_id, 
+					'transaction_id'=>$result
+				);
+				
+				// Actualizamos el contrato con el id de la transacción asociada
+				$update = $this->MPayments->update_contract($data_contract);
+				
 			}
+			
+			echo '{"response":"ok"}';
        
-        }
+        }else{
+			
+			echo '{"response":"error"}';
+			
+		}
+		
     }
     
     // Método para actualizar el precio del dólar tomando como referencia la api de dolartoday
