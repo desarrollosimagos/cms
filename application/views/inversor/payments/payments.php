@@ -116,7 +116,13 @@
 			<table id="tab_contracts" data-page-size="10" data-filter=#filter_contracts class="footable table table-stripped toggle-arrow-tiny">
 				<thead>
 					<tr class='text-center'>
-						<th></th>
+						<th>
+							<div class="i-checks">
+								<label>
+									<input class="general_checkbox" type="checkbox" id="contracts">
+								</label>
+							</div>
+						</th>
 						<th>ID</th>
 						<th ><?php echo $this->lang->line('payment_contracts_user'); ?></th>
 						<th data-hide="phone" ><?php echo $this->lang->line('payment_contracts_account'); ?></th>
@@ -131,7 +137,7 @@
 								<td>
 									<div class="i-checks">
 										<label>
-											<input class="checkbox" type="checkbox" name="real" id="contract_<?php echo $contrato->id; ?>">
+											<input class="checkbox" type="checkbox" id="contract_<?php echo $contrato->id; ?>">
 										</label>
 									</div>
 								</td>
