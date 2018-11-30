@@ -96,11 +96,31 @@ class MInscription extends CI_Model {
         
     }
     
+    // Public method to update the data of a rule of a contract
+    public function update_contract_rule($datos) {
+		
+		$result = $this->db->where('contracts_id', $datos['contracts_id']);
+		$result = $this->db->where('segment', $datos['segment']);
+		$result = $this->db->update('contract_rules', $datos);
+		return $result;
+        
+    }
+    
     // Método público para obterner las reglas de un proyecto
     public function get_project_rules($project_id) {
 		
 		$result = $this->db->where('project_id', $project_id);
         $query = $this->db->get('project_rules');
+
+        return $query->result();
+            
+    }
+    
+    // Método público para obterner las reglas de un contrato
+    public function get_contract_rules($contract_id) {
+		
+		$result = $this->db->where('contracts_id', $contract_id);
+        $query = $this->db->get('contract_rules');
 
         return $query->result();
             
