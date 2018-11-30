@@ -383,6 +383,10 @@ $(document).ready(function() {
 					
 						swal("Disculpe,", "no se ha podido procesar el pago, por favor consulte con el adminsitrador del sistema.");
 						
+					}else if(response['response'] == 'outdated') {
+					
+						swal("Disculpe,", "debe actualizar el costo de los contratos.");
+						
 					}else{
 						
 						swal({ 

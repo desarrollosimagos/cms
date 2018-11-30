@@ -89,61 +89,69 @@ class CPayments extends CI_Controller {
 	// Método para guardar un nuevo registro
     public function add() {
 		
-		$fecha = $this->input->post('date');
-		$fecha = explode(" ", $fecha);
-		$fecha = explode("/", $fecha[0]);
-		$fecha = $fecha[2]."-".$fecha[1]."-".$fecha[0];
+		if($this->check_cost($this->input->post('contract_ids')) == 0){
 		
-		$fecha = $fecha;
-		
-		$user_id = 0;
-		
-		$amount = $this->input->post('amount');
-		
-		$real = 1;
-		
-		$datos = array(
-            'user_id' => $user_id,
-            'user_create_id' => $this->session->userdata('logged_in')['id'],
-            'type' => $this->input->post('type'),
-            'project_id' => 0,
-            'account_id' => $this->input->post('account_id'),
-            'date' => $fecha,
-            'description' => '',
-            'reference' => $this->input->post('reference'),
-            'observation' => $this->input->post('observation'),
-            'real' => $real,
-            'rate' => 1,
-            'amount' => $amount,
-            'status' => 'waiting',
-            'd_create' => date('Y-m-d H:i:s')
-        );
-        
-        $result = $this->MPayments->insert($datos);
-        
-        if ($result) {
+			$fecha = $this->input->post('date');
+			$fecha = explode(" ", $fecha);
+			$fecha = explode("/", $fecha[0]);
+			$fecha = $fecha[2]."-".$fecha[1]."-".$fecha[0];
 			
-			// Actualizamos los contratos actualizándoles el id de la transacción a la que quedarán asociados
-			$contract_ids = explode(";", $this->input->post('contract_ids'));
-			foreach($contract_ids as $contract_id){
+			$fecha = $fecha;
+			
+			$user_id = 0;
+			
+			$amount = $this->input->post('amount');
+			
+			$real = 1;
+			
+			$datos = array(
+				'user_id' => $user_id,
+				'user_create_id' => $this->session->userdata('logged_in')['id'],
+				'type' => $this->input->post('type'),
+				'project_id' => 0,
+				'account_id' => $this->input->post('account_id'),
+				'date' => $fecha,
+				'description' => '',
+				'reference' => $this->input->post('reference'),
+				'observation' => $this->input->post('observation'),
+				'real' => $real,
+				'rate' => 1,
+				'amount' => $amount,
+				'status' => 'waiting',
+				'd_create' => date('Y-m-d H:i:s')
+			);
+			
+			$result = $this->MPayments->insert($datos);
+			
+			if ($result) {
 				
-				// Armamos la data del contrato
-				$data_contract = array( 
-					'id'=>$contract_id, 
-					'transaction_id'=>$result
-				);
+				// Actualizamos los contratos actualizándoles el id de la transacción a la que quedarán asociados
+				$contract_ids = explode(";", $this->input->post('contract_ids'));
+				foreach($contract_ids as $contract_id){
+					
+					// Armamos la data del contrato
+					$data_contract = array( 
+						'id'=>$contract_id, 
+						'transaction_id'=>$result
+					);
+					
+					// Actualizamos el contrato con el id de la transacción asociada
+					$update = $this->MPayments->update_contract($data_contract);
+					
+				}
 				
-				// Actualizamos el contrato con el id de la transacción asociada
-				$update = $this->MPayments->update_contract($data_contract);
+				echo '{"response":"ok"}';
+		   
+			}else{
+				
+				echo '{"response":"error"}';
 				
 			}
 			
-			echo '{"response":"ok"}';
-       
-        }else{
-			
-			echo '{"response":"error"}';
-			
+		}else{
+		
+			echo '{"response":"outdated"}';
+		
 		}
 		
     }
@@ -196,6 +204,21 @@ class CPayments extends CI_Controller {
 							
 							$errors++;
 							
+						}else{
+							
+							// Armamos la data de la regla del contrato
+							$data_contract_rule = array(
+								'var1' => $current_date,
+								'cond' => $cond,
+								'var2' => $rule->var2,
+								'contracts_id' => $contract_id,
+								'segment' => $rule->segment,
+								'result' => $rule->result
+							);
+							
+							// Actualizamos la regla del contrato con el costo y el rango de fechas correspondiente
+							$update_contract_rule = $this->MInscription->update_contract_rule($data_contract_rule);
+							
 						}
 						
 					}
@@ -216,6 +239,53 @@ class CPayments extends CI_Controller {
 			echo '{"response":"ok"}';
 			
 		}
+		
+	}
+    
+    // Método para verificar si las reglas de los contratos marcados están actualizadas
+	public function check_cost($contract_ids){
+		
+		$errors = 0;
+		
+		// Transformamos la cadena de ids en un arreglo iterable
+		$contract_ids = explode(";", $contract_ids);
+		foreach($contract_ids as $contract_id){
+			
+			// Consultamos las reglas del contrato
+			$contract_rules = $this->MInscription->get_contract_rules($contract_id);
+			
+			// Verificamos las reglas de costo que encajen con la fecha actual
+			foreach($contract_rules as $rule){
+				
+				$cond = $rule->cond;  // Operador condicional de la regla
+				$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+				$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+				$range_from = $range[0];  // Rango desde
+				$range_to = $range[1];  // Rango hasta
+				
+				// Tomamos la fecha actual
+				$current_date = date('Y-m-d H:i:s');
+				
+				// Si el operador condicional es "between" y la regla es de costo
+				if($cond == "between" && $rule->segment == "cost"){
+					
+					// Si la fecha actual no está dentro del rango de fechas de la regla de costo del contrato, marcamos dicha regla como desactualizada
+					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+					if($check_in_range == false){
+						
+						// Indicamos que la regla está actualizada incrementando el valor de $errors
+						$errors++;
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		// Retorna de resultados
+		return $errors;
 		
 	}
     
