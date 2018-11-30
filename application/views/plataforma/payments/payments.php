@@ -334,7 +334,7 @@
 			</div>
 			<div class="modal-footer" >
 				<!-- Spinner de carga de pago -->
-				<div class="sk-spinner sk-spinner-circle" id="load_payment" style="float: right !important;">
+				<div class="sk-spinner sk-spinner-circle" id="load_payment" style="float: right !important;margin-right: 10px !important;">
 					<div class="sk-circle1 sk-circle"></div>
 					<div class="sk-circle2 sk-circle"></div>
 					<div class="sk-circle3 sk-circle"></div>
@@ -350,7 +350,7 @@
 				</div>
 				<!-- Cierre de spinner de carga de pago -->
 				&nbsp;
-				<button class="btn btn-primary" type="button" id="pay_excute" style="float: right !important;">
+				<button class="btn btn-primary" type="button" id="pay_excute" style="float: right !important;margin-right: 15px !important;">
 					<?php echo $this->lang->line('payment_modal_pay_button'); ?>
 				</button>
 			</div>
