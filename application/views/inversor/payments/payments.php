@@ -173,8 +173,26 @@
 			<?php $filter_profile = array(1, 2, 3, 4); ?>
 			<?php if(in_array($this->session->userdata('logged_in')['profile_id'], $filter_profile)){ ?>
 			<div class="col-sm-4">
-				<button type="button" class="btn btn-sm btn-primary" id="pay"><?php echo $this->lang->line('payment_contracts_pay_button'); ?></button>
-				<button type="button" class="btn btn-sm btn-primary" id="recalculate"><?php echo $this->lang->line('payment_contracts_recalculate_button'); ?></button>
+				<button type="button" class="btn btn-sm btn-primary" id="pay" style="float: left !important;margin-left:10px !important;"><?php echo $this->lang->line('payment_contracts_pay_button'); ?></button>
+				&nbsp;
+				<button type="button" class="btn btn-sm btn-primary" id="recalculate" style="float: left !important;margin-left:10px !important;"><?php echo $this->lang->line('payment_contracts_recalculate_button'); ?></button>
+				&nbsp;
+				<!-- Spinner de carga de recálculo -->
+				<div class="sk-spinner sk-spinner-circle" id="load_recalculation" style="float: left !important;margin-left:10px !important;">
+					<div class="sk-circle1 sk-circle"></div>
+					<div class="sk-circle2 sk-circle"></div>
+					<div class="sk-circle3 sk-circle"></div>
+					<div class="sk-circle4 sk-circle"></div>
+					<div class="sk-circle5 sk-circle"></div>
+					<div class="sk-circle6 sk-circle"></div>
+					<div class="sk-circle7 sk-circle"></div>
+					<div class="sk-circle8 sk-circle"></div>
+					<div class="sk-circle9 sk-circle"></div>
+					<div class="sk-circle10 sk-circle"></div>
+					<div class="sk-circle11 sk-circle"></div>
+					<div class="sk-circle12 sk-circle"></div>
+				</div>
+				<!-- Cierre de spinner de carga de recálculo -->
 			</div>
 			<br>
 			<?php } ?>
@@ -315,7 +333,24 @@
 				</form>
 			</div>
 			<div class="modal-footer" >
-				<button class="btn btn-primary" type="button" id="pay_excute">
+				<!-- Spinner de carga de pago -->
+				<div class="sk-spinner sk-spinner-circle" id="load_payment" style="float: right !important;margin-right: 10px !important;">
+					<div class="sk-circle1 sk-circle"></div>
+					<div class="sk-circle2 sk-circle"></div>
+					<div class="sk-circle3 sk-circle"></div>
+					<div class="sk-circle4 sk-circle"></div>
+					<div class="sk-circle5 sk-circle"></div>
+					<div class="sk-circle6 sk-circle"></div>
+					<div class="sk-circle7 sk-circle"></div>
+					<div class="sk-circle8 sk-circle"></div>
+					<div class="sk-circle9 sk-circle"></div>
+					<div class="sk-circle10 sk-circle"></div>
+					<div class="sk-circle11 sk-circle"></div>
+					<div class="sk-circle12 sk-circle"></div>
+				</div>
+				<!-- Cierre de spinner de carga de pago -->
+				&nbsp;
+				<button class="btn btn-primary" type="button" id="pay_excute" style="float: right !important;margin-right: 15px !important;">
 					<?php echo $this->lang->line('payment_modal_pay_button'); ?>
 				</button>
 			</div>
