@@ -230,6 +230,10 @@ $(document).ready(function() {
 		
 	});
 	
+	// El elemento que se quiere activar (ícono de carga) si hay una petición ajax en proceso.
+	var cargando_recalculo = $("#load_recalculation");
+	cargando_recalculo.hide();
+	
 	// Ejecutamos las funciones de recálculo de montos de contratos
 	$("#recalculate").click(function (e) {
 		
@@ -239,6 +243,16 @@ $(document).ready(function() {
 		
 		// Mostramos la modal sólo si hay contratos marcados
 		if(count_checks() > 0){
+			
+			// evento ajax start
+			$(document).ajaxStart(function() {
+				cargando_recalculo.show();
+			});
+
+			// evento ajax stop
+			$(document).ajaxStop(function() {
+				cargando_recalculo.hide();
+			});
 			
 			$.post(base_url+'CPayments/update_cost', { 'contract_ids': contract_ids }, function (response) {
 
@@ -337,6 +351,10 @@ $(document).ready(function() {
 		
 	}
 	
+	// El elemento que se quiere activar (ícono de carga) si hay una petición ajax en proceso.
+	var cargando_pago = $("#load_payment");
+	cargando_pago.hide();
+	
 	// Ejecutar actualización de datos
     $("#pay_excute").click(function (e) {
 
@@ -364,6 +382,16 @@ $(document).ready(function() {
 		} else {
             
             var formData = new FormData(document.getElementById("ejecutar_pago"));  // Forma de capturar todos los datos del formulario
+			
+			// evento ajax start
+			$(document).ajaxStart(function() {
+				cargando_pago.show();
+			});
+
+			// evento ajax stop
+			$(document).ajaxStop(function() {
+				cargando_pago.hide();
+			});
 			
 			$.ajax({
 				// method: "POST",
