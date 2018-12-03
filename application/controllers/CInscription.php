@@ -194,7 +194,7 @@ class CInscription extends CI_Controller {
 					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
 					if($check_in_range == true){
-						$project_date = $range_to;
+						$project_pay_expiration = $range_to;
 					}
 				}
 				
@@ -203,7 +203,7 @@ class CInscription extends CI_Controller {
 					// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
 					if($check_in_range == true){
-						$project_pay_expiration = $range_from;
+						$project_date = $range_from;
 					}
 				}
 				

@@ -41,6 +41,29 @@ class MPayments extends CI_Model {
     }
 
     //Public method to obtain the transactions
+    public function getContractsTransaction($transaction_id) {
+		
+		$select = 'c.id, c.project_id, p.name, c.user_id, u.username, c.transaction_id, c.type, ';
+		$select .= 'c.created_on, c.finished_on, c.payback, c.amount, ';
+		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals';
+		$this->db->select($select);
+		$this->db->distinct();
+		$this->db->from('contracts c');
+		$this->db->join('projects p', 'p.id = c.project_id', 'left');
+		$this->db->join('coins cn', 'cn.id = p.coin_id');
+		$this->db->join('users u', 'u.id = c.user_id', 'left');
+		$this->db->where('c.transaction_id', $transaction_id);
+        $query = $this->db->get();
+        
+        //~ echo $this->db->last_query();
+        //~ 
+        //~ exit();
+
+        return $query->result();
+            
+    }
+
+    //Public method to obtain the transactions
     public function obtenerTransacciones($user_id) {
 		
 		$select = 'f_p.id, f_p.date, f_p.account_id, f_p.type, f_p.description, f_p.reference, f_p.observation, ';

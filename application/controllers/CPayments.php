@@ -273,7 +273,7 @@ class CPayments extends CI_Controller {
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
 					if($check_in_range == false){
 						
-						// Indicamos que la regla está actualizada incrementando el valor de $errors
+						// Indicamos que la regla está desactualizada incrementando el valor de $errors
 						$errors++;
 						
 					}

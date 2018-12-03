@@ -22,6 +22,9 @@ class CFondoPersonal extends CI_Controller {
         parent::__construct();
        
         $this->load->model('MFondoPersonal');
+        $this->load->model('MPayments');
+        $this->load->model('MInscription');
+        $this->load->model('MMails');
         $this->load->model('MCuentas');
         $this->load->model('MProjects');
         $this->load->model('MUser');
@@ -418,14 +421,90 @@ class CFondoPersonal extends CI_Controller {
 			// Actualizamos la cuenta
 			$update_account = $this->MCuentas->update($data_account);
 			
+			// Enviamos la notificaión de pago a los usuarios de los contratos asociados a la transacción
+			// Primero buscamos los contratos asociados a la transacción
+			$associated_contracts = $this->MPayments->getContractsTransaction($data_transaccion['id']);
+			
+			//~ print_r($associated_contracts);
+			//~ 
+			//~ exit();
+			
+			foreach($associated_contracts as $contract){
+				
+				// Consultamos las reglas del contrato
+				$project_rules = $this->MInscription->get_project_rules($contract->project_id);
+				
+				// Verificamos el monto del evento consultando el rango de fechas de cada regla de costo
+				// Verificamos la fecha de inicio del evento consultando el rango de fechas de cada regla de fecha
+				$project_cost = 0;
+				$project_date = '';
+				
+				// Verificamos las reglas de costo que encajen con la fecha actual
+				foreach($project_rules as $rule){
+					
+					$cond = $rule->cond;  // Operador condicional de la regla
+					$range = $rule->var2;  // Cadena de rangos de fecha de la regla
+					$range = explode(";", $range);  // Separación de los rangos de fecha de la regla
+					$range_from = $range[0];  // Rango desde
+					$range_to = $range[1];  // Rango hasta
+					
+					// Tomamos la fecha actual
+					$current_date = date('Y-m-d H:i:s');
+					
+					// Si el operador condicional es "between" y la regla es de costo
+					if($cond == "between" && $rule->segment == "cost"){
+						
+						// Si la fecha actual está dentro del rango de fechas de la regla de costo del contrato, totmamos el monto (result) de dicha regla como el costo
+						$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+						if($check_in_range == true){
+							
+							$project_cost = $rule->result . " " . $contract->coin_avr;
+							
+						}
+						
+					}
+					
+					// Si es una regla de fecha
+					if($rule->segment == "date" && $cond == "between"){
+						
+						// Si la fecha actual está dentro del rango de fechas de la regla tomamos ese costo como monto del proyecto
+						$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
+						if($check_in_range == true){
+							
+							$project_date = $range_from;
+							
+						}
+						
+					}
+					
+				}
+				
+				// Armamos los datos del pago
+				$datos_pago = array(
+					'username' => $contract->username,
+					'event_name' => $contract->name,
+					'event_date' => $project_date,
+					'event_cost' => $project_cost
+				);
+				
+				$this->MMails->enviarMailPago($datos_pago);  // Envío del email de notificación
+				
+			}
+			
 		}else{
+			
 			$update_account = true;
+			
 		}
 		
 		if($update_transaccion && $update_account){
+			
 			echo '{"response":"ok"}';
+			
 		}else{
+			
 			echo '{"response":"error"}';
+			
 		}
 		
 	}
