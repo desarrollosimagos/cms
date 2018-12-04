@@ -261,15 +261,15 @@ class MProjects extends CI_Model {
 
     // Public method to serach the investors associated
     public function buscar_inversores($project_id) {
-        $this->db->select('i_g.name, u.username, u.name as name_user, u.alias, u.image');
-		$this->db->from('usergroups i_g');
-		$this->db->join('usergroups_projects i_g_p', 'i_g_p.group_id = i_g.id');
-		$this->db->join('usergroups_users i_g_u', 'i_g_u.group_id = i_g.id');
-		$this->db->join('users u', 'u.id = i_g_u.user_id');
-		$this->db->where('i_g_p.project_id', $project_id);
+		
+        $this->db->select('c.project_id, c.transaction_id, u.id, u.username, u.name, u.alias, u.status, u.image');
+		$this->db->from('contracts c');
+		$this->db->join('users u', 'u.id = c.user_id');
+		$this->db->where('c.project_id', $project_id);
 		$query = $this->db->get();
 		
         return $query->result();
+        
     }
 
     // Public method to serach the transactions associated
