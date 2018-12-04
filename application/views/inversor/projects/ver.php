@@ -341,7 +341,7 @@ th {
 											<h2>
 												<?php
 												$i = 0;  // Número de usuario registrados
-												foreach($project_transactions as $transact){
+												foreach($data_investors as $investor){
 													$i += 1;
 												}
 												echo $i;
@@ -358,8 +358,8 @@ th {
 											<h2>
 												<?php
 												$j = 0;  // Número de usuario validados
-												foreach($project_transactions as $transact){
-													if($transact->status == "approved"){
+												foreach($data_investors as $investor){
+													if($investor['status'] == 1){
 														$j += 1;
 													}
 												}

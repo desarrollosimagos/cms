@@ -474,6 +474,7 @@ class CProjects extends CI_Controller {
 				'username' => $investor->username,
 				'name_user' => $investor->name,
 				'alias' => $investor->alias,
+				'status' => $investor->status,
 				'image' => $investor->image
 			);
 		}
