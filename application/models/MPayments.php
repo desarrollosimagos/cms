@@ -32,8 +32,11 @@ class MPayments extends CI_Model {
 		$this->db->join('projects p', 'p.id = c.project_id', 'left');
 		$this->db->join('coins cn', 'cn.id = p.coin_id');
 		$this->db->join('users u', 'u.id = c.user_id');
-		$this->db->where('c.user_id', $user_id);
-		$this->db->or_where('c.user_create_id', $user_id);
+		// Si el usuario corresponde al de un perfil diferente a administrador y a plataforma
+        if($this->session->userdata('logged_in')['profile_id'] != 1 && $this->session->userdata('logged_in')['profile_id'] != 2){
+			$this->db->where('c.user_id', $user_id);
+			$this->db->or_where('c.user_create_id', $user_id);
+		}
         $query = $this->db->get();
 
         return $query->result();
@@ -75,7 +78,10 @@ class MPayments extends CI_Model {
 		$this->db->join('users u', 'u.id = f_p.user_id', 'left');
 		$this->db->join('accounts c', 'c.id = f_p.account_id');
 		$this->db->join('coins cn', 'cn.id = c.coin_id');
-		$this->db->where('f_p.user_create_id', $user_id);
+		// Si el usuario corresponde al de un perfil diferente a administrador y a plataforma
+        if($this->session->userdata('logged_in')['profile_id'] != 1 && $this->session->userdata('logged_in')['profile_id'] != 2){
+			$this->db->where('f_p.user_create_id', $user_id);
+		}
         $query = $this->db->get();
 
         return $query->result();
