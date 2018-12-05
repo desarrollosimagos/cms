@@ -726,7 +726,7 @@ th {
 				</thead>
 				<tbody>
 					<?php $i = 1; ?>
-					<?php foreach ($project_transactions as $transact) { ?>
+					<?php foreach ($project_contracts as $transact) { ?>
 						<?php if($transact->status == "approved") { ?>
 							<tr style="text-align: center">
 								<td>
@@ -802,7 +802,7 @@ th {
 				</thead>
 				<tbody>
 					<?php $i = 1; ?>
-					<?php foreach ($project_transactions as $transact) { ?>
+					<?php foreach ($project_contracts as $transact) { ?>
 						<?php if($transact->status == "waiting") { ?>
 							<tr style="text-align: center">
 								<td>
