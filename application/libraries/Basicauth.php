@@ -151,7 +151,7 @@ Class Basicauth
 				//~ }
 				
 			}else{
-				$data['error'] = 'Disculpe, el usuario no tiene acceso, consulte con el administrador del sistema';
+				$data['error'] = 'Disculpe, no ha validado su usuario, por favor consulte su correo electrónico.';
 			}
 		}else{
 			$data['error'] = 'Usuario o contraseña incorrectos';
