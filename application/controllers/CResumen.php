@@ -620,7 +620,7 @@ class CResumen extends CI_Controller {
 					
 				}
 				
-				if($fondo->status == 'approved' && $fondo->user_id == 0 && $fondo->project_id > 0){
+				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->contracts > 0)){
 					// Suma de depósitos
 					if($fondo->type == 'deposit'){
 						$deposit_approved += $trans_usd;
@@ -1317,7 +1317,7 @@ class CResumen extends CI_Controller {
 				}
 				
 				// Si tiene proyecto asociado en project_id lo sumamos
-				if($fondo->status == 'approved' && $fondo->user_id == 0 && $fondo->project_id > 0){
+				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->contracts > 0)){
 					// Suma de depósitos
 					if($fondo->type == 'deposit'){
 						$deposit_approved += $trans_usd;
