@@ -582,7 +582,7 @@ th {
 				</thead>
 				<tbody>
 					<?php $i = 1; ?>
-					<?php foreach ($project_transactions as $transact) { ?>
+					<?php foreach ($project_contracts as $transact) { ?>
 						<tr style="text-align: center">
 							<td>
 								<?php echo $transact->id; ?>

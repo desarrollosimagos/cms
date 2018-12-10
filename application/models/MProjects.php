@@ -329,14 +329,15 @@ class MProjects extends CI_Model {
 		$this->db->select($select);
 		$this->db->from('accounts a');
 		$this->db->join('transactions t', 't.account_id = a.id');
-		$this->db->join('projects p', 'p.id = t.project_id');
+		$this->db->join('contracts ctr', 'ctr.transaction_id = t.id');
+		$this->db->join('projects p', 'p.id = ctr.project_id');
 		$this->db->join('coins c', 'c.id = a.coin_id');
 		$this->db->join('account_type t_c', 't_c.id = a.type');
 		// Si el usuario corresponde al de un GESTOR incluimos sólo las cuentas donde éste creo transacciones
-        if($this->session->userdata('logged_in')['profile_id'] == 5){
+        if($this->session->userdata('logged_in')['profile_id'] == 3){
 			$this->db->where('t.user_create_id =', $this->session->userdata('logged_in')['id']);
 		}
-		$this->db->where('t.project_id =', $project_id);
+		$this->db->where('ctr.project_id =', $project_id);
 		$this->db->group_by(array("a.id", "a.owner", "a.alias", "a.number", "a.type", "a.description", "a.amount", "a.status", "a.d_create", "coin", "coin_avr", "coin_symbol", "coin_decimals", "tipo_cuenta"));
 		$this->db->order_by("a.id", "desc");
 		$query = $this->db->get();
@@ -495,8 +496,10 @@ class MProjects extends CI_Model {
 			}
 		}
 		
-		$select = 'pt.id, pt.date, pt.project_id, pt.user_id, pt.user_create_id, pt.d_create, pt.type, pt.description, ctr.amount, pt.real, pt.rate, pt.status, u.username, c.alias, ';
-		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals, u.name, u.alias as user_alias';
+		$select = 'pt.id, pt.date, pt.project_id, pt.user_id, pt.user_create_id, pt.d_create, pt.type, pt.description, ctr.amount, ';
+		$select .= 'pt.real, pt.rate, pt.status, u.username, c.alias, cn.description as coin, cn.abbreviation as coin_avr, ';
+		$select .= 'cn.symbol as coin_symbol, cn.decimals as coin_decimals, u.name, u.alias as user_alias, ';
+		$select .= 'ctr.project_id as project_id_contract, ctr.user_id as user_id_contract';
 		
 		$this->db->select($select);
 		$this->db->distinct();
@@ -540,29 +543,30 @@ class MProjects extends CI_Model {
 			}
 		}
 		
-		$select = 'pt.id, pt.project_id, pt.user_id, pt.user_create_id, pt.date, pt.type, pt.description, pt.amount, pt.status, u.username, c.alias, ';
-		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals, u.name, u.alias as user_alias';
+		$select = 'pt.id, pt.project_id, pt.user_id, pt.user_create_id, pt.date, pt.type, pt.description, ctr.amount, pt.status, ';
+		$select .= 'u.username, c.alias, cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, ';
+		$select .= 'cn.decimals as coin_decimals, u.name, u.alias as user_alias';
 		
 		$this->db->select($select);
 		$this->db->from('transactions pt');
 		$this->db->join('accounts c', 'c.id = pt.account_id');
-		$this->db->join('coins cn', 'cn.id = c.coin_id');
-		$this->db->join('users u', 'u.id = pt.user_id', 'left');
+		$this->db->join('contracts ctr', 'ctr.transaction_id = pt.id');
+		$this->db->join('projects pj', 'pj.id = ctr.project_id');
+		$this->db->join('coins cn', 'cn.id = pj.coin_id');
+		$this->db->join('users u', 'u.id = ctr.user_id', 'left');
 		// Si el usuario logueado es de perfil inversor tomamos sólo las transacciones asignadas a él.
 		// Si el usuario logueado es de perfil gestor tomamos sólo las transacciones generadas por él.
 		// Si el usuario logueado es de perfil asesor tomamos sólo las transacciones generadas por él y los usuarios asociados a él.
 		if($this->session->userdata('logged_in')['profile_id'] != 1 && $this->session->userdata('logged_in')['profile_id'] != 2){
-			if($this->session->userdata('logged_in')['profile_id'] == 3){
+			if($this->session->userdata('logged_in')['profile_id'] == 4){
 				$this->db->where('pt.user_id =', $this->session->userdata('logged_in')['id']);
-			}else if($this->session->userdata('logged_in')['profile_id'] == 5){
+			}else if($this->session->userdata('logged_in')['profile_id'] == 3){
 				$this->db->where('pt.user_create_id', $this->session->userdata('logged_in')['id']);
 			}else if($this->session->userdata('logged_in')['profile_id'] == 4){
-				$this->db->where_in('pt.user_id', $ids);
-			}else{
 				$this->db->where('pt.user_id =', $this->session->userdata('logged_in')['id']);
 			}
 		}
-		$this->db->where('pt.project_id', $project_id);
+		$this->db->where('ctr.project_id', $project_id);
 		$this->db->where('pt.status', 'approved');
 		//~ $this->db->group_by("cn.description");
 		$this->db->order_by("pt.date", "desc");
