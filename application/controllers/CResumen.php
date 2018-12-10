@@ -620,7 +620,7 @@ class CResumen extends CI_Controller {
 					
 				}
 				
-				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->contracts > 0)){
+				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->project_id_contract > 0)){
 					// Suma de depósitos
 					if($fondo->type == 'deposit'){
 						$deposit_approved += $trans_usd;
@@ -1317,7 +1317,7 @@ class CResumen extends CI_Controller {
 				}
 				
 				// Si tiene proyecto asociado en project_id lo sumamos
-				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->contracts > 0)){
+				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id > 0 || $fondo->project_id_contract > 0)){
 					// Suma de depósitos
 					if($fondo->type == 'deposit'){
 						$deposit_approved += $trans_usd;
@@ -1384,9 +1384,9 @@ class CResumen extends CI_Controller {
 			// Colectamos los ids de los usuarios de las transacciones generales
 			foreach($fondos_details as $fondo){
 				
-				if(!in_array($fondo->user_id, $ids_users)){
-					if($fondo->user_id > 0){
-						$ids_users[] = $fondo->user_id;
+				if(!in_array($fondo->user_id_contract, $ids_users)){
+					if($fondo->user_id_contract > 0){
+						$ids_users[] = $fondo->user_id_contract;
 					}
 				}
 				
@@ -1411,7 +1411,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->user_id == $id_user){
+					if($fondo->user_id_contract == $id_user){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción
@@ -1542,7 +1542,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->user_id == $id_user){
+					if($fondo->user_id_contract == $id_user){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción
@@ -1581,7 +1581,7 @@ class CResumen extends CI_Controller {
 						}
 						
 						// Si tiene proyecto asociado en project_id lo sumamos
-						if($fondo->status == 'approved' && $fondo->user_id > 0 && $fondo->project_id > 0){
+						if($fondo->status == 'approved' && ($fondo->user_id > 0 || $fondo->user_id_contract > 0) && ($fondo->project_id > 0 || $fondo->project_id_contract > 0)){
 							// Suma de depósitos
 							if($fondo->type == 'profit'){
 								$profit_approved += $trans_usd;
@@ -1609,7 +1609,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->user_id == $id_user){
+					if($fondo->user_id_contract == $id_user){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción
@@ -1648,7 +1648,7 @@ class CResumen extends CI_Controller {
 						}
 						
 						// Si tiene proyecto asociado en project_id lo sumamos
-						if($fondo->status == 'approved' && $fondo->user_id > 0 && $fondo->project_id == 0){
+						if($fondo->status == 'approved' && ($fondo->user_id > 0 || $fondo->user_id_contract > 0) && $fondo->project_id == 0){
 							// Suma de depósitos
 							if($fondo->type == 'deposit'){
 								$deposit_approved += $trans_usd;
@@ -1696,7 +1696,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->user_id == $id_user){
+					if($fondo->user_id_contract == $id_user){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción
@@ -1735,7 +1735,7 @@ class CResumen extends CI_Controller {
 						}
 						
 						// Si tiene proyecto asociado en project_id lo sumamos
-						if($fondo->status == 'approved' && $fondo->project_id > 0){
+						if($fondo->status == 'approved' && ($fondo->project_id > 0 || $fondo->project_id_contract > 0)){
 							// Suma de depósitos
 							if($fondo->type == 'deposit'){
 								$deposit_approved += $trans_usd;
@@ -1814,13 +1814,16 @@ class CResumen extends CI_Controller {
 			// Colectamos los ids de los proyectos de las transacciones generales
 			foreach($fondos_details as $fondo){
 				
-				if(!in_array($fondo->project_id, $ids_projects)){
-					if($fondo->project_id > 0){
-						$ids_projects[] = $fondo->project_id;
+				if(!in_array($fondo->project_id_contract, $ids_projects)){
+					if($fondo->project_id_contract > 0){
+						$ids_projects[] = $fondo->project_id_contract;
 					}
 				}
 				
 			}
+			
+			//~ print_r($ids_projects);
+			//~ exit();
 			
 			// Armamos una lista de fondos por proyecto y lo almacenamos en el arreglo '$resumen_projects'
 			foreach($ids_projects as $id_project){
@@ -1849,7 +1852,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->project_id == $id_project){
+					if($fondo->project_id_contract == $id_project){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción
@@ -2050,7 +2053,7 @@ class CResumen extends CI_Controller {
 				
 				foreach($fondos_details as $fondo){
 					
-					if($fondo->project_id == $id_project){
+					if($fondo->project_id_contract == $id_project){
 						
 						// Conversión de cada monto a dólares
 						$currency = $fondo->coin_avr;  // Tipo de moneda de la transacción

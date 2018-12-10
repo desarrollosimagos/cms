@@ -689,7 +689,7 @@
 								<?php echo $i; ?>
 							</td>
 							<td>
-								<?php echo $fondo->name; ?>
+								<?php echo $fondo->username; ?>
 							</td>
 							<td>
 								<?php echo $fondo->alias; ?>

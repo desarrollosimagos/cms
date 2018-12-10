@@ -228,8 +228,10 @@ class MResumen extends CI_Model {
 		
 		$capitalAprobado = 0;
 		
-		$select = 'u.name, u.alias, u.username, f_p.id, f_p.account_id, f_p.project_id, f_p.user_id, f_p.user_create_id, f_p.type, f_p.amount, f_p.real, f_p.rate, f_p.status, f_p.date, ';
-		$select .= 'cn.description as coin, cn.abbreviation as coin_avr, cn.symbol as coin_symbol, cn.decimals as coin_decimals, pf.id as perfil_id, pf.name as perfil_name, pj.name as project_name, p_t.type as project_type, count(ctr.transaction_id) as contracts';
+		$select = 'u.name, u.alias, u.username, f_p.id, f_p.account_id, f_p.project_id, f_p.user_id, f_p.user_create_id, f_p.type, ';
+		$select .= 'ctr.amount, f_p.real, f_p.rate, f_p.status, f_p.date, cn.description as coin, cn.abbreviation as coin_avr, ';
+		$select .= 'cn.symbol as coin_symbol, cn.decimals as coin_decimals, pf.id as perfil_id, pf.name as perfil_name, ';
+		$select .= 'pj.name as project_name, p_t.type as project_type, ctr.project_id as project_id_contract, ctr.user_id as user_id_contract';
 		
 		$this->db->select($select);
 		//~ $this->db->from('transactions f_p');
@@ -253,11 +255,11 @@ class MResumen extends CI_Model {
 			$this->db->join('account_type t_c', 't_c.id = c.type', 'right');
 			$this->db->join('transactions f_p', 'f_p.account_id = c.id');
 			$this->db->join('contracts ctr', 'ctr.transaction_id = f_p.id');
-			$this->db->join('users u', 'u.id = f_p.user_id', 'left');
-			$this->db->join('coins cn', 'cn.id = c.coin_id');
+			$this->db->join('users u', 'u.id = ctr.user_id');
 			$this->db->join('profile pf', 'pf.id = u.profile_id', 'left');
-			$this->db->join('projects pj', 'pj.id = f_p.project_id', 'left');
-			$this->db->join('project_types p_t', 'p_t.id = pj.type', 'left');
+			$this->db->join('projects pj', 'pj.id = ctr.project_id');
+			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins cn', 'cn.id = pj.coin_id');
 			$this->db->where('ig_u.user_id =', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 2){
 			$this->db->from('usergroups ig');
@@ -267,31 +269,31 @@ class MResumen extends CI_Model {
 			$this->db->join('account_type t_c', 't_c.id = c.type', 'right');
 			$this->db->join('transactions f_p', 'f_p.account_id = c.id');
 			$this->db->join('contracts ctr', 'ctr.transaction_id = f_p.id');
-			$this->db->join('users u', 'u.id = f_p.user_id', 'left');
-			$this->db->join('coins cn', 'cn.id = c.coin_id');
+			$this->db->join('users u', 'u.id = ctr.user_id');
 			$this->db->join('profile pf', 'pf.id = u.profile_id', 'left');
-			$this->db->join('projects pj', 'pj.id = f_p.project_id', 'left');
-			$this->db->join('project_types p_t', 'p_t.id = pj.type', 'left');
+			$this->db->join('projects pj', 'pj.id = ctr.project_id');
+			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins cn', 'cn.id = pj.coin_id');
 			$this->db->where('ig_u.user_id =', $this->session->userdata('logged_in')['id']);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 3){
 			$this->db->from('transactions f_p');
 			$this->db->join('contracts ctr', 'ctr.transaction_id = f_p.id');
 			$this->db->join('accounts c', 'c.id = f_p.account_id');
-			$this->db->join('coins cn', 'cn.id = c.coin_id');
-			$this->db->join('users u', 'u.id = f_p.user_id', 'left');
+			$this->db->join('users u', 'u.id = ctr.user_id');
 			$this->db->join('profile pf', 'pf.id = u.profile_id', 'left');
-			$this->db->join('projects pj', 'pj.id = f_p.project_id', 'left');
-			$this->db->join('project_types p_t', 'p_t.id = pj.type', 'left');
+			$this->db->join('projects pj', 'pj.id = ctr.project_id');
+			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins cn', 'cn.id = pj.coin_id');
 			$this->db->where_in('f_p.user_id', $ids);
 		}else if($this->session->userdata('logged_in')['profile_id'] == 4){
 			$this->db->from('transactions f_p');
 			$this->db->join('contracts ctr', 'ctr.transaction_id = f_p.id');
 			$this->db->join('accounts c', 'c.id = f_p.account_id');
-			$this->db->join('coins cn', 'cn.id = c.coin_id');
-			$this->db->join('users u', 'u.id = f_p.user_id', 'left');
+			$this->db->join('users u', 'u.id = ctr.user_id');
 			$this->db->join('profile pf', 'pf.id = u.profile_id', 'left');
-			$this->db->join('projects pj', 'pj.id = f_p.project_id', 'left');
-			$this->db->join('project_types p_t', 'p_t.id = pj.type', 'left');
+			$this->db->join('projects pj', 'pj.id = ctr.project_id');
+			$this->db->join('project_types p_t', 'p_t.id = pj.type');
+			$this->db->join('coins cn', 'cn.id = pj.coin_id');
 			$this->db->where('f_p.user_id', $this->session->userdata('logged_in')['id']);
 		}
 		
@@ -365,12 +367,13 @@ class MResumen extends CI_Model {
 		
 		$this->db->select($select);
 		$this->db->from('transactions f_p');
+		$this->db->join('contracts ctr', 'ctr.transaction_id = f_p.id');
 		$this->db->join('accounts c', 'c.id = f_p.account_id');
-		$this->db->join('coins cn', 'cn.id = c.coin_id');
 		$this->db->join('users u', 'u.id = f_p.user_id', 'left');
-		$this->db->join('projects p', 'p.id = f_p.project_id', 'left');
+		$this->db->join('projects p', 'p.id = ctr.project_id', 'left');
 		$this->db->join('project_types p_t', 'p_t.id = p.type', 'left');
-		$this->db->where('f_p.project_id', $project_id);
+		$this->db->join('coins cn', 'cn.id = p.coin_id');
+		$this->db->where('ctr.project_id', $project_id);
 		if($this->session->userdata('logged_in')['profile_id'] != 1 && $this->session->userdata('logged_in')['profile_id'] != 2){
 			if($this->session->userdata('logged_in')['profile_id'] == 5){
 				$this->db->where('f_p.user_create_id', $this->session->userdata('logged_in')['id']);
@@ -380,6 +383,9 @@ class MResumen extends CI_Model {
 		}
 		$this->db->group_by('cn.description');
         $query = $this->db->get();
+        
+        //~ echo $this->db->last_query();
+		//~ exit();
         
         return $query->result();
             

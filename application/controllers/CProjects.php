@@ -571,7 +571,7 @@ class CProjects extends CI_Controller {
 			$capital_disponible_moneda_proyecto = 0;
 			if(count($find_transactions) > 0){
 				foreach($find_transactions as $t1){
-					if($t1->status == 'approved' && $t1->project_id == $data['id']){
+					if($t1->status == 'approved' && $t1->project_id_contract == $data['id']){
 						if($t1->type == "invest" && $t1->amount < 0){
 							$capital_disponible_moneda_cuenta += 0;
 						}else{
@@ -1215,7 +1215,7 @@ class CProjects extends CI_Controller {
 			
 		}
         
-        $fondos_details = $this->MProjects->obtenerTransacciones($project_id);  // Listado de fondos detallados
+        $fondos_details = $this->MProjects->obtenerContratos($project_id);  // Listado de fondos detallados
 		
 		$resumen = array(
 			'capital_payback' => 0,
@@ -1854,7 +1854,7 @@ class CProjects extends CI_Controller {
 				}
 				
 				// Si tiene proyecto asociado en project_id lo sumamos
-				if($fondo->status == 'approved' && $fondo->user_id == 0 && $fondo->project_id == $project_id){
+				if($fondo->status == 'approved' && $fondo->user_id == 0 && ($fondo->project_id == $project_id || $fondo->project_id_contract == $project_id)){
 					// Suma de depósitos
 					if($fondo->type == 'deposit'){
 						$deposit_approved += $trans_usd;
