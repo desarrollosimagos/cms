@@ -29,7 +29,12 @@ class MProjects extends CI_Model {
     //Public method to obtain the projects
     public function obtener() {
 		
-		$this->db->select('pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status, c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol');
+		$select = 'pj.id, pj.name, pj.description, p_t.type as type, pj.valor, pj.status, ';
+		$select .= 'c.description as coin, c.abbreviation as coin_avr, c.symbol as coin_symbol';
+		
+		$this->db->select($select);
+		$this->db->distinct();
+		
 		// Si el usuario logueado es de perfil administrador, plataforma o gestor tomamos sólo los proyectos de su grupo de inversores.
 		// Si el usuario logueado es de perfil inversor tomamos sólo los proyectos en los que tiene transacciones.
 		if($this->session->userdata('logged_in')['profile_id'] == 1){
