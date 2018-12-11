@@ -27,7 +27,7 @@ $lang['edit_gender1_profileuser'] = 'Masculino';
 $lang['edit_gender2_profileuser'] = 'Femenino';
 $lang['edit_birthday_profileuser'] = 'Fecha de nacimiento';
 $lang['edit_phone_profileuser'] = 'Teléfono de contacto';
-$lang['edit_emergency_contact_profileuser'] = 'Contacto de emergencia';
+$lang['edit_emergency_contact_profileuser'] = 'Nombre de Persona de Contacto';
 $lang['edit_emergency_phone_profileuser'] = 'Teléfono de emergencia';
 
 $lang['back_profileuser'] = 'Volver';

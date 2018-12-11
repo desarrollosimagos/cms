@@ -135,15 +135,15 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_emergency_contact_profileuser'); ?> *</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" placeholder="" name="emergency_contact" id="emergency_contact" value="<?php echo $editar_data[0]->emergency_contact ?>">
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_emergency_phone_profileuser'); ?> *</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" onkeypress="return valida_telefono(event)" maxlength="11" name="emergency_phone" id="emergency_phone" value="<?php echo $editar_data[0]->emergency_phone ?>">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" ><?php echo $this->lang->line('edit_emergency_contact_profileuser'); ?> *</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" onkeypress="return valida_contacto(event)" placeholder="" name="emergency_contact" id="emergency_contact" value="<?php echo $editar_data[0]->emergency_contact ?>">
 						</div>
 					</div>
 					

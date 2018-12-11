@@ -178,6 +178,20 @@ function valida_telefono(e){
     return patron.test(tecla_final);
 }
 
+function valida_contacto(e){
+    tecla = (document.all) ? e.keyCode : e.which;
+
+    //Tecla de retroceso para borrar, siempre la permite
+    if (tecla==8){
+        return true;
+    }
+        
+    // Patron de entrada, en este caso solo acepta números
+    patron =/[a-zA-Z]+/;
+    tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+}
+
 // Validamos que los archivos sean de tipo .jpg, jpeg o png
 function valida_tipo(input) {
 	
