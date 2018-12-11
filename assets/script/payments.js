@@ -483,3 +483,277 @@ function valida_tipo(input) {
 		input.parent('div').removeClass('has-error');
 	}
 }
+
+//~ // Función para convertir a la moneda del usuario logueado el monto total a pagar
+//~ function convertir(monto){
+	//~ 
+	//~ // Variables globales para la posterior validación del capital aprobado al validar la transacciones
+    //~ var capital_aprobado_global = 0;
+    //~ var coins_global = 0;
+    //~ 
+    //~ // Proceso de conversión de moneda (captura del equivalente a 1 dólar en las distintas monedas)
+    //~ $.post('https://openexchangerates.org/api/latest.json?app_id=65148900f9c2443ab8918accd8c51664', function (coins) {
+		//~ 
+		//~ coins_global = coins  // Tasas de conversión global
+		//~ 
+		//~ var valor1btc, valor1anycoin, rate = $("#iso_currency_user").val(), rates = [], cryptos;
+		//~ 
+		//~ // Colectando los symbolos de todas las cryptomonedas soportadas por la plataforma de coinmarketcap
+		//~ $.ajax({
+			//~ type: "get",
+			//~ dataType: "json",
+			//~ url: 'https://api.coinmarketcap.com/v1/ticker/',
+			//~ async: false
+		//~ })
+		//~ .done(function(coin) {
+			//~ if(coin.error){
+				//~ console.log(coin.error);
+			//~ } else {
+				//~ 
+				//~ cryptos = coin;
+				//~ 
+				//~ $.each(coin, function (i) {
+					//~ if (coin[i]['symbol'] == rate){
+						//~ // Obtenemos el valor de la cryptomoneda del usuario en dólares
+						//~ valor1anycoin = coin[i]['price_usd'];
+					//~ }
+					//~ rates.push(coin[i]['symbol']);  // Colectamos los símbolos de todas las cryptomonedas
+				//~ });
+			//~ }				
+		//~ }).fail(function() {
+			//~ console.log("error ajax");
+		//~ });
+		//~ 
+		//~ // Valor de 1 dólar en bolívares (uso de async: false para esperar a que cargue la data)
+		//~ $.ajax({
+			//~ type: "get",
+			//~ dataType: "json",
+			//~ url: 'https://s3.amazonaws.com/dolartoday/data.json',
+			//~ async: false
+		//~ })
+		//~ .done(function(vef) {
+			//~ if(vef.error){
+				//~ console.log(vef.error);
+			//~ } else {
+				//~ valor1vef = vef['USD']['transferencia'];
+			//~ }				
+		//~ }).fail(function() {
+			//~ console.log("error ajax");
+		//~ });
+		//~ 
+		//~ // Si el tipo de moneda de la transacción es Bitcoin (BTC) o Bolívares (VEF) hacemos la conversión usando valores de una api más acorde
+		//~ if ($.inArray( $("#iso_currency_user").val(), rates ) != -1) {
+			//~ 
+			//~ var currency_user = 1/parseFloat(valor1anycoin);  // Tipo de moneda del usuario logueado
+				//~ 
+		//~ } else if($("#iso_currency_user").val() == 'VEF') {
+				//~ 
+			//~ var currency_user = valor1vef;  // Tipo de moneda del usuario logueado
+		//~ 
+		//~ } else {
+		//~ 
+			//~ var currency_user = coins['rates'][$("#iso_currency_user").val()];  // Tipo de moneda del usuario logueado
+		//~ 
+		//~ }
+		//~ 
+		//~ var capital_pendiente = 0;
+		//~ var capital_aprobado = 0;
+		//~ 
+		//~ // Proceso de cálculo de capital aprobado y pendiente
+		//~ $.post('<?php echo base_url(); ?>dashboard/fondos_json', function (fondos) {
+			//~ 
+			//~ $.each(fondos, function (i) {
+				//~ 
+				//~ // Conversión de cada account a dólares
+				//~ var currency = fondos[i]['coin_avr'];  // Tipo de moneda de la transacción
+				//~ 
+				//~ // Si el tipo de moneda de la transacción es Bitcoin (BTC) o Bolívares (VEF) hacemos la conversión usando una api más acorde
+				//~ if ($.inArray( currency, rates ) != -1) {
+					//~ 
+					//~ // Primero convertimos el valor de la cryptodivisa
+					//~ var valor1anycoin = 0;
+					//~ rate = currency;
+					//~ 
+					//~ $.each(cryptos, function (i) {
+						//~ if (cryptos[i]['symbol'] == rate){
+							//~ // Obtenemos el valor de la cryptomoneda del usuario en dólares
+							//~ valor1anycoin = cryptos[i]['price_usd'];
+						//~ }
+					//~ });
+					//~ 
+					//~ var trans_usd = parseFloat(fondos[i]['amount'])*parseFloat(valor1anycoin);
+					//~ 
+				//~ } else if(currency == 'VEF') {
+						//~ 
+					//~ var trans_usd = parseFloat(fondos[i]['amount'])/parseFloat(valor1vef);
+					//~ 
+				//~ } else {
+					//~ 
+					//~ var trans_usd = parseFloat(fondos[i]['amount'])/parseFloat(coins['rates'][currency]);
+					//~ 
+				//~ }
+				//~ 
+				//~ // Sumamos o restamos dependiendo del tipo de transacción (ingreso/egreso)
+				//~ if(fondos[i]['status'] == 'waiting'){
+					//~ if(fondos[i]['type'] == 'deposit'){
+						//~ capital_pendiente += trans_usd;
+					//~ }else{
+						//~ capital_pendiente += trans_usd;
+					//~ }
+				//~ }
+				//~ if(fondos[i]['status'] == 'approved'){
+					//~ if(fondos[i]['type'] == 'deposit'){
+						//~ capital_aprobado += trans_usd;
+						//~ capital_aprobado_global += trans_usd;
+					//~ }else{
+						//~ capital_aprobado += trans_usd;
+						//~ capital_aprobado_global += trans_usd;
+					//~ }
+				//~ }
+			//~ });
+			//~ 
+			//~ capital_aprobado = (capital_aprobado*currency_user).toFixed(2);
+			//~ 
+			//~ capital_pendiente = (capital_pendiente*currency_user).toFixed(2);
+			//~ 
+			//~ $("#span_capital_aprobado").text(capital_aprobado);
+			//~ 
+		//~ }, 'json');
+		//~ 
+	//~ }, 'json').fail(function() {
+		//~ 
+		//~ // Usamos la segunda cuenta si la primera falla
+		//~ // Proceso de conversión de moneda (captura del equivalente a 1 dólar en las distintas monedas)
+		//~ $.post('https://openexchangerates.org/api/latest.json?app_id=1d8edbe4f5d54857b1686c15befc4a85', function (coins) {
+			//~ 
+			//~ coins_global = coins  // Tasas de conversión global
+			//~ 
+			//~ var valor1btc, valor1anycoin, rate = $("#iso_currency_user").val(), rates = [], cryptos;
+			//~ 
+			//~ // Colectando los symbolos de todas las cryptomonedas soportadas por la plataforma de coinmarketcap
+			//~ $.ajax({
+				//~ type: "get",
+				//~ dataType: "json",
+				//~ url: 'https://api.coinmarketcap.com/v1/ticker/',
+				//~ async: false
+			//~ })
+			//~ .done(function(coin) {
+				//~ if(coin.error){
+					//~ console.log(coin.error);
+				//~ } else {
+					//~ 
+					//~ cryptos = coin;
+					//~ 
+					//~ $.each(coin, function (i) {
+						//~ if (coin[i]['symbol'] == rate){
+							//~ // Obtenemos el valor de la cryptomoneda del usuario en dólares
+							//~ valor1anycoin = coin[i]['price_usd'];
+						//~ }
+						//~ rates.push(coin[i]['symbol']);  // Colectamos los símbolos de todas las cryptomonedas
+					//~ });
+				//~ }				
+			//~ }).fail(function() {
+				//~ console.log("error ajax");
+			//~ });
+			//~ 
+			//~ // Valor de 1 dólar en bolívares (uso de async: false para esperar a que cargue la data)
+			//~ $.ajax({
+				//~ type: "get",
+				//~ dataType: "json",
+				//~ url: 'https://s3.amazonaws.com/dolartoday/data.json',
+				//~ async: false
+			//~ })
+			//~ .done(function(vef) {
+				//~ if(vef.error){
+					//~ console.log(vef.error);
+				//~ } else {
+					//~ valor1vef = vef['USD']['transferencia'];
+				//~ }				
+			//~ }).fail(function() {
+				//~ console.log("error ajax");
+			//~ });
+			//~ 
+			//~ // Si el tipo de moneda de la transacción es Bitcoin (BTC) o Bolívares (VEF) hacemos la conversión usando valores de una api más acorde
+			//~ if ($.inArray( $("#iso_currency_user").val(), rates ) != -1) {
+				//~ 
+				//~ var currency_user = 1/parseFloat(valor1anycoin);  // Tipo de moneda del usuario logueado
+					//~ 
+			//~ } else if($("#iso_currency_user").val() == 'VEF') {
+					//~ 
+				//~ var currency_user = valor1vef;  // Tipo de moneda del usuario logueado
+			//~ 
+			//~ } else {
+			//~ 
+				//~ var currency_user = coins['rates'][$("#iso_currency_user").val()];  // Tipo de moneda del usuario logueado
+			//~ 
+			//~ }
+			//~ 
+			//~ var capital_pendiente = 0;
+			//~ var capital_aprobado = 0;
+			//~ 
+			//~ // Proceso de cálculo de capital aprobado y pendiente
+			//~ $.post('<?php echo base_url(); ?>dashboard/fondos_json', function (fondos) {
+				//~ 
+				//~ $.each(fondos, function (i) {
+					//~ 
+					//~ // Conversión de cada account a dólares
+					//~ var currency = fondos[i]['coin_avr'];  // Tipo de moneda de la transacción
+					//~ 
+					//~ // Si el tipo de moneda de la transacción es Bitcoin (BTC) o Bolívares (VEF) hacemos la conversión usando una api más acorde
+					//~ if ($.inArray( currency, rates ) != -1) {
+						//~ 
+						//~ // Primero convertimos el valor de la cryptodivisa
+						//~ var valor1anycoin = 0;
+						//~ rate = currency;
+						//~ 
+						//~ $.each(cryptos, function (i) {
+							//~ if (cryptos[i]['symbol'] == rate){
+								//~ // Obtenemos el valor de la cryptomoneda del usuario en dólares
+								//~ valor1anycoin = cryptos[i]['price_usd'];
+							//~ }
+						//~ });
+						//~ 
+						//~ var trans_usd = parseFloat(fondos[i]['amount'])*parseFloat(valor1anycoin);
+						//~ 
+					//~ } else if(currency == 'VEF') {
+							//~ 
+						//~ var trans_usd = parseFloat(fondos[i]['amount'])/parseFloat(valor1vef);
+						//~ 
+					//~ } else {
+						//~ 
+						//~ var trans_usd = parseFloat(fondos[i]['amount'])/parseFloat(coins['rates'][currency]);
+						//~ 
+					//~ }
+					//~ 
+					//~ // Sumamos o restamos dependiendo del tipo de transacción (ingreso/egreso)
+					//~ if(fondos[i]['status'] == 'waiting'){
+						//~ if(fondos[i]['type'] == 'deposit'){
+							//~ capital_pendiente += trans_usd;
+						//~ }else{
+							//~ capital_pendiente += trans_usd;
+						//~ }
+					//~ }
+					//~ if(fondos[i]['status'] == 'approved'){
+						//~ if(fondos[i]['type'] == 'deposit'){
+							//~ capital_aprobado += trans_usd;
+							//~ capital_aprobado_global += trans_usd;
+						//~ }else{
+							//~ capital_aprobado += trans_usd;
+							//~ capital_aprobado_global += trans_usd;
+						//~ }
+					//~ }
+				//~ });
+				//~ 
+				//~ capital_aprobado = (capital_aprobado*currency_user).toFixed(2);
+				//~ 
+				//~ capital_pendiente = (capital_pendiente*currency_user).toFixed(2);
+				//~ 
+				//~ $("#span_capital_aprobado").text(capital_aprobado);
+				//~ 
+			//~ }, 'json');
+			//~ 
+		//~ }, 'json');  // Cierre de la conversión del monto con la segunda cuenta de openexchangerates.org
+		//~ 
+	//~ });  // Cierre de la conversión del monto con la primera cuenta de openexchangerates.org
+	//~ 
+//~ }
