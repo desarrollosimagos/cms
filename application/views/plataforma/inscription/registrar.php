@@ -37,7 +37,7 @@
 									<?php }?>
 								</select>
 								<div class="alert alert-danger" id="category-message" style="display:none;">
-									<?php echo $this->lang->line('registry_message_category_inscription'); ?>
+									<?php echo $this->lang->line('registry_message_category_inscription'); ?> <a class="alert-link" href="<?php echo base_url();?>profileuser"><?php echo $this->lang->line('registry_message_category_inscription_profile'); ?></a>
 								</div>
 							</div>
 						</div>

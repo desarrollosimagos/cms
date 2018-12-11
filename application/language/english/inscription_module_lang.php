@@ -16,6 +16,7 @@ $lang['registry_user_inscription'] = 'User';
 $lang['registry_project_inscription'] = 'Event';
 $lang['registry_category_inscription'] = 'Category';
 $lang['registry_message_category_inscription'] = 'The user has not registered his date of birth.';
+$lang['registry_message_category_inscription_profile'] = 'Complete profile.';
 $lang['registry_icon_inscription'] = 'Icon';
 $lang['registry_back_inscription'] = 'Back';
 $lang['registry_save_inscription'] = 'Save';
