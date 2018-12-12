@@ -88,11 +88,13 @@ class Welcome extends CI_Controller {
 			// Si el operador condicional es "between" y la regla es de inscripción
 			if($cond == "between" && $rule->segment == "inscription"){
 				
+				$user_id = $this->session->userdata('logged_in')['id'];  // Id del usuario logueado
+				
 				// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
 				$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
-				if($check_in_range == true){
+				if($check_in_range == true && $this->get_contract_user($user_id, $id) == 0){
 					
-					// Marcado del proyecto como disponible
+					// Marcado del proyecto como disponible si el usuario no está inscrito
 					$inscription_available = 'yes';
 					
 				}
@@ -240,11 +242,13 @@ class Welcome extends CI_Controller {
 				// Si el operador condicional es "between" y la regla es de inscripción
 				if($cond == "between" && $rule->segment == "inscription"){
 					
+					$user_id = $this->session->userdata('logged_in')['id'];  // Id del usuario logueado
+					
 					// Si la fecha actual está dentro del rango de fechas de la regla de inscripción del proyecto, marcamos el proyecto como disponible
 					$check_in_range = $this->MInscription->check_in_range($current_date, $range_from, $range_to);
-					if($check_in_range == true){
+					if($check_in_range == true && $this->get_contract_user($user_id, $proyecto->id) == 0){
 						
-						// Marcado del proyecto como disponible
+						// Marcado del proyecto como disponible si el usuario no está inscrito
 						$data_proyecto['inscription_available'] = 'yes';
 						
 					}
@@ -330,6 +334,16 @@ class Welcome extends CI_Controller {
 		$this->load->view('footer');
 		
 	}
+	
+	// Método para comprobar el contrato de un usuario
+    public function get_contract_user($user_id, $project_id) {
+		
+		// Consultamos si el usuario está inscrito en el evento indicado
+		$query = $this->MInscription->get_contract_user($user_id, $project_id);
+
+        return count($query);
+            
+    }
 	
 	public function contacts()
 	{
