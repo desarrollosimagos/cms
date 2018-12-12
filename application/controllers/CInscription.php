@@ -302,12 +302,26 @@ class CInscription extends CI_Controller {
 					
 				}else{
 					
+					// Buscamos las cuentas asociadas al proyecto seleccionado
+					$associated_accounts = $this->MInscription->buscar_cuentas_proyecto($project_id);
+					
+					$payment_accounts = "";  // Conversión a cadena
+					
+					foreach($associated_accounts as $account){
+						
+						$payment_accounts .= $account->alias . ": " . $account->number . ", ";
+						
+					}
+					
+					$payment_accounts = substr($payment_accounts, 0, -2);
+					
 					// Armamos los datos de la Inscripción
 					$datos_reg = array(
 						'username' => $data_user[0]->username,
 						'event_name' => $data_event[0]->name,
 						'event_date' => $project_date,
 						'pay_expiration' => $project_pay_expiration,
+						'payment_accounts' => $payment_accounts,
 						'event_cost' => $project_cost
 					);
 					
@@ -404,6 +418,20 @@ class CInscription extends CI_Controller {
 		}
 		
 	}
+	
+	// Método para comprobar el contrato de un usuario
+    public function get_contract_user() {
+		
+		$user_id = $this->input->post('user_id');  // Id del usuario
+		
+		$project_id = $this->input->post('project_id');  // Id del proyecto
+		
+		// Consultamos si el usuario está inscrito en el evento indicado
+		$query = $this->MInscription->get_contract_user($user_id, $project_id);
+
+        echo '{"response":"'.count($query).'"}';
+            
+    }
     
     
     // Método para actualizar el precio del dólar tomando como referencia la api de dolartoday

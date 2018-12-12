@@ -847,6 +847,10 @@ class MMails extends CI_Model {
 									'.$datos_reg['pay_expiration'].'
 								  </li>
 								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
+									<strong>Cuentas de pago:</strong>
+									'.$datos_reg['payment_accounts'].'
+								  </li>
+								  <li style="display:block;margin:0;padding:5px 0;border-bottom:1px solid #eee">
 									<strong>Costo:</strong>
 									'.$datos_reg['event_cost'].'
 								  </li>
