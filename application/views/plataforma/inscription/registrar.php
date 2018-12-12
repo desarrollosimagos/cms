@@ -144,6 +144,7 @@ $(document).ready(function(){
 		cargando_categorias.hide();
 		});
 		
+		// Carga de las categorías correspondientes
 		$.post('<?php echo base_url(); ?>CInscription/load_categories', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
 				
 			if (response['response'] == 'no_birthday') {
@@ -168,6 +169,23 @@ $(document).ready(function(){
 			
 		}, 'json');
 		
+		// Verificación de la incripción del usuario al evento seleccionado
+		$.post('<?php echo base_url(); ?>CInscription/get_contract_user', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
+			
+			if (parseInt(response['response']) > 0) {
+				
+				// Hacemos visible el botón de guardado
+				$("#registrar").hide();
+				
+			}else{
+				
+				// Ocultamos el botón de guardado
+				$("#registrar").show();
+				
+			}
+			
+		}, 'json');
+		
 	}
     
     // Proceso de carga de categorías en el combo al cambiar la selección del usuario o el proyecto
@@ -187,6 +205,7 @@ $(document).ready(function(){
 			cargando_categorias.hide();
 			});
 			
+			// Carga de las categorías correspondientes
 			$.post('<?php echo base_url(); ?>CInscription/load_categories', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
 				
 				if (response['response'] == 'no_birthday') {
@@ -210,6 +229,23 @@ $(document).ready(function(){
 				}
 				
             }, 'json');
+            
+            // Verificación de la incripción del usuario al evento seleccionado
+			$.post('<?php echo base_url(); ?>CInscription/get_contract_user', {'user_id':$("#user_id").val(), 'project_id':$("#project_id").val()}, function (response) {
+				
+				if (parseInt(response['response']) > 0) {
+					
+					// Hacemos visible el botón de guardado
+					$("#registrar").hide();
+					
+				}else{
+					
+					// Ocultamos el botón de guardado
+					$("#registrar").show();
+					
+				}
+				
+			}, 'json');
 			
 		}
 		
@@ -286,12 +322,12 @@ $(document).ready(function(){
                 }else{
 					
 					swal({
-						title: "Registro",
-						text: "Guardado con exito, ¿desea hacer el pago ahora?",
+						title: "¡Felicidades!",
+						text: "Usted se ha inscrito satisfactoriamente. Hemos enviado un correo con las cuentas bancarias disponibles para el pago. ¿Desea Registrar el pago ahora?",
 						type: "success",
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Pagar",
+						confirmButtonText: "Registrar",
 						cancelButtonText: "No",
 						closeOnConfirm: false,
 						closeOnCancel: true

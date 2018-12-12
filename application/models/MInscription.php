@@ -126,6 +126,17 @@ class MInscription extends CI_Model {
             
     }
     
+    // Método público para comprobar el contrato de un usuario
+    public function get_contract_user($user_id, $project_id) {
+		
+		$result = $this->db->where('user_id', $user_id);
+		$result = $this->db->where('project_id', $project_id);
+        $query = $this->db->get('contracts');
+
+        return $query->result();
+            
+    }
+    
     // Método público para verificar si una fecha está dentro de un rango de fechas
     public function check_in_range($date, $range_from, $range_to) {
 		
@@ -182,6 +193,27 @@ class MInscription extends CI_Model {
 			return $query->result();
 		else
 			return $query->result();
+            
+    }
+    
+    //Public method to obtain the accounts of project
+    public function buscar_cuentas_proyecto($project_id) {
+		
+		$select = 'a.alias, a.number';
+		
+		$this->db->select($select);
+		$this->db->from('usergroups ug');
+		$this->db->join('usergroups_projects ugp', 'ugp.group_id = ug.id');
+		$this->db->join('usergroups_accounts uga', 'uga.group_id = ug.id');
+		$this->db->join('accounts a', 'a.id = uga.account_id');
+		$this->db->where('ugp.project_id', $project_id);
+		$query = $this->db->get();
+		
+		//~ echo $this->db->last_query();
+        //~ 
+        //~ exit();
+
+		return $query->result();
             
     }
 
